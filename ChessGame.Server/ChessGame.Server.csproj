@@ -15,4 +15,8 @@
     <ProjectReference Include="..\ChessGame.Shared\ChessGame.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>
