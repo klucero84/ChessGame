@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ChessGame.Server.Models.Pieces
 {
     public class King : Piece
     {
-        public King(Board board, User user) : base(board, user)
+        public King(User user, int x, int y) : base(user, x, y)
         {
         }
 

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace ChessGame.Server.Models
 {
     /// <summary>
-    /// In memory datastructure representation of current board state. should not be persisted.
+    /// Dictionary<int,Dictionary<int, Piece>> In memory datastructure representation of current board state. should not be persisted.
     /// </summary>
     public class Board
     {
         private Game _game;
         public const int BoardSize = 8;
-        private List<Piece> _pieces;
+        public List<Piece> Pieces = new List<Piece>();
         private Dictionary<int,Dictionary<int, Piece>> _surface = new Dictionary<int, Dictionary<int, Piece>>(BoardSize);
 
         public Board(Game game)
@@ -30,8 +30,14 @@ namespace ChessGame.Server.Models
         /// <summary>
         /// resets the _surface container to a blank board with no pieces
         /// </summary>
-        private void InitializeBoard()
+        private void InitializeBoard(Dictionary<int, Dictionary<int, Piece>> pieces = null)
         {
+            if (pieces != null)
+            {
+                _surface = pieces;
+                return;
+            }
+
            for(int x = 0; x < BoardSize; x++)
            {
                 Dictionary<int, Piece> column = new Dictionary<int, Piece>(BoardSize);

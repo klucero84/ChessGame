@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ChessGame.Server.Models.Pieces
 {
     public class Queen : Piece
     {
-        public Queen(Board board, User user) : base(board, user)
+        public Queen(User user, int x, int y) : base(user, x, y)
         {
         }
 
@@ -18,7 +16,16 @@ namespace ChessGame.Server.Models.Pieces
 
         protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove)
         {
-            return (true, null);
+            int diffX = Math.Abs(X - attemptedMove.EndX);
+            int diffY = Math.Abs(Y - attemptedMove.EndY);
+            if (diffX == 0 || diffY == 0)
+            {
+                return (true, null);
+            } else if (diffX == diffY)
+            {
+                return (true, null);
+            }
+            return (false, "A Queen must move in a in straight lines along the x or y axis, or in a diagonal line.");
         }
     }
 }

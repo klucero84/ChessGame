@@ -12,20 +12,18 @@ namespace ChessGame.Server.Models
         /// </summary>
         public int Id { get; set; }
 
-        private int _x;
-        private int _y;
         private readonly User _user;
 
         /// <summary>
         /// Abscissas value (x)
         /// </summary>
-        public int X { get; protected set; }
+        public int X { get; set; }
 
 
         /// <summary>
         /// Ordinate value (y)
         /// </summary>
-        public int Y { get; protected set; }
+        public int Y { get; set; }
 
         /// <summary>
         /// Owner of this piece
@@ -35,12 +33,17 @@ namespace ChessGame.Server.Models
             return _user;
         }
 
-        private Board _board;
-
-        public Piece(Board board, User user)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="user">User to which the piece belongs</param>
+        /// <param name="x">Abscissas value of piece</param>
+        /// <param name="y">Ordinate value of the piece</param>
+        public Piece(User user, int x, int y)
         {
-            _board = board;
             _user = user;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
@@ -51,16 +54,22 @@ namespace ChessGame.Server.Models
         public (bool, string) IsLegalMove(Move attemptedMove)
         {
             //shared logic for determining legality of a move is here
-            if (!IsMe(attemptedMove?.Piece)) {
-                return (false, "Piece doesn't match");
+            if (!IsMe(attemptedMove?.Piece))
+            {
+                return (false, "Piece doesn't match.");
             }
-            if (!IsMyUser(attemptedMove?.User)){
-                return (false, "User doesn't match");
+            if (!IsMyUser(attemptedMove?.User))
+            {
+                return (false, "User doesn't match.");
             }
-            if (IsOutOfBounds(attemptedMove)) {
-                return (false, "attempted move is out of bounds");
+            if (IsOutOfBounds(attemptedMove))
+            {
+                return (false, "Attempted move is out of bounds.");
             }
-
+            if (!IsActuallyMoving(attemptedMove))
+            {
+                return (false, "Attempted move doesn't change board state.");
+            }
             //determine if move will put user in check
 
             //determine if user is in check and this will not take them out of check
@@ -69,12 +78,6 @@ namespace ChessGame.Server.Models
             //each subclass is responsible for it's own class (piece) specific movement logic
             return IsLegalMoveForPiece(attemptedMove);
         }
-
-
-        //protected Move MovePiece(User user, Int32 newX, Int32 newY)
-        //{
-
-        //}
 
         protected abstract (bool, string) IsLegalMoveForPiece(Move attemptedMove);
 
@@ -98,18 +101,30 @@ namespace ChessGame.Server.Models
             return false;
         }
 
+        /// <summary>
+        /// Returns true if the move put a piece out bounds.
+        /// </summary>
+        /// <param name="move"></param>
+        /// <returns></returns>
         protected bool IsOutOfBounds(Move move)
         {
-            if (move?.EndY > Board.BoardSize || move?.EndY < 0) {
+            if (move?.EndY > Game.BoardSize - 1 || move?.EndY < 0) {
                 return true;
             }
-            if (move?.EndX > Board.BoardSize || move?.EndX < 0) {
+            if (move?.EndX > Game.BoardSize - 1 || move?.EndX < 0) {
                 return true;
             }
             return false;
         }
-        
+
+        /// <summary>
+        /// Returns true if the move has different X and Y coordinates aka the move moves a piece.
+        /// </summary>
+        /// <param name="move"></param>
+        /// <returns></returns>
+        protected bool IsActuallyMoving(Move move)
+        {
+            return !(X == move.EndX && Y == move.EndY);
+        }
     }
-
-
 }

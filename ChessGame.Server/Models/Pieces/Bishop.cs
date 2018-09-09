@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ChessGame.Server.Models.Pieces
 {
     public class Bishop : Piece
     {
-        public Bishop(Board board, User user) : base(board, user)
+        public Bishop(User user, int x, int y) : base(user, x, y)
         {
         }
 
@@ -18,7 +16,15 @@ namespace ChessGame.Server.Models.Pieces
 
         protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove)
         {
-            return (true, null);
+            int diffX = Math.Abs(X - attemptedMove.EndX);
+            int diffY = Math.Abs(Y - attemptedMove.EndY);
+            if(diffX == diffY)
+            {
+                return (true, null);
+            }
+
+            return (false, "A Bishop must move in a diagonal line");
+            
         }
     }
 }

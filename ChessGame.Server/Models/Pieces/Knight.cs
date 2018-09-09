@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ChessGame.Server.Models.Pieces
 {
     public class Knight : Piece
     {
-        public Knight(Board board, User user) : base(board, user)
+        public Knight(User user, int x, int y) : base(user, x, y)
         {
         }
 
@@ -23,12 +21,12 @@ namespace ChessGame.Server.Models.Pieces
             int diffY = Math.Abs(Y - attemptedMove.EndY);
             if (diffX == 1 && diffY == 2)
             {
-
+                return (true, null);
             } else if (diffX == 2 && diffY == 1)
             {
                 return (true, null);
             }
-            return (false, "A knight must move two spaces on one axis and one space on the other axis");
+            return (false, "A Knight must move two spaces on one axis and one space on the other axis.");
         }
     }
 }

@@ -18,6 +18,7 @@ namespace ChessGame.Server.Models
             EndY = endY;
         }
 
+        public int Id { get; set; }
         public Game Game { get; }
         public Piece Piece { get; }
         public User User { get; }
