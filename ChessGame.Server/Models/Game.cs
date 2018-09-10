@@ -1,6 +1,7 @@
 ﻿using ChessGame.Server.Models.Pieces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,18 +17,18 @@ namespace ChessGame.Server.Models
 
         private List<Piece> _pieces;
 
-        public User User1 { get; set; }
+        [Required]
+        public User WhiteUser { get; set; }
 
-        public User User2 { get; set; }
-
-        public UserColor turn;
+        [Required]
+        public User BlackUser { get; set; }
 
         public Game() { }
 
         public Game(User user1, User user2)
         {
-            User1 = user1;
-            User2 = user2;
+            WhiteUser = user1;
+            BlackUser = user2;
         }
 
         public bool AddMove(Move attemptedMove)
@@ -42,7 +43,7 @@ namespace ChessGame.Server.Models
                 return false;
             }
             _moves.Add(attemptedMove);
-            ToggleTurn();
+            //ToggleTurn();
             //save move to db
             return true;
         }
@@ -50,48 +51,49 @@ namespace ChessGame.Server.Models
         public void Reset()
         {
             _pieces = new List<Piece>(32);
-            User whiteUser = User1.Color == UserColor.WHITE ? User1 : User2;
-            User blackUser = User1.Color == UserColor.BLACK ? User1 : User2;
+            //User whiteUser = WhiteUser.Color == UserColor.WHITE ? WhiteUser : User2;
+            //User blackUser = User1.Color == UserColor.BLACK ? WhiteUser : User2;
+
             //i is the x
             for(int i = 0; i < BoardSize; i++)
             {
                 //add white pawns to the second row from bottom
-                _pieces.Add(new Pawn(whiteUser, i, 1));
+                _pieces.Add(new Pawn(WhiteUser, i, 1));
                 //add black pawns to the second row from top
-                _pieces.Add(new Pawn(blackUser, i, 6));
+                _pieces.Add(new Pawn(BlackUser, i, 6));
                 switch (i)
                 {
                     case 0:
                     case 7:
                     {//rooks
-                        _pieces.Add(new Rook(whiteUser, i, 0));
-                        _pieces.Add(new Rook(blackUser, i, 7));
+                        _pieces.Add(new Rook(WhiteUser, i, 0));
+                        _pieces.Add(new Rook(BlackUser, i, 7));
                         continue;
                     }
                     case 1:
                     case 6:
                     {//knights
-                        _pieces.Add(new Knight(whiteUser, i, 0));
-                        _pieces.Add(new Knight(blackUser, i, 7));
+                        _pieces.Add(new Knight(WhiteUser, i, 0));
+                        _pieces.Add(new Knight(BlackUser, i, 7));
                         continue;
                     }
                     case 2:
                     case 5:
                     {//bishops
-                        _pieces.Add(new Bishop(whiteUser, i, 0));
-                        _pieces.Add(new Bishop(blackUser, i, 7));
+                        _pieces.Add(new Bishop(WhiteUser, i, 0));
+                        _pieces.Add(new Bishop(BlackUser, i, 7));
                         continue;
                     }
                     case 3:
                     {//queens
-                        _pieces.Add(new Queen(whiteUser, i, 0));
-                        _pieces.Add(new Queen(blackUser, i, 7));
+                        _pieces.Add(new Queen(WhiteUser, i, 0));
+                        _pieces.Add(new Queen(BlackUser, i, 7));
                         continue;
                     }
                     case 4:
                     {//kings
-                        _pieces.Add(new King(whiteUser, i, 0));
-                        _pieces.Add(new King(blackUser, i, 7));
+                        _pieces.Add(new King(WhiteUser, i, 0));
+                        _pieces.Add(new King(BlackUser, i, 7));
                         continue;
                     }
                 }
@@ -103,9 +105,14 @@ namespace ChessGame.Server.Models
             return _moves;
         }
 
-        private void ToggleTurn()
+        //private void ToggleTurn()
+        //{
+        //    turn = turn == UserColor.WHITE ? UserColor.BLACK : UserColor.WHITE;
+        //}
+
+        public void LoadGame(List<Move> moves)
         {
-            turn = turn == UserColor.WHITE ? UserColor.BLACK : UserColor.WHITE;
+            _moves = moves;
         }
     }
 }

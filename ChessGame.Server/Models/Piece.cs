@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ChessGame.Server.Models
 {
-    public abstract class Piece
+    public class Piece
     {
         /// <summary>
         /// Unique db identifier
         /// </summary>
         public int Id { get; set; }
 
-        private readonly User _user;
-
+        [Required]
         /// <summary>
         /// Abscissas value (x)
         /// </summary>
         public int X { get; set; }
 
-
+        [Required]
         /// <summary>
         /// Ordinate value (y)
         /// </summary>
@@ -29,9 +30,16 @@ namespace ChessGame.Server.Models
         /// Owner of this piece
         /// </summary>
         /// <returns></returns>
-        public User OwnedBy() {
-            return _user;
-        }
+        [Required]
+        public User OwnedBy { get; set; }
+
+        [Required]
+        public Game Game { get; set; }
+
+        /// <summary>
+        /// Blank Constructor 
+        /// </summary>
+        public Piece() { }
 
         /// <summary>
         /// Constructor
@@ -41,7 +49,7 @@ namespace ChessGame.Server.Models
         /// <param name="y">Ordinate value of the piece</param>
         public Piece(User user, int x, int y)
         {
-            _user = user;
+            OwnedBy = user;
             X = x;
             Y = y;
         }
@@ -79,9 +87,15 @@ namespace ChessGame.Server.Models
             return IsLegalMoveForPiece(attemptedMove);
         }
 
-        protected abstract (bool, string) IsLegalMoveForPiece(Move attemptedMove);
+        protected virtual (bool, string) IsLegalMoveForPiece(Move attemptedMove)
+        {
+            throw new NotImplementedException("IsLegalMoveForPiece is not implemented.");
+        }
 
-        public abstract List<Move> GetAllLegalMoves();
+        public virtual List<Move> GetAllLegalMoves()
+        {
+            throw new NotImplementedException("GetAllLegalMoves is not imeplemented.");
+        }
         
         protected bool IsMe (Piece piece)
         {
@@ -94,7 +108,7 @@ namespace ChessGame.Server.Models
 
         protected bool IsMyUser(User user)
         {
-            if (user?.Id == _user.Id)
+            if (user?.Id == OwnedBy.Id)
             {
                 return true;
             }

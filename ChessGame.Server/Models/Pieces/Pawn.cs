@@ -18,13 +18,13 @@ namespace ChessGame.Server.Models.Pieces
 
         protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove)
         {
-            UserColor color = attemptedMove.User.Color;
+            bool isWhite = attemptedMove.Game.WhiteUser.Id == attemptedMove.User.Id;
             int diffX = Math.Abs(X - attemptedMove.EndX);
             if (diffX > 1)
             {
                 return (false, "A Pawn cannot move more than one square to the side.");
             }
-            if (color == UserColor.WHITE)
+            if (isWhite)
             {
                 //white pawns start at row index 1 and move up one at a time
                 if (Y + 1 == attemptedMove.EndY)
@@ -43,7 +43,7 @@ namespace ChessGame.Server.Models.Pieces
                     return (true, null);
                 }
             }
-            else if(color == UserColor.BLACK)
+            else
             {
                 //black pawns start at row index 6 and only move down
                 if (Y - 1 == attemptedMove.EndY)
