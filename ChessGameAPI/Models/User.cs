@@ -17,8 +17,18 @@ namespace ChessGameAPI.Models
         public string Email { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public byte[] PasswordHash { get; set; }
 
+        [Required]
+        public byte[] PasswordSalt { get; set; }
+
+        [Required]
+        public DateTime DateJoined { get; set; }
+
+        [Required]
+        public DateTime LastActive { get; set; }
+
+        ICollection<Photo> Photos { get; set; }
 
         //public bool IsInCheck { get; set; }
     }
