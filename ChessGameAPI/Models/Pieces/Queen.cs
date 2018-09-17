@@ -5,6 +5,7 @@ namespace ChessGameAPI.Models.Pieces
 {
     public class Queen : Piece
     {
+        public Queen() { }
         public Queen(User user, int x, int y) : base(user, x, y)
         {
         }

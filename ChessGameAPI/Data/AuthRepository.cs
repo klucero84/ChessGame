@@ -23,7 +23,7 @@ namespace ChessGameAPI.Data
         /// <summary>
         /// asynchronously authenticates the user
         /// </summary>
-        /// <param name="username">user attempting to login</param>
+        /// <param name="email">email of user attempting to login</param>
         /// <param name="password">password for the user</param>
         /// <returns>an async operation returning a User model</returns>
         public async Task<User> Login(string email, string password)
@@ -89,7 +89,7 @@ namespace ChessGameAPI.Data
         /// <summary>
         /// Checks to see if this username has already been added to the data context
         /// </summary>
-        /// <param name="username">Email to check</param>
+        /// <param name="email">Email to check</param>
         /// <returns>an async operation returning bool, true = user exists</returns>
         public async Task<bool> UserExists(string email)
         {

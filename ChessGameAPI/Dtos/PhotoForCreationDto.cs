@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 namespace ChessGameAPI.Dtos
 {
     /// <summary>
-    /// dto for creating a photo
+    /// dto for creating a photo in cloudinary
     /// </summary>
     public class PhotoForCreationDto
     {

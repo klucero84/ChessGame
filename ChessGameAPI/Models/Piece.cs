@@ -14,16 +14,17 @@ namespace ChessGameAPI.Models
         /// </summary>
         public int Id { get; set; }
 
-        [Required]
+       
         /// <summary>
         /// Abscissas value (x)
         /// </summary>
+        [Required]
         public int X { get; set; }
 
-        [Required]
         /// <summary>
         /// Ordinate value (y)
         /// </summary>
+        [Required]
         public int Y { get; set; }
 
         /// <summary>

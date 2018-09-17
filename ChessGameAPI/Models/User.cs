@@ -10,10 +10,10 @@ namespace ChessGameAPI.Models
     {
         public int Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]
@@ -28,7 +28,7 @@ namespace ChessGameAPI.Models
         [Required]
         public DateTime LastActive { get; set; }
 
-        ICollection<Photo> Photos { get; set; }
+        public ICollection<Photo> Photos { get; set; }
 
         //public bool IsInCheck { get; set; }
     }

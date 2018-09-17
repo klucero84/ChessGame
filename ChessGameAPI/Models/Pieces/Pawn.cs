@@ -7,6 +7,8 @@ namespace ChessGameAPI.Models.Pieces
     {
         public bool IsCapturing;
 
+        public Pawn() { }
+
         public Pawn(User user, int x, int y) : base(user, x, y)
         {
         }

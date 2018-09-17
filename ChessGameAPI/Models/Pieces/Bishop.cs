@@ -5,6 +5,8 @@ namespace ChessGameAPI.Models.Pieces
 {
     public class Bishop : Piece
     {
+        public Bishop() { }
+        
         public Bishop(User user, int x, int y) : base(user, x, y)
         {
         }

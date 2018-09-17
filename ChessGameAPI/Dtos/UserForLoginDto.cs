@@ -13,6 +13,7 @@ namespace ChessGameAPI.Dtos
         /// </summary>
         /// <value></value>
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         /// <summary>

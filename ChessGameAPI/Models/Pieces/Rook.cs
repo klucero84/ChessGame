@@ -5,6 +5,8 @@ namespace ChessGameAPI.Models.Pieces
 {
     public class Rook : Piece
     {
+
+        public Rook() { }
         public Rook(User user, int x, int y) : base(user, x, y)
         {
         }

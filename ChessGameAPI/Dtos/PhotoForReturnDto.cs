@@ -1,7 +1,7 @@
 namespace ChessGameAPI.Dtos
 {
     /// <summary>
-    /// Return information for photo
+    /// Return information for photo post cloudinary creation
     /// </summary>
     public class PhotoForReturnDto : PhotosForDetailDto
     {
