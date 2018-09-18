@@ -305,12 +305,12 @@ Thumbs.db
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/tmp
-/out-tsc
+ChessGameSPA/dist
+ChessGameSPA/tmp
+ChessGameSPA/out-tsc
 
 # dependencies
-/node_modules
+ChessGameSPA/node_modules
 
 # IDEs and editors
 /.idea
@@ -341,3 +341,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+ChessGameSPA/dist/
