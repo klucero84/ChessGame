@@ -29,13 +29,5 @@ namespace ChessGameAPI.Models
         public DateTime LastActive { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
-
-        //public bool IsInCheck { get; set; }
     }
-
-    //public enum UserColor
-    //{
-        //WHITE = 0,
-        //BLACK = 1
-    //}
 }

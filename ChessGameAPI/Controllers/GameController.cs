@@ -12,34 +12,42 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChessGameAPI.Controllers
 {
     /// <summary>
-    /// Controller responsible for the game
+    /// Controller responsible for Games.
     /// </summary>
-    [Route("api/[controller]")]
-    [ApiController]
     public class GameController: AuthorizedControllerBase
     {
-        private readonly IGameRepository _repo;
+        private readonly IGameRepository _gameRepo;
         private readonly IUserRepository _userRepo;
         private readonly IMapper _mapper;
-        public GameController(IGameRepository repo, IMapper mapper, IUserRepository userRepo)
+
+        /// <summary>
+        /// Controller responsible for Games.
+        /// </summary>
+        /// <param name="gameRepo">Data repository for games</param>
+        /// <param name="mapper">automapper utility</param>
+        /// <param name="userRepo">Data repository for users</param>
+        public GameController(IGameRepository gameRepo, IMapper mapper, IUserRepository userRepo)
         {
-            _repo = repo;
+            _gameRepo = gameRepo;
             _mapper = mapper;
             _userRepo = userRepo;
         }
 
-        public IActionResult Index()
-        {
-            return Ok("Hello Api");
-        }
-
+        /// <summary>
+        /// Gets a list of games for the current user.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetGames()
         {
-            var result = await _repo.GetGamesForUser(GetCurrentUserId());
+            var result = await _gameRepo.GetGamesForUser(GetCurrentUserId());
             return Ok(result);
         }
 
+        /// <summary>
+        /// Creates new game for current user.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> NewGame()
         {
@@ -51,20 +59,19 @@ namespace ChessGameAPI.Controllers
 
             Game newGame = new Game(whiteUser, blackUser);
             newGame.Reset();
-            _repo.Add(newGame);
-            foreach(Piece piece in newGame.GetPieces())
+            _gameRepo.Add(newGame);
+            foreach(Piece piece in newGame.Pieces)
             {
-                _repo.Add(piece);
+                _gameRepo.Add(piece);
             }
-            _repo.Add(newGame.GetPieces());
-            var result = await _repo.SaveAll();
+            var result = await _gameRepo.SaveAll();
 
             GameDto gameDto = _mapper.Map<GameDto>(newGame);
             return Ok(gameDto);
         }
 
         /// <summary>
-        /// 
+        /// Gets a game by its unique identifier.
         /// </summary>
         /// <param name="id">Id of the game to get from data repo</param>
         /// <returns>Piece and Move list that represents a game in progress</returns>
@@ -72,25 +79,11 @@ namespace ChessGameAPI.Controllers
         public async Task<IActionResult> GetGame(int id)
         {
             
-            var game =  await _repo.GetGame(id);
+            var game =  await _gameRepo.GetGame(id);
             var gameDto = _mapper.Map<GameDto>(game);
-            var moves = _mapper.Map<IEnumerable<MoveDto>>(game.GetMoves());
-            var peices = _mapper.Map<IEnumerable<PieceDto>>(game.GetPieces());
+            // var moves = _mapper.Map<IEnumerable<MoveDto>>(game.GetMoves());
+            // var peices = _mapper.Map<IEnumerable<PieceDto>>(game.GetPieces());
             return Ok(gameDto);
         }
-
-        /// <summary>
-        /// Main action driver. updates peices and moves list that represents the game.
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        [HttpPut]
-        public async Task<IActionResult> AddMove(MoveForAddMoveDto dto)
-        {
-            await _repo.SaveAll();
-            return Ok();
-        }
-
-        
     }
 }

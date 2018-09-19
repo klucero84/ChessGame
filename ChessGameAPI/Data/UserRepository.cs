@@ -5,6 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChessGameAPI.Data
 {
+    /// <summary>
+    /// Implementation of the IUserRepository interface.
+    /// Responsible for user info.
+    /// </summary>
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;

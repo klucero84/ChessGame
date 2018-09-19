@@ -34,9 +34,17 @@ namespace ChessGameAPI.Models
         [Required]
         public User OwnedBy { get; set; }
 
+        /// <summary>
+        /// Game to which this piece belongs
+        /// </summary>
+        /// <value></value>
         [Required]
         public Game Game { get; set; }
 
+        /// <summary>
+        /// subclass discriminator
+        /// </summary>
+        /// <value></value>
         public string Discriminator { get; set; }
 
         /// <summary>
@@ -47,6 +55,7 @@ namespace ChessGameAPI.Models
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="game">Game to which the piece belongs</param>
         /// <param name="user">User to which the piece belongs</param>
         /// <param name="x">Abscissas value of piece</param>
         /// <param name="y">Ordinate value of the piece</param>

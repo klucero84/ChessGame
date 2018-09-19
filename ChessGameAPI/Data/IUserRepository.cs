@@ -4,9 +4,12 @@ using ChessGameAPI.Models;
 
 namespace ChessGameAPI.Data
 {
+    /// <summary>
+    /// User Repository Interface
+    /// </summary>
     public interface IUserRepository
     {
-         /// <summary>
+        /// <summary>
         /// Gets a list of all users asynchronously
         /// </summary>
         /// <returns>an asychronous operation returning an enumerable collection of User models</returns>

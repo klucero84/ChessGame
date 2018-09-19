@@ -1,5 +1,8 @@
 namespace ChessGameAPI.Dtos
 {
+    /// <summary>
+    /// dto for piece info
+    /// </summary>
     public class PieceDto
     {
         public int Id { get; set; }

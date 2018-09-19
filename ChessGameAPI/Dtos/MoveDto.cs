@@ -1,5 +1,8 @@
 namespace ChessGameAPI.Dtos
 {
+    /// <summary>
+    /// dto for historic move infomation
+    /// </summary>
     public class MoveDto
     {
         public int Id { get; set; }

@@ -6,12 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChessGameAPI.Controllers
 {
     /// <summary>
-    /// Base Class for all authorized controllers
+    /// Abstract Base Class for authorized controllers
     /// </summary>
-    
     [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
     public abstract class AuthorizedControllerBase: ControllerBase
     {
+        /// <summary>
+        /// Get the user id from the NameIdentifier claimtype.
+        /// </summary>
+        /// <returns>User id of current authorized user.</returns>
         protected int GetCurrentUserId()
         {
             int userId = 0;

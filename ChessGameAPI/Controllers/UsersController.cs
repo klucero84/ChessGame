@@ -6,26 +6,40 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChessGameAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    /// <summary>
+    /// 
+    /// </summary>
     public class UsersController : AuthorizedControllerBase
     {
         private readonly IUserRepository _repo;
         private readonly IMapper _mapper;
 
-
+        /// <summary>
+        /// Controller responsible for users
+        /// </summary>
+        /// <param name="repo"></param>
+        /// <param name="mapper"></param>
         public UsersController(IUserRepository repo, IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> GetUsers()
         {
             var result =  await _repo.GetUsers();
             return Ok(result);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> GetUser(int id)
         {
             var result = await _repo.GetUser(id);

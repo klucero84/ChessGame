@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChessGameAPI.Data
 {
+    /// <summary>
+    /// Implementation of the IGameRepository interface.
+    /// Responsible for game info.
+    /// </summary>
     public class GameRepository : IGameRepository
     {
         private readonly DataContext _context;
@@ -37,12 +41,12 @@ namespace ChessGameAPI.Data
         }
 
         /// <summary>
-        /// Saves all changes made in this context to the underlying data source.
+        /// Saves all changes asynchronously
         /// </summary>
-        /// <returns>an async operation returning an bool if any changes were saved</returns>
-        public async Task<bool> SaveAll()
+        /// <returns>an asynchronous operation returning a int, the number of objects written to the underlying data context.</returns>
+        public async Task<int> SaveAll()
         {
-            return await _context.SaveChangesAsync() > 0;
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Game>> GetGamesForUser(int userId)
@@ -52,7 +56,7 @@ namespace ChessGameAPI.Data
 
         public async Task<Game> GetGame(int gameId)
         {
-            return await _context.Games.FirstOrDefaultAsync(x => x.Id == gameId);
+            return await _context.Games.Include(g =>g.Pieces).Include(g => g.WhiteUserId).Include(g => g.BlackUserId).FirstOrDefaultAsync(x => x.Id == gameId);
         }
 
         public async Task<Piece> GetPiece(int pieceId)

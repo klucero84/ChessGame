@@ -27,7 +27,7 @@ namespace ChessGameAPI.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="repo">Data repository to look for authorization info</param>
+        /// <param name="repo">Data repository for authorization</param>
         /// <param name="config">current configuration profile</param>
         public AuthController (IAuthRepository repo, IConfiguration config)
         {

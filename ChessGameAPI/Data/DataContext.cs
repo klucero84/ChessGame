@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ChessGameAPI.Data
 {
     /// <summary>
-    /// 
+    /// default data context
     /// </summary>
     public class DataContext : DbContext
     {

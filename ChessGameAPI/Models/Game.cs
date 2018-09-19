@@ -34,6 +34,11 @@ namespace ChessGameAPI.Models
             BlackUser = user2;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attemptedMove"></param>
+        /// <returns></returns>
         public bool AddMove(Move attemptedMove)
         {
             Piece pieceToBeMoved = attemptedMove.Piece;
@@ -104,24 +109,25 @@ namespace ChessGameAPI.Models
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<Move> GetMoves()
         {
             return _moves;
         }
 
-        public List<Piece> GetPieces()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<Piece> Pieces
         {
-            return _pieces;
-        }
-
-        //private void ToggleTurn()
-        //{
-        //    turn = turn == UserColor.WHITE ? UserColor.BLACK : UserColor.WHITE;
-        //}
-
-        public void LoadGame(List<Move> moves)
-        {
-            _moves = moves;
+            get
+            {
+                return _pieces;
+            }
         }
     }
 }

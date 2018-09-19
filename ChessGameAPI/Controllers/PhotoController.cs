@@ -6,18 +6,21 @@ using Microsoft.Extensions.Configuration;
 namespace ChessGameAPI.Controllers
 {
     /// <summary>
-    /// Controller reponsible for photos
+    /// Controller reponsible for photos.
     /// </summary>
-    [Authorize]
-    [Route("api/users{userId}/photos")]
-    [ApiController]
     public class PhotoController : ControllerBase
     {
-        private readonly IUserRepository _repo;
+        private readonly IUserRepository _userRepo;
         private readonly IConfiguration _config;
-        public PhotoController(IUserRepository repo, IConfiguration config)
+
+        /// <summary>
+        /// Controller responsible for photos.
+        /// </summary>
+        /// <param name="userRepo">Data repository for Users</param>
+        /// <param name="config">current configuration profile</param>
+        public PhotoController(IUserRepository userRepo, IConfiguration config)
         {
-            _repo = repo;
+            _userRepo = userRepo;
             _config = config;
         }
     }

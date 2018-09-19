@@ -6,6 +6,7 @@ namespace ChessGameAPI.Data
 {
     /// <summary>
     /// Implementation of the IAuthRepository Interface.
+    /// Responsible for Authorization info.
     /// </summary>
     public class AuthRepository : IAuthRepository
     {
