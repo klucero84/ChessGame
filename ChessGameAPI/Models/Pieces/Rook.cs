@@ -7,7 +7,7 @@ namespace ChessGameAPI.Models.Pieces
     {
 
         public Rook() { }
-        public Rook(User user, int x, int y) : base(user, x, y)
+        public Rook(Game game, User user, int x, int y) : base(game, user, x, y)
         {
         }
 

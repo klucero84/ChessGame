@@ -25,5 +25,9 @@ namespace ChessGameAPI.Helpers
             CreateMap<UserForUpdateDto, User>();
             CreateMap<Photo, PhotoForReturnDto>();
             CreateMap<PhotoForCreationDto, Photo>();
+            CreateMap<MoveForAddMoveDto, Move>();
+            CreateMap<Move, MoveDto>();
+            CreateMap<Piece, PieceDto>();
+            CreateMap<Game, GameDto>();
         }    }
 }

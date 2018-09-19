@@ -9,7 +9,7 @@ namespace ChessGameAPI.Models.Pieces
 
         public Pawn() { }
 
-        public Pawn(User user, int x, int y) : base(user, x, y)
+        public Pawn(Game game, User user, int x, int y) : base(game, user, x, y)
         {
         }
 

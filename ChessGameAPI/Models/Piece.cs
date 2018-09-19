@@ -37,6 +37,8 @@ namespace ChessGameAPI.Models
         [Required]
         public Game Game { get; set; }
 
+        public string Discriminator { get; set; }
+
         /// <summary>
         /// Blank Constructor 
         /// </summary>
@@ -48,8 +50,9 @@ namespace ChessGameAPI.Models
         /// <param name="user">User to which the piece belongs</param>
         /// <param name="x">Abscissas value of piece</param>
         /// <param name="y">Ordinate value of the piece</param>
-        public Piece(User user, int x, int y)
+        public Piece(Game game, User user, int x, int y)
         {
+            Game = game;
             OwnedBy = user;
             X = x;
             Y = y;

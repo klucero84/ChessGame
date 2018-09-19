@@ -1,4 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using ChessGameAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChessGameAPI.Data
 {
@@ -33,12 +37,30 @@ namespace ChessGameAPI.Data
         }
 
         /// <summary>
-        /// Asynchronously saves all changes made in this context to the underlying database.
+        /// Saves all changes made in this context to the underlying data source.
         /// </summary>
         /// <returns>an async operation returning an bool if any changes were saved</returns>
         public async Task<bool> SaveAll()
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<IEnumerable<Game>> GetGamesForUser(int userId)
+        {
+            return await _context.Games.Where(x => x.BlackUserId == userId || x.WhiteUserId == userId).ToListAsync();
+        }
+
+        public async Task<Game> GetGame(int gameId)
+        {
+            return await _context.Games.FirstOrDefaultAsync(x => x.Id == gameId);
+        }
+
+        public async Task<Piece> GetPiece(int pieceId)
+        {
+            return await _context.Pieces.FirstOrDefaultAsync(x => x.Id == pieceId);
+        }
+
+
+        
     }
 }

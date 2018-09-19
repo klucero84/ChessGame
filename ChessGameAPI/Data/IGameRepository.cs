@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using ChessGameAPI.Models;
 
 namespace ChessGameAPI.Data
 {
@@ -21,5 +23,11 @@ namespace ChessGameAPI.Data
         /// </summary>
         /// <returns>an asynchronous operation returning a boolean</returns>
          Task<bool> SaveAll();
+
+        Task<IEnumerable<Game>> GetGamesForUser(int userId);
+
+        Task<Game> GetGame(int gameId);
+
+        Task<Piece> GetPiece(int pieceId);
     }
 }

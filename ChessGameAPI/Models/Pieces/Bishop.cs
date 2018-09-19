@@ -7,7 +7,7 @@ namespace ChessGameAPI.Models.Pieces
     {
         public Bishop() { }
         
-        public Bishop(User user, int x, int y) : base(user, x, y)
+        public Bishop(Game game, User user, int x, int y) : base(game, user, x, y)
         {
         }
 

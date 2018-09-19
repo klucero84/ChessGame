@@ -6,7 +6,7 @@ namespace ChessGameAPI.Models.Pieces
     public class King : Piece
     {
         public King() { }
-        public King(User user, int x, int y) : base(user, x, y)
+        public King(Game game, User user, int x, int y) : base(game, user, x, y)
         {
         }
 
