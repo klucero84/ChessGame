@@ -25,7 +25,7 @@ export class NavComponent implements OnInit {
       this.alertify.error(error);
       // console.log('Failed to Login');
     }, () => {
-      this.router.navigate(['/users']);
+      this.router.navigate(['/home']);
     });
   }
 
@@ -34,7 +34,7 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.alertify.message('loggged out');
     this.router.navigate(['/home']);
   }

@@ -1,5 +1,10 @@
 <div class="container mt-5">
-  <div *ngIf="!registerMode" style="text-align: center">
+ 
+  <div *ngIf="loggedIn()" >
+    <h1>logged in</h1>
+  </div>
+ <div *ngIf="!loggedIn()" >
+  <div *ngIf="!registerMode"  style="text-align: center">
     <h1>Chess Game</h1>
     <p class="lead">Sign up to play</p>
     <div class="text-center">
@@ -15,4 +20,5 @@
       </div>
     </div>
   </div>
+ </div>
 </div>
