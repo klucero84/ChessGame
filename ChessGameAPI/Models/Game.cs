@@ -128,9 +128,12 @@ namespace ChessGameAPI.Models
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<Move> GetMoves()
+        public List<Move> Moves
         {
-            return _moves;
+            get
+            {
+                return _moves;
+            }
         }
 
         /// <summary>

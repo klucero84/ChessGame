@@ -29,6 +29,7 @@ namespace ChessGameAPI.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
             var result =  await _repo.GetUsers();
@@ -40,6 +41,7 @@ namespace ChessGameAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
             var result = await _repo.GetUser(id);
