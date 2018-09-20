@@ -8,6 +8,10 @@ namespace ChessGameAPI.Models
 {
     public class User
     {
+        public User()
+        {
+            _lastActive = DateTime.Now;
+        }
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -22,11 +26,30 @@ namespace ChessGameAPI.Models
         [Required]
         public byte[] PasswordSalt { get; set; }
 
+        private DateTime _dateJoined;
         [Required]
-        public DateTime DateJoined { get; set; }
+        public DateTime DateJoined {
+            get 
+            { 
+                return _dateJoined == null ? 
+                DateTime.Now : _dateJoined;
+            }
+            set { _dateJoined = value; }
+        }
 
+        private DateTime _lastActive;
+        
         [Required]
-        public DateTime LastActive { get; set; }
+        public DateTime LastActive {
+            get 
+            {
+                return _lastActive == null ?
+                DateTime.Now : _lastActive;
+            }
+            set { _lastActive = value; }
+        }
+
+        public DateTimeOffset utcOffset { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
     }

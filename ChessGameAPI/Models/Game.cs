@@ -1,5 +1,6 @@
 ﻿
 using ChessGameAPI.Models.Pieces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,6 +27,20 @@ namespace ChessGameAPI.Models
 
         public User BlackUser { get; set; }
 
+        private DateTime _dateCreated;
+        public DateTime DateCreated
+        {
+            get 
+            { 
+                return _dateCreated == null ? 
+                DateTime.Now : _dateCreated;
+            }
+
+            set { _dateCreated = value;}
+        }
+        
+        public DateTime? DateCompleted { get; set;}
+        
         public Game() { }
 
         public Game(User user1, User user2)

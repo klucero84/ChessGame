@@ -9,6 +9,8 @@ namespace ChessGameAPI.Dtos
 
         public PieceDto Piece { get; set; }
 
+        public string PieceDiscriminator { get; set; }
+
         public UserForDetailDto User { get; set; }
 
         public int StartX { get; set; }

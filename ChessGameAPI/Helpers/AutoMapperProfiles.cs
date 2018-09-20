@@ -15,6 +15,7 @@ namespace ChessGameAPI.Helpers
         /// </summary>
         public AutoMapperProfiles()
         {
+            //model to dto
             CreateMap<User, UserForListDto>().ForMember(dest => dest.PhotoUrl, opt => {
                 opt.MapFrom(srs => srs.Photos.FirstOrDefault( p => p.IsMain).URL);
             });
@@ -22,12 +23,16 @@ namespace ChessGameAPI.Helpers
                 opt.MapFrom(srs => srs.Photos.FirstOrDefault( p => p.IsMain).URL);
             });
             CreateMap<Photo, PhotosForDetailDto>();
-            CreateMap<UserForUpdateDto, User>();
             CreateMap<Photo, PhotoForReturnDto>();
-            CreateMap<PhotoForCreationDto, Photo>();
-            CreateMap<MoveForAddMoveDto, Move>();
             CreateMap<Move, MoveDto>();
             CreateMap<Piece, PieceDto>();
             CreateMap<Game, GameDto>();
-        }    }
+
+
+            //dto to model
+            CreateMap<UserForUpdateDto, User>();
+            CreateMap<PhotoForCreationDto, Photo>();
+            CreateMap<MoveForAddMoveDto, Move>();
+        }    
+    }
 }

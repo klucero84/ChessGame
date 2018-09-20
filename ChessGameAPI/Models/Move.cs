@@ -26,8 +26,25 @@ namespace ChessGameAPI.Models
         [Required]
         public Game Game { get; set; }
 
+        private Piece _piece;
         [Required]
-        public Piece Piece { get; set; }
+        public Piece Piece 
+        { 
+            get { return _piece; }
+            set 
+            { 
+                _piece = value; 
+                _discriminator = _piece.Discriminator; 
+            }  
+        }
+
+        private string _discriminator;
+
+        public string PieceDiscriminator
+        {
+            get { return _discriminator; }
+            set { _discriminator = value; }
+        }
 
         [Required]
         public User User { get; set; }

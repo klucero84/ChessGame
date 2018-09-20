@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ChessGameAPI.Dtos
@@ -13,6 +14,18 @@ namespace ChessGameAPI.Dtos
         /// </summary>
         /// <value>integer</value>
         public int Id { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
+        public DateTime DateCreated { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
+        public DateTime DateCompleted { get; set; }
         
         /// <summary>
         /// IEnumerable collection of dtos for moves

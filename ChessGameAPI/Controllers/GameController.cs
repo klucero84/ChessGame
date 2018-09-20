@@ -37,18 +37,19 @@ namespace ChessGameAPI.Controllers
         /// Gets a list of games for the current user.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [Route("~/api/games")]
         public async Task<IActionResult> GetGames()
         {
-            var result = await _gameRepo.GetGamesForUser(GetCurrentUserId());
-            return Ok(result);
+            var games = await _gameRepo.GetGamesForUser(GetCurrentUserId());
+            var gamesDto = _mapper.Map<IEnumerable<GameDto>>(games);
+            return Ok(gamesDto);
         }
 
         /// <summary>
         /// Creates new game for current user.
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> NewGame()
         {
             // todo: match making queue/service
@@ -81,8 +82,6 @@ namespace ChessGameAPI.Controllers
             
             var game =  await _gameRepo.GetGame(id);
             var gameDto = _mapper.Map<GameDto>(game);
-            // var moves = _mapper.Map<IEnumerable<MoveDto>>(game.GetMoves());
-            // var peices = _mapper.Map<IEnumerable<PieceDto>>(game.GetPieces());
             return Ok(gameDto);
         }
     }
