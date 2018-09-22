@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, Input } from '@angular/core';
 import { User } from '../../_models/user';
 import { NgForm } from '@angular/forms';
 
@@ -8,7 +8,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
-  user: User;
+  @Input() user: User;
   @ViewChild('editForm') editForm: NgForm;
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {

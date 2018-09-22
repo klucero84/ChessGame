@@ -2,7 +2,7 @@ import { Game } from './game';
 import { User } from './user';
 import { Piece } from './piece';
 
-export interface Move {
+export class Move {
     id: number;
     gameId: number;
     game?: Game;

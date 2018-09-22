@@ -1,0 +1,14 @@
+<div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">{{game.id}}</h5>
+      <i class="fa fa-calendar-alt"></i>User Since: {{game.dateCreated}},<br>
+      <i class="fa fa-calendar-alt"></i>Last Active: {{game.dateCompleted}}
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+
+      <div *ngIf="isGameFinished()" >
+        
+      </div>
+
+      trophy
+    </div>
+  </div>

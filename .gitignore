@@ -342,3 +342,4 @@ testem.log
 .DS_Store
 Thumbs.db
 ChessGameSPA/dist/
+ChessGameSPA/img/

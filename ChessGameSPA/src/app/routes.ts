@@ -17,7 +17,7 @@ import { GameDetailComponent } from './game/game-detail/game-detail.component';
 import { GameDetailResolver } from './_resolvers/game-detail.resolver';
 import { GameHomeComponent } from './game/game-home/game-home.component';
 
-export const appRoutes: Routes = [
+export const AppRoutes: Routes = [
     { path: '', component : HomeComponent },
     {
         path: '',
@@ -26,19 +26,17 @@ export const appRoutes: Routes = [
         children: [
             { path: 'users', component : UserListComponent , resolve: {users: UserListResolver} },
             { path: 'user/:id', component : UserDetailComponent , resolve : {user: UserDetailResolver} },
-            { path: 'user/edit', component: UserEditComponent,
-            resolve : {user: UserEditResolver}, canDeactivate: [PreventUnsavedChanges] },
+            { path: 'user/edit', component: UserEditComponent, resolve : {user: UserEditResolver}, canDeactivate: [PreventUnsavedChanges] },
             { path: 'messages', component : MessagesComponent },
             { path: 'game',
                 children: [
                    { path: 'list', component : GameListComponent, resolve: {games: GameListResolver} },
                    { path: ':id/play', component: GamePlayComponent, resolve : {game: GamePlayResolver} },
                    { path: ':id/detail', component: GameDetailComponent, resolve : {game: GameDetailResolver} },
-                   { path: '', component: GameHomeComponent }
+                   { path: '**', redirectTo: '', component: GameHomeComponent }
                 ]
             }
         ]
     },
-
     { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

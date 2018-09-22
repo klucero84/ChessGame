@@ -1,38 +1,49 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { JwtModule } from '@auth0/angular-jwt';
+import { DragAndDropModule } from 'angular-draggable-droppable';
+
+import { AppRoutes } from './routes';
+
+import { AuthService } from './_services/auth.service';
+import { MoveService } from './_services/move.service';
+import { GameService } from './_services/game.service';
+import { UserService } from './_services/user.service';
+import { AlertifyService } from './_services/alertify.service';
+
+import { AuthGuard } from './_guards/auth.guard';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
+
+import { ErrorInterceptorProvider } from './_services/error.interceptor';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { MessagesComponent } from './messages/messages.component';
-import { UserDetailComponent } from './user/user-detail/user-detail.component';
-import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
-import { AuthGuard } from './_guards/auth.guard';
-import { AuthService } from './_services/auth.service';
-import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
-import { AlertifyService } from './_services/alertify.service';
-import { UserService } from './_services/user.service';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { appRoutes } from './routes';
-import { HttpClientModule } from '@angular/common/http';
-import { ErrorInterceptorProvider } from './_services/error.interceptor';
-import { GameService } from './_services/game.service';
-import { GameListComponent } from './game/game-list/game-list.component';
-import { GameDetailComponent } from './game/game-detail/game-detail.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { UserCardComponent } from './user/user-card/user-card.component';
+import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import { GameHomeComponent } from './game/game-home/game-home.component';
+import { GameListComponent } from './game/game-list/game-list.component';
 import { GamePlayComponent } from './game/game-play/game-play.component';
-import { MoveService } from './_services/move.service';
+import { GameCardComponent } from './game/game-card/game-card.component';
+import { GameDetailComponent } from './game/game-detail/game-detail.component';
+import { GameBoardComponent } from './game/game-board/game-board.component';
+import { GamePieceComponent } from './game/game-piece/game-piece.component';
+
 import { GameDetailResolver } from './_resolvers/game-detail.resolver';
 import { GameListResolver } from './_resolvers/game-list.resolver';
 import { GamePlayResolver } from './_resolvers/game-play.resolver';
-import { JwtModule } from '@auth0/angular-jwt';
 import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { UserEditResolver } from './_resolvers/user-edit.resolver';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 
 export function tokenGetter() {
@@ -53,21 +64,26 @@ export function tokenGetter() {
       GameListComponent,
       GameDetailComponent,
       GameHomeComponent,
-      GamePlayComponent
+      GamePlayComponent,
+      UserCardComponent,
+      GameCardComponent,
+      GameBoardComponent,
+      GamePieceComponent
    ],
    imports: [
       BrowserModule,
       HttpClientModule,
       FormsModule,
+      DragAndDropModule,
       BsDropdownModule.forRoot(),
-      RouterModule.forRoot(appRoutes),
+      RouterModule.forRoot(AppRoutes),
       JwtModule.forRoot({
         config: {
             tokenGetter: AuthService.prototype.getAuthToken,
             whitelistedDomains: ['localhost:5000'],
             blacklistedRoutes: ['localhost:5000/api/auth']
         }
-    })
+      })
    ],
    providers: [
        AuthGuard,

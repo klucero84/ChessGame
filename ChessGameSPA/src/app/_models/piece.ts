@@ -6,6 +6,6 @@ export interface Piece {
     x: number;
     y: number;
     discriminator: string;
-    owner: User;
+    ownedBy: User;
     game: Game;
 }
