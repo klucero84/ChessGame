@@ -10,8 +10,8 @@ namespace ChessGameAPI.Migrations
             migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "utcOffset",
                 table: "Users",
-                nullable: false,
-                defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+                nullable: true,
+                defaultValue: new DateTimeOffset(new DateTime(1,1,1), new TimeSpan(0,0,0)));
 
             migrationBuilder.AddColumn<string>(
                 name: "PieceDiscriminator",
@@ -21,7 +21,8 @@ namespace ChessGameAPI.Migrations
             migrationBuilder.AddColumn<DateTime>(
                 name: "DateCompleted",
                 table: "Games",
-                nullable: true);
+                nullable: true,
+                defaultValue: null);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DateCreated",

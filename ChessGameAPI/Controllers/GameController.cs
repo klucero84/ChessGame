@@ -8,17 +8,22 @@ using ChessGameAPI.Dtos;
 using ChessGameAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ChessGameAPI.Helpers;
 
 namespace ChessGameAPI.Controllers
 {
     /// <summary>
     /// Controller responsible for Games.
     /// </summary>
-    public class GameController: AuthorizedControllerBase
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class GameController: ControllerBase
     {
         private readonly IGameRepository _gameRepo;
         private readonly IUserRepository _userRepo;
         private readonly IMapper _mapper;
+        private readonly IAuthRepository _authRepo;
 
         /// <summary>
         /// Controller responsible for Games.
@@ -26,11 +31,12 @@ namespace ChessGameAPI.Controllers
         /// <param name="gameRepo">Data repository for games</param>
         /// <param name="mapper">automapper utility</param>
         /// <param name="userRepo">Data repository for users</param>
-        public GameController(IGameRepository gameRepo, IMapper mapper, IUserRepository userRepo)
+        public GameController(IGameRepository gameRepo, IMapper mapper, IUserRepository userRepo, IAuthRepository authRepo)
         {
             _gameRepo = gameRepo;
             _mapper = mapper;
             _userRepo = userRepo;
+            _authRepo = authRepo;
         }
 
         /// <summary>
@@ -40,7 +46,7 @@ namespace ChessGameAPI.Controllers
         [Route("~/api/games")]
         public async Task<IActionResult> GetGames()
         {
-            var games = await _gameRepo.GetGamesForUser(GetCurrentUserId());
+            var games = await _gameRepo.GetGamesForUser(this.GetCurrentUserId());
             var gamesDto = _mapper.Map<IEnumerable<GameDto>>(games);
             return Ok(gamesDto);
         }
@@ -55,7 +61,7 @@ namespace ChessGameAPI.Controllers
             // todo: match making queue/service
             var oppenentId = 2;
 
-            User whiteUser = await _userRepo.GetUser(GetCurrentUserId());
+            User whiteUser = await _userRepo.GetUser(this.GetCurrentUserId());
             User blackUser = await _userRepo.GetUser(oppenentId);
 
             Game newGame = new Game(whiteUser, blackUser);

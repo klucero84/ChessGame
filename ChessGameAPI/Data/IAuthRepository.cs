@@ -30,5 +30,7 @@ namespace ChessGameAPI.Data
         /// <param name="email">proposed email</param>
         /// <returns>an async operation returning a bool, true = user exisit</returns>
          Task<bool> UserExists(string email);
+
+         void LogUserActivity(int userId);
     }
 }

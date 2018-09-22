@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChessGameAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20180920030822_AddGameDateTimesMoveDiscriminator")]
+    [Migration("20180920180202_AddGameDateTimesMoveDiscriminator")]
     partial class AddGameDateTimesMoveDiscriminator
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,7 +155,7 @@ namespace ChessGameAPI.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired();
 
-                    b.Property<DateTimeOffset>("utcOffset");
+                    b.Property<DateTimeOffset?>("utcOffset");
 
                     b.HasKey("Id");
 
@@ -238,7 +238,7 @@ namespace ChessGameAPI.Migrations
             modelBuilder.Entity("ChessGameAPI.Models.Move", b =>
                 {
                     b.HasOne("ChessGameAPI.Models.Game", "Game")
-                        .WithMany()
+                        .WithMany("Moves")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade);
 

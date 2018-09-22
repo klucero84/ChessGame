@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ChessGameAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,9 @@ namespace ChessGameAPI.Data
             }
             if(!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)){
                 return null;
-            } 
+            }
+            user.LastActive = DateTime.Now;
+            _context.SaveChangesAsync();
             return user;
         }
 
@@ -73,6 +76,8 @@ namespace ChessGameAPI.Data
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.DateJoined = DateTime.Now;
+            user.LastActive = DateTime.Now;
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
@@ -97,6 +102,14 @@ namespace ChessGameAPI.Data
             if(await _context.Users.AnyAsync(x => x.Email == email))
                 return true;
             return false;
+        }
+
+        public async void LogUserActivity(int userId)
+        {
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            user.LastActive = DateTime.Now;
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -27,17 +27,7 @@ namespace ChessGameAPI.Models
 
         public User BlackUser { get; set; }
 
-        private DateTime _dateCreated;
-        public DateTime DateCreated
-        {
-            get 
-            { 
-                return _dateCreated == null ? 
-                DateTime.Now : _dateCreated;
-            }
-
-            set { _dateCreated = value;}
-        }
+        public DateTime DateCreated { get; set; }
         
         public DateTime? DateCompleted { get; set;}
         
@@ -75,6 +65,7 @@ namespace ChessGameAPI.Models
         {
             _pieces = new List<Piece>(32);
             _moves = new List<Move>();
+            DateCreated = DateTime.Now;
             //User whiteUser = WhiteUser.Color == UserColor.WHITE ? WhiteUser : User2;
             //User blackUser = User1.Color == UserColor.BLACK ? WhiteUser : User2;
 

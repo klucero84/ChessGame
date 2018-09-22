@@ -25,7 +25,7 @@ namespace ChessGameAPI.Dtos
         /// 
         /// </summary>
         /// <value></value>
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
         
         /// <summary>
         /// IEnumerable collection of dtos for moves

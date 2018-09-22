@@ -49,7 +49,10 @@ namespace ChessGameAPI.Models
             set { _lastActive = value; }
         }
 
-        public DateTimeOffset utcOffset { get; set; }
+        public DateTimeOffset? utcOffset { 
+            get; 
+            set; 
+        }
 
         public ICollection<Photo> Photos { get; set; }
     }

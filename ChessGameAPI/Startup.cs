@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -62,6 +63,27 @@ namespace ChessGameAPI
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                     ValidateIssuer = false,
                     ValidateAudience = false
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context => 
+                    {
+                        /// <summary>
+                        /// log all user activity
+                        /// todo: make async and faster since this will be getting called on every token validation
+                        /// </summary>
+                        int userId = 0;
+                        var dbContext = context.HttpContext.RequestServices.GetRequiredService<DataContext>();
+                        var userIdClaim = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+                        var userIdValue = userIdClaim?.Value;
+                        int.TryParse(userIdValue, out userId);
+                        var user = dbContext.Users.FirstOrDefault(u => u.Id == userId);
+                        user.LastActive = DateTime.Now;
+                        dbContext.SaveChanges();
+                        return Task.CompletedTask;
+
+                        
+                    }
                 };
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(opt => {

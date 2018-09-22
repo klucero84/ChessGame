@@ -9,7 +9,10 @@ namespace ChessGameAPI.Controllers
     /// <summary>
     /// 
     /// </summary>
-    public class UsersController : AuthorizedControllerBase
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsersController : ControllerBase
     {
         private readonly IUserRepository _repo;
         private readonly IMapper _mapper;

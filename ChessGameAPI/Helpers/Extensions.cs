@@ -1,5 +1,10 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
+using ChessGameAPI.Controllers;
+using ChessGameAPI.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChessGameAPI.Helpers
 {
@@ -20,5 +25,18 @@ namespace ChessGameAPI.Helpers
             response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
             response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
+
+        public static int GetCurrentUserId(this ControllerBase baseController)
+        {
+            int userId = 0;
+            if (baseController.User.Identity.IsAuthenticated)
+            {
+                var claimsIdentity = baseController.User.Identity as ClaimsIdentity;
+                var userIdClaim = claimsIdentity?.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+                var userIdValue = userIdClaim?.Value;
+                int.TryParse(userIdValue, out userId);
+            }
+            return userId;
+        }  
     }
 }

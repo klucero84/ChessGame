@@ -8,6 +8,9 @@ namespace ChessGameAPI.Controllers
     /// <summary>
     /// Controller reponsible for photos.
     /// </summary>
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
     public class PhotoController : ControllerBase
     {
         private readonly IUserRepository _userRepo;

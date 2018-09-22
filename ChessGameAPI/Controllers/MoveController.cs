@@ -3,6 +3,7 @@ using AutoMapper;
 using ChessGameAPI.Data;
 using ChessGameAPI.Dtos;
 using ChessGameAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChessGameAPI.Controllers
@@ -10,7 +11,10 @@ namespace ChessGameAPI.Controllers
     /// <summary>
     /// Controller responsible for moves.
     /// </summary>
-    public class MoveController : AuthorizedControllerBase
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class MoveController : ControllerBase
     {
         private readonly IGameRepository _repo;
         private readonly IMapper _mapper;
