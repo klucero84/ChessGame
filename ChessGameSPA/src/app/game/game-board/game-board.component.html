@@ -1,8 +1,14 @@
 <div class="checkerboard">
   <div *ngFor="let row of boardY;">
-    <div *ngFor="let column of boardX;" class="board-tile x-{{column}} y-{{row}}" mwlDroppable (dragOver)='dragOver(column,row)' (drop)='drop(column,row);'>
-      <div mwlDraggable (mousedown)='pieceMouseDown(column, row)' >
-      </div>
+    <div *ngFor="let column of boardX;" class="board-tile x-{{column}} y-{{row}}">
+      <app-game-board-square 
+          [piece]='getPieceForXY(column, row)' 
+          [game]='game'
+          [x]='column' 
+          [y]='row' 
+          (pickUpPiece)="pickUpPiece($event)" 
+          (putDownPiece)='putDownPiece($event)'>
+        </app-game-board-square>
     </div>
   </div>
 </div>

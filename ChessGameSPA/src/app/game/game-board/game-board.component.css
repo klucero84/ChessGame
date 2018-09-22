@@ -26,70 +26,8 @@
 .checkerboard > div:nth-child(2n-1) > div:nth-child(2n-1){
     background-color: #e2d37f;
 }
-.piece
-{
-  height: 100%;
-  width: 100%;
-}
 /*columns*/
 .x-0{
     clear: left;
 }
-.black-Pawn
-{
-  background-image:url('../../../../img/80/BlackPawn.png');
-}
 
-.black-Rook
-{
-  background-image:url('../../../../img/80/BlackRook.png');
-}
-
-.black-Knight
-{
-  background-image:url('../../../../img/80/BlackKnight.png');
-}
-
-.black-Bishop
-{
-  background-image:url('../../../../img/80/BlackBishop.png');
-}
-
-.black-Queen
-{
-  background-image:url('../../../../img/80/BlackQueen.png');
-}
-
-.black-King
-{
-  background-image:url('../../../../img/80/BlackKing.png');
-}
-.white-Pawn
-{
-  background-image:url('../../../../img/80/WhitePawn.png');
-}
-
-.white-Rook
-{
-  background-image:url('../../../../img/80/WhiteRook.png');
-}
-
-.white-Knight
-{
-  background-image:url('../../../../img/80/WhiteKnight.png');
-}
-
-.white-Bishop
-{
-  background-image:url('../../../../img/80/WhiteBishop.png');
-}
-
-.white-Queen
-{
-  background-image:url('../../../../img/80/WhiteQueen.png');
-}
-
-.white-King
-{
-  background-image:url('../../../../img/80/WhiteKing.png');
-}

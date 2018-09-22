@@ -5,11 +5,9 @@ import { Piece } from './piece';
 export class Move {
     id: number;
     gameId: number;
-    game?: Game;
     pieceId: number;
     piece?: Piece;
     userId: number;
-    user?: User;
     startX: number;
     startY: number;
     endX: number;
