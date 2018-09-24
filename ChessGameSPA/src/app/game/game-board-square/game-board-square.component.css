@@ -4,6 +4,13 @@ div
   width: 100%;
 }
 
+.active-piece {
+  opacity: 1;
+}
+.non-active-piece {
+  opacity: .8;
+}
+
 .black-Pawn
 {
   background-image:url('../../../assets/img/80/BlackPawn.png');

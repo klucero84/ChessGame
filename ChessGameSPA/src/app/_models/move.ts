@@ -6,11 +6,11 @@ export class Move {
     id: number;
     gameId: number;
     pieceId: number;
-    piece?: Piece;
     userId: number;
     startX: number;
     startY: number;
     endX: number;
     endY: number;
     discriminator: string;
+    isWhite: boolean;
 }

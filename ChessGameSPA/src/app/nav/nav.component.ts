@@ -33,6 +33,18 @@ export class NavComponent implements OnInit {
     return this.authService.loggedIn();
   }
 
+  loginDemo() {
+    this.authService.login({'email': 'kenneth@kennethlucero.com', 'password': 'password'}).subscribe(next => {
+      this.alertify.success('logged in with demo.');
+    },
+    error => {
+      this.alertify.error(error);
+    },
+    () => {
+      this.router.navigate(['/home']);
+    });
+  }
+
   logout() {
     this.authService.logout();
     this.alertify.message('loggged out');

@@ -16,7 +16,7 @@ export class GameListResolver implements Resolve<Game[]>  {
         return this.gameService.getGames().pipe(
             catchError( error => {
                 this.alertify.error('Problem retrieving games.');
-                this.router.navigate(['/games/home']);
+                this.router.navigate(['/home']);
                 return of(null);
             })
         );

@@ -9,14 +9,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GameListComponent implements OnInit {
 
- games: Game[];
+ @Input() games: Game[];
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.games = data['games'];
-      console.log(this.games);
+      // console.log(this.games);
     });
   }
 }

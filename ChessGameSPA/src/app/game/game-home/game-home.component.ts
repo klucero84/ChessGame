@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Game } from '../../_models/game';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game-home',
@@ -7,10 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameHomeComponent implements OnInit {
 
-  constructor() { }
+  @Input() games: Game[];
+  @Input() game: Game[];
+
+  playMode = false;
+  listMode = true;
+
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    console.log('home again');
+    this.route.data.subscribe(data => {
+      this.games = data['games'];
+      this.game = data['game'];
+      // console.log(this.game);
+    });
+    this.listMode = !this.game;
+    this.playMode = !this.games;
   }
-
 }

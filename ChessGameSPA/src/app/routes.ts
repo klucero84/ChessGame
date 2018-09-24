@@ -9,9 +9,7 @@ import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserEditResolver } from './_resolvers/user-edit.resolver';
-import { GameListComponent } from './game/game-list/game-list.component';
 import { GameListResolver } from './_resolvers/game-list.resolver';
-import { GamePlayComponent } from './game/game-play/game-play.component';
 import { GamePlayResolver } from './_resolvers/game-play.resolver';
 import { GameDetailComponent } from './game/game-detail/game-detail.component';
 import { GameDetailResolver } from './_resolvers/game-detail.resolver';
@@ -30,10 +28,10 @@ export const AppRoutes: Routes = [
             { path: 'messages', component : MessagesComponent },
             { path: 'game',
                 children: [
-                   { path: 'list', component : GameListComponent, resolve: {games: GameListResolver} },
-                   { path: ':id/play', component: GamePlayComponent, resolve : {game: GamePlayResolver} },
+                //    { path: 'list', component : GameHomeComponent, resolve: {games: GameListResolver} },
+                   { path: ':id/play', component: GameHomeComponent, resolve : {game: GamePlayResolver} },
                    { path: ':id/detail', component: GameDetailComponent, resolve : {game: GameDetailResolver} },
-                   { path: '**', redirectTo: '', component: GameHomeComponent }
+                   { path: '**', redirectTo: '', component: GameHomeComponent, resolve: {games: GameListResolver} }
                 ]
             }
         ]

@@ -1,11 +1,7 @@
-<p>
-  game-list works! poop
-</p>
-
 <div class="container">
   <div class="row">
-    <div *ngFor="let game of games" class="col-lg-2 col-md-3 col-sm-6">
-     {{game.id}}
+    <div *ngFor="let game of games; let i = index;" class="col-6">
+      <app-game-card [game]='game'></app-game-card>
     </div>
-  </div>
+    </div>
 </div>

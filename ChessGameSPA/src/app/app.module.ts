@@ -32,7 +32,6 @@ import { UserCardComponent } from './user/user-card/user-card.component';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import { GameHomeComponent } from './game/game-home/game-home.component';
 import { GameListComponent } from './game/game-list/game-list.component';
-import { GamePlayComponent } from './game/game-play/game-play.component';
 import { GameCardComponent } from './game/game-card/game-card.component';
 import { GameDetailComponent } from './game/game-detail/game-detail.component';
 import { GameBoardComponent } from './game/game-board/game-board.component';
@@ -44,6 +43,8 @@ import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { UserEditResolver } from './_resolvers/user-edit.resolver';
 import { GameBoardSquareComponent } from './game/game-board-square/game-board-square.component';
+import { GameControlPanelComponent } from './game/game-control-panel/game-control-panel.component';
+import { GameHistoryComponent } from './game/game-history/game-history.component';
 
 
 export function tokenGetter() {
@@ -64,11 +65,12 @@ export function tokenGetter() {
       GameListComponent,
       GameDetailComponent,
       GameHomeComponent,
-      GamePlayComponent,
       UserCardComponent,
       GameCardComponent,
       GameBoardComponent,
       GameBoardSquareComponent,
+      GameControlPanelComponent,
+      GameHistoryComponent
    ],
    imports: [
       BrowserModule,

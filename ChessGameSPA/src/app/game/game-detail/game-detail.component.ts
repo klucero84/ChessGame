@@ -16,7 +16,7 @@ export class GameDetailComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.game = data['game'];
-      console.log(this.game);
+      // console.log(this.game);
     });
   }
 

@@ -1,0 +1,13 @@
+<div class="card mb-2 h-25">
+  <div class="card-header text-white bg-primary">
+    <h5>Game Controls</h5>
+  </div>
+  <div class="card-body">
+      <button type="button" class="btn btn-success btn-sm mr-2" [routerLink]="['/messages']">New Game</button>
+      <button type="button" [ngClass]="{invisible: !game}" class="btn btn-danger btn-sm mr-2" [routerLink]="['/messages']">Concede</button>
+      <button type="button" [ngClass]="{invisible: !game}" class="btn btn-info btn-sm" [routerLink]="['/game']">Save & Quit</button>
+      <p class="card-text" *ngIf="game">
+        <span class="text-sucess">Turn:</span> {{usersTurn()}}
+      </p>
+  </div>
+</div>

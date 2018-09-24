@@ -1,3 +1,15 @@
-<p>
-  game-home works!
-</p>
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-8">
+        <app-game-list *ngIf="listMode" [games]="games"></app-game-list>
+        <app-game-board *ngIf='playMode' [game]="game"></app-game-board>
+    </div>
+    <div class="col-4 mb-3">
+      <div class="sticky-top pt-3">
+        <app-game-control-panel [game]="game"></app-game-control-panel>
+        <app-game-history *ngIf="playMode" [game]="game"></app-game-history>
+      </div>
+    </div>
+  </div>
+</div>
+  

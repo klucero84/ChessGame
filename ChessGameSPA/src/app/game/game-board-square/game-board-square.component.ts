@@ -33,7 +33,7 @@ export class GameBoardSquareComponent implements OnInit {
   }
 
   dragStart() {
-    if (this.piece !== null) {
+    if (this.piece && this.userHasTurn()) {
       this.pickUpPiece.emit(this.piece);
     }
   }
@@ -42,12 +42,27 @@ export class GameBoardSquareComponent implements OnInit {
     if (this.piece == null) {
       return '';
     }
-    let cssString = 'piece ';
+    let cssString = '';
     if (this.piece.ownedBy.id === this.game.whiteUser.id) {
       cssString = cssString + 'white-' + this.piece.discriminator;
     } else if (this.piece.ownedBy.id === this.game.blackUser.id) {
       cssString = cssString + 'black-' + this.piece.discriminator;
     }
+    if (this.userHasTurn()) {
+      cssString = cssString + ' active-piece';
+    } else {
+      cssString = cssString + ' non-active-piece';
+    }
     return cssString;
+  }
+
+  userHasTurn() {
+    if (this.game.moves[this.game.moves.length - 1]) {
+      return !(this.game.moves[this.game.moves.length - 1].userId === this.piece.ownedBy.id);
+    }
+    if (this.piece && this.piece.ownedBy) {
+      return this.piece.ownedBy.id === this.game.whiteUser.id;
+    }
+    return false;
   }
 }

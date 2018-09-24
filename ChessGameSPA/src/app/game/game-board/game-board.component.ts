@@ -31,20 +31,16 @@ export class GameBoardComponent implements OnInit {
       return;
     }
     this.move = new Move();
-    this.move.piece = piece;
+    this.move.startX = piece.x;
+    this.move.startY = piece.y;
+    this.move.discriminator = piece.discriminator;
+    this.move.pieceId = piece.id;
+    this.move.userId = piece.ownedBy.id;
   }
 
   putDownPiece(event) {
-    if (!this.move.piece) {
-      return;
-    }
-    // if (is not legalmove for this kind of piece)
-      // this.alertifyService.error('illegal move for piece type');
-      // return;
-
-    // if there is a piece
     if (event.piece) {
-      if (event.piece.ownedBy.id === this.move.piece.ownedBy.id) {
+      if (event.piece.ownedBy.id === this.move.userId) {
         this.alertifyService.warning('You cannot place a piece in a square that another of your pieces sits');
         return;
       } else {
@@ -53,19 +49,43 @@ export class GameBoardComponent implements OnInit {
       }
     }
 
-    this.move.piece.x = event.x;
-    this.move.piece.y = event.y;
+      // if there is a piece
+    const piece = this.getPieceForXY(this.move.startX, this.move.startY);
+    if (!piece) {
+      return;
+    }
+    // if (is not legalmove for this kind of piece)
+      // this.alertifyService.error('illegal move for piece type');
+      // return;
+
+    piece.x = event.x;
+    piece.y = event.y;
     this.move.endX = event.x;
-    this.move.endY = event.x;
-    this.move.pieceId = this.move.piece.id;
-    this.move.userId = this.move.piece.ownedBy.id;
+    this.move.endY = event.y;
     this.move.gameId = this.game.id;
-    this.move.piece = null;
-    // this.moveService.addMove(this.move);
-    console.log(this.move);
+    this.move.isWhite = this.game.whiteUser.id === this.move.userId;
+    if (!this.moveService.isLegalMove(this.move, this.move.isWhite, false)) {
+      return false;
+    }
+    // used in dev to add moves from one user.
+    this.moveService.addMoveTwoPlayer(this.move).subscribe(() => {
+    // this.moveService.addMove(this.move).subscribe(() => {
+      console.log(this.move);
+      this.game.moves.push(this.move);
+      // const savedPiece = this.getPieceForXY(this.move.endX, this.move.endY);
+      piece.x = this.move.endX;
+      piece.y = this.move.endY;
+      // this.alertifyService.success('registration successful');
+    }, error => {
+      piece.x = this.move.startX;
+      piece.y = this.move.startY;
+      this.alertifyService.error(error);
+    });
+
+
   }
 
-  getPieceForXY(x, y) {
+  getPieceForXY(x: number, y: number) {
     const pieces = this.game.pieces.filter(p => p.x === x && p.y === y);
     if (pieces === null) {
       return null;
