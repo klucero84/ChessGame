@@ -61,7 +61,7 @@ namespace ChessGameAPI.Data
 
         public async Task<Piece> GetPiece(int pieceId)
         {
-            return await _context.Pieces.FirstOrDefaultAsync(x => x.Id == pieceId);
+            return await _context.Pieces.Include(p =>p.Game).FirstOrDefaultAsync(x => x.Id == pieceId);
         }
 
 

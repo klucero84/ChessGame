@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,8 +24,14 @@ namespace ChessGameAPI.Models
 
         public int Id { get; set; }
 
+        [ForeignKey("Games")]
+        public int GameId { get; set; }
+
         [Required]
         public Game Game { get; set; }
+
+        [ForeignKey("Pieces")]
+        public int PieceId { get; set; }
 
         private Piece _piece;
         [Required]
@@ -45,6 +52,9 @@ namespace ChessGameAPI.Models
             get { return _discriminator; }
             set { _discriminator = value; }
         }
+
+        [ForeignKey("Users")]
+        public int UserId { get; set; }
 
         [Required]
         public User User { get; set; }

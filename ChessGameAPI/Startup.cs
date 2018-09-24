@@ -28,28 +28,18 @@ namespace ChessGameAPI
     {
         public IConfiguration Configuration { get; }
 
-        public IHostingEnvironment CurrentEnvironment { get; } 
+        public IHostingEnvironment env { get; } 
 
         public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
-            CurrentEnvironment = environment;
+            env = environment;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string env = CurrentEnvironment.EnvironmentName;
-            string connString;
-            if (env == "Production")
-            {
-                connString = Configuration.GetConnectionString("Production");
-            } else
-            {
-                connString = Configuration.GetConnectionString("Development");
-            }
-
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(connString));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connString")));
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -92,11 +82,11 @@ namespace ChessGameAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
             }
             else
             {

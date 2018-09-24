@@ -15,7 +15,7 @@ namespace ChessGameAPI.Models.Pieces
             throw new NotImplementedException();
         }
 
-        protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove)
+        protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove, bool isWhite)
         {
             //move must be abs two in one axis and abs one in another axis
             int diffX = Math.Abs(X - attemptedMove.EndX);

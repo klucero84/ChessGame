@@ -49,7 +49,7 @@ namespace ChessGameAPI.Models
             Piece pieceToBeMoved = attemptedMove.Piece;
             
             //determine if this move is legal
-            (bool, string) result = pieceToBeMoved.IsLegalMove(attemptedMove);
+            (bool, string) result = pieceToBeMoved.IsLegalMove(attemptedMove, attemptedMove.UserId == WhiteUserId);
             if (!result.Item1)
             {
                 //illegal move tell

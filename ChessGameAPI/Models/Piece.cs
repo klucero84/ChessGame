@@ -72,7 +72,7 @@ namespace ChessGameAPI.Models
         /// </summary>
         /// <param name="attemptedMove"></param>
         /// <returns></returns>
-        public (bool, string) IsLegalMove(Move attemptedMove)
+        public (bool, string) IsLegalMove(Move attemptedMove, bool isWhite)
         {
             //shared logic for determining legality of a move is here
             if (!IsMe(attemptedMove?.Piece))
@@ -97,10 +97,27 @@ namespace ChessGameAPI.Models
 
 
             //each subclass is responsible for it's own class (piece) specific movement logic
-            return IsLegalMoveForPiece(attemptedMove);
+            return IsLegalMoveForPiece(attemptedMove, isWhite);
         }
 
-        protected virtual (bool, string) IsLegalMoveForPiece(Move attemptedMove)
+
+        public (bool, string) IsLegalMoveTwoPlayer(Move attemptedMove, bool isWhite) {
+            //shared logic for determining legality of a move is here
+            if (!IsMe(attemptedMove?.Piece))
+            {
+                return (false, "Piece doesn't match.");
+            }
+            if (IsOutOfBounds(attemptedMove))
+            {
+                return (false, "Attempted move is out of bounds.");
+            }
+            if (!IsActuallyMoving(attemptedMove))
+            {
+                return (false, "Attempted move doesn't change board state.");
+            }
+            return IsLegalMoveForPiece(attemptedMove, isWhite);
+        }
+        protected virtual (bool, string) IsLegalMoveForPiece(Move attemptedMove, bool isWhite)
         {
             throw new NotImplementedException("IsLegalMoveForPiece is not implemented.");
         }
@@ -121,7 +138,9 @@ namespace ChessGameAPI.Models
 
         protected bool IsMyUser(User user)
         {
-            if (user?.Id == OwnedBy.Id)
+            if (OwnedBy == null || user == null)
+                return false;
+            if (user.Id == OwnedBy.Id)
             {
                 return true;
             }

@@ -23,6 +23,8 @@ namespace ChessGameAPI.Dtos
 
         public int UserId { get; set; }
 
+        public bool isWhite { get; set; }
+
     
     }
 }

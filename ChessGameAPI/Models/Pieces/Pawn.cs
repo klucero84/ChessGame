@@ -18,9 +18,8 @@ namespace ChessGameAPI.Models.Pieces
             throw new NotImplementedException();
         }
 
-        protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove)
+        protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove, bool isWhite)
         {
-            bool isWhite = attemptedMove.Game.WhiteUser.Id == attemptedMove.User.Id;
             int diffX = Math.Abs(X - attemptedMove.EndX);
             if (diffX > 1)
             {

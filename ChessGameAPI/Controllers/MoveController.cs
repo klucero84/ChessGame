@@ -46,10 +46,38 @@ namespace ChessGameAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddMove(MoveForAddMoveDto dto)
         {
+            
             Move newMove = _mapper.Map<Move>(dto);
             _repo.Add(newMove);
-            int code = await _repo.SaveAll();
-            return Ok();
+            Piece movedPiece = await _repo.GetPiece(dto.PieceId);
+            
+            var moveAttempt =  movedPiece.IsLegalMove(newMove, dto.isWhite);
+            if (moveAttempt.Item1) {
+                movedPiece.X = newMove.EndX;
+                movedPiece.Y = newMove.EndY;
+                int code = await _repo.SaveAll();
+                return Ok(code); 
+            } else {
+                return BadRequest(moveAttempt.Item2);
+            }
+           
+        }
+
+        [HttpPost("~/api/move/two-player")]
+        public async Task<IActionResult> AddMoveTwoPlayer(MoveForAddMoveDto dto) 
+        {
+            Move newMove = _mapper.Map<Move>(dto);
+            _repo.Add(newMove);
+            Piece movedPiece = await _repo.GetPiece(dto.PieceId);
+            var moveAttempt =  movedPiece.IsLegalMoveTwoPlayer(newMove, dto.isWhite);
+            if (moveAttempt.Item1) {
+                movedPiece.X = newMove.EndX;
+                movedPiece.Y = newMove.EndY;
+                int code = await _repo.SaveAll();
+                return Ok(code); 
+            } else {
+                return BadRequest(moveAttempt.Item2);
+            }
         }
     }
 }
