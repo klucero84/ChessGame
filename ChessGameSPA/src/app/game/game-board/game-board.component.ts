@@ -3,6 +3,7 @@ import { Game } from '../../_models/game';
 import { MoveService } from '../../_services/move.service';
 import { AlertifyService } from '../../_services/alertify.service';
 import { Move } from '../../_models/move';
+import { MoveSocketService } from '../../_services/move.socket.service';
 
 @Component({
   selector: 'app-game-board',
@@ -15,15 +16,22 @@ export class GameBoardComponent implements OnInit {
   boardX: any[];
   boardY: any[];
   move: Move = new Move();
+  ioConnection: any;
+
+
+
+
   @Input() game: Game;
 
   constructor(private moveService: MoveService,
-              private alertifyService: AlertifyService) {
+              private alertifyService: AlertifyService,
+              private moveSocketService: MoveSocketService) {
     this.boardX = Array(0, 1, 2, 3, 4, 5, 6, 7);
     this.boardY = Array(7, 6, 5, 4, 3, 2, 1, 0);
   }
 
   ngOnInit() {
+    this.initIoConnection();
   }
 
   pickUpPiece(piece) {
@@ -58,6 +66,7 @@ export class GameBoardComponent implements OnInit {
       // this.alertifyService.error('illegal move for piece type');
       // return;
 
+    // move the piece right now and move it back if it fails to persist
     piece.x = event.x;
     piece.y = event.y;
     this.move.endX = event.x;
@@ -94,4 +103,21 @@ export class GameBoardComponent implements OnInit {
     }
     return pieces[0];
   }
+
+  private initIoConnection(): void {
+    this.moveSocketService.initSocket();
+
+    this.ioConnection = this.moveSocketService.onMove()
+      .subscribe((move: Move) => {
+        this.game.moves.push(move);
+      });
+  }
+
+  public sendMove(move: Move): void {
+    if (!move) {
+      return;
+    }
+    this.moveSocketService.send(move);
+  }
+
 }

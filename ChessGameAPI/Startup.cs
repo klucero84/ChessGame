@@ -48,6 +48,7 @@ namespace ChessGameAPI
             services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
             services.AddCors();
             services.AddAutoMapper();
+            services.AddWebSocketManager();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => {
                 options.TokenValidationParameters =new TokenValidationParameters
@@ -85,7 +86,7 @@ namespace ChessGameAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -107,11 +108,17 @@ namespace ChessGameAPI
                 // app.UseHsts();
             }
 
+            app.UseWebSockets();
             // app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
+            
+            // app.MapWebSocketManager("/ws", serviceProvider.GetService<ChatMessageHandler>());
+            // app.MapWebSocketManager("/test", serviceProvider.GetService<TestMessageHandler>());
+
+
             app.UseMvc(routes => {
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",

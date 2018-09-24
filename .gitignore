@@ -344,3 +344,7 @@ Thumbs.db
 ChessGameSPA/dist/
 ChessGameSPA/img/
 ChessGameSPA/src/assets/
+wwwroot/
+
+# Publish settings
+*.pubxml
