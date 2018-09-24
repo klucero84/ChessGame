@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ChessGameAPI.Data;
 using ChessGameAPI.Helpers;
+using ChessGameAPI.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -46,9 +47,16 @@ namespace ChessGameAPI
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
-            services.AddCors();
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins("http://localhost:4200");
+            }));
+            services.AddSignalR();
             services.AddAutoMapper();
-            services.AddWebSocketManager();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => {
                 options.TokenValidationParameters =new TokenValidationParameters
@@ -107,18 +115,15 @@ namespace ChessGameAPI
                 });
                 // app.UseHsts();
             }
-
-            app.UseWebSockets();
-            // app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseCors("CorsPolicy");
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chat");
+            });
+            
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseAuthentication();
-            
-            // app.MapWebSocketManager("/ws", serviceProvider.GetService<ChatMessageHandler>());
-            // app.MapWebSocketManager("/test", serviceProvider.GetService<TestMessageHandler>());
-
-
             app.UseMvc(routes => {
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",

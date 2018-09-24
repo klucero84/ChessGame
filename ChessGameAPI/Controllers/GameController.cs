@@ -43,7 +43,7 @@ namespace ChessGameAPI.Controllers
         /// Gets a list of games for the current user.
         /// </summary>
         /// <returns></returns>
-        [Route("~/api/games")]
+        [HttpGet("~/api/games")]
         public async Task<IActionResult> GetGames()
         {
             var games = await _gameRepo.GetGamesForUser(this.GetCurrentUserId());

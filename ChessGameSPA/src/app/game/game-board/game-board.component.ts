@@ -104,20 +104,26 @@ export class GameBoardComponent implements OnInit {
     return pieces[0];
   }
 
+  applyOpponentMove() {
+    console.log('newMove');
+  }
+
   private initIoConnection(): void {
     this.moveSocketService.initSocket();
 
-    this.ioConnection = this.moveSocketService.onMove()
-      .subscribe((move: Move) => {
-        this.game.moves.push(move);
-      });
+    this.ioConnection = this.moveSocketService.onMove(this.applyOpponentMove());
+    // .subscribe((move: Move) => {
+    //     console.log(move);
+    //     // this.game.moves.push(move);
+    //   });
+      console.log(this.ioConnection);
   }
 
-  public sendMove(move: Move): void {
-    if (!move) {
-      return;
-    }
-    this.moveSocketService.send(move);
-  }
+  // public sendMove(move: Move): void {
+  //   if (!move) {
+  //     return;
+  //   }
+  //   this.moveSocketService.send(move);
+  // }
 
 }
