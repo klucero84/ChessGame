@@ -2,9 +2,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ChessGameAPI.Data;
 using ChessGameAPI.Dtos;
+using ChessGameAPI.Hubs;
 using ChessGameAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ChessGameAPI.Controllers
 {
@@ -18,16 +20,18 @@ namespace ChessGameAPI.Controllers
     {
         private readonly IGameRepository _repo;
         private readonly IMapper _mapper;
+        private readonly IHubContext<MoveHub> _hub;
 
         /// <summary>
         /// Controller responsible for moves.
         /// </summary>
         /// <param name="repo">Data repository for moves</param>
         /// <param name="mapper">automapper utility</param>
-        public MoveController (IGameRepository repo, IMapper mapper)
+        public MoveController (IGameRepository repo, IMapper mapper, IHubContext<MoveHub> hub)
         {
             _repo = repo;
             _mapper = mapper;
+            _hub = hub;
         }
 
         [Route("~/api/game/{gameId:int}/moves")]
@@ -64,7 +68,7 @@ namespace ChessGameAPI.Controllers
         }
 
         [HttpPost("~/api/move/two-player")]
-        public async Task<IActionResult> AddMoveTwoPlayer(MoveForAddMoveDto dto) 
+        public async Task<IActionResult> AddMoveTwoPlayer(MoveForAddMoveDto dto)
         {
             Move newMove = _mapper.Map<Move>(dto);
             _repo.Add(newMove);
@@ -74,6 +78,8 @@ namespace ChessGameAPI.Controllers
                 movedPiece.X = newMove.EndX;
                 movedPiece.Y = newMove.EndY;
                 int code = await _repo.SaveAll();
+                string connId =  Request.Cookies["conn-id"];
+                await _hub.Clients.GroupExcept(dto.GameId.ToString(), connId).SendAsync("addMoveToGame", dto);
                 return Ok(code); 
             } else {
                 return BadRequest(moveAttempt.Item2);

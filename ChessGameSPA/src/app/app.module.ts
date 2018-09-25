@@ -15,7 +15,6 @@ import { MoveService } from './_services/move.service';
 import { GameService } from './_services/game.service';
 import { UserService } from './_services/user.service';
 import { AlertifyService } from './_services/alertify.service';
-import { MoveSocketService } from './_services/move.socket.service';
 
 import { AuthGuard } from './_guards/auth.guard';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
@@ -91,7 +90,6 @@ export function tokenGetter() {
    providers: [
        AuthGuard,
        AuthService,
-       MoveSocketService,
        PreventUnsavedChanges,
        AlertifyService,
        ErrorInterceptorProvider,

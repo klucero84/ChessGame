@@ -1,13 +1,14 @@
+using ChessGameAPI.Dtos;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChessGameAPI.Hubs
 {
     public class ChatHub : Hub
     {
-        public void SendToAll(string name, string message)
+        public void SendToAll(MoveDto move)
         {
             // Clients.All.SendAsync()
-            Clients.All.SendAsync("sendToAll", name, message);
+            Clients.All.SendAsync("sendToAll", move);
         }
     }
 }

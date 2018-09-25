@@ -2,10 +2,14 @@
   <div class="card-header text-white bg-primary">
     <h5>Move History</h5>
   </div>
-  <div class="card-body container-fluid">
-    <div *ngFor="let move of game.moves" class="row">
-      From: {{move.startX}}, {{move.startY}} => To: {{move.endX}}, {{move.endY}}
-      Piece:{{move.discriminator}} User: {{move.userId === game.whiteUser.id ? game.whiteUser.name : game.blackUser.name}}
+  <div class="card-body container-fluid" style ="max-height: 60vh; overflow-y: scroll;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+    <div *ngFor="let move of game.moves" class="row border border-secondary mb-2 pl-2 pt-2 move-history" >
+      <div class='w-100'>
+        {{getUserForMove(move)}}'s <i [ngClass]="'fa fa-chess-' + move.pieceDiscriminator.toLowerCase()" alt=""></i> ( {{move.pieceDiscriminator}} )
+      </div>
+      <div class='w-100'>
+        {{getXLocName(move.startX)}}{{getYLocName(move.startY)}} => {{getXLocName(move.endX)}}{{getYLocName(move.endY)}}
+      </div>
     </div>
     <div *ngIf="game.moves?.length === 0" class="row">
       No Moves yet

@@ -4,14 +4,17 @@ import { Piece } from './piece';
 
 export class Move {
     id: number;
+    game: Game;
     gameId: number;
+    piece: Piece;
     pieceId: number;
+    user: User;
     userId: number;
     startX: number;
     startY: number;
     endX: number;
     endY: number;
-    discriminator: string;
+    pieceDiscriminator: string;
     isWhite: boolean;
 
     /**

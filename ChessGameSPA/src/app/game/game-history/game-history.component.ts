@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Game } from '../../_models/game';
+import { Move } from '../../_models/move';
 
 @Component({
   selector: 'app-game-history',
@@ -12,6 +13,29 @@ export class GameHistoryComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  getUserForMove(move: Move) {
+    let name = 'blank';
+    if (move.userId === this.game.whiteUser.id) {
+      name = this.game.whiteUser.name;
+    } else if ( move.userId === this.game.blackUser.id) {
+      name = this.game.blackUser.name;
+    } else if ( move.user.id === this.game.whiteUser.id) {
+      name = this.game.whiteUser.name;
+    } else if ( move.user.id === this.game.blackUser.id) {
+      name = this.game.blackUser.name;
+    }
+    return name;
+  }
+
+  getXLocName(x: number) {
+    let letters: Array<string> = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    return letters[x];
+  }
+
+  getYLocName(y: number) {
+    return y + 1;
   }
 
 }

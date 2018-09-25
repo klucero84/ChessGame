@@ -1,9 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Game } from '../../_models/game';
 import { MoveService } from '../../_services/move.service';
 import { AlertifyService } from '../../_services/alertify.service';
 import { Move } from '../../_models/move';
-import { MoveSocketService } from '../../_services/move.socket.service';
 
 @Component({
   selector: 'app-game-board',
@@ -24,14 +23,14 @@ export class GameBoardComponent implements OnInit {
   @Input() game: Game;
 
   constructor(private moveService: MoveService,
-              private alertifyService: AlertifyService,
-              private moveSocketService: MoveSocketService) {
+              private alertifyService: AlertifyService) {
     this.boardX = Array(0, 1, 2, 3, 4, 5, 6, 7);
     this.boardY = Array(7, 6, 5, 4, 3, 2, 1, 0);
   }
 
   ngOnInit() {
-    this.initIoConnection();
+    console.log(this.game.id);
+    this.moveService.joinGame(this.game);
   }
 
   pickUpPiece(piece) {
@@ -41,9 +40,13 @@ export class GameBoardComponent implements OnInit {
     this.move = new Move();
     this.move.startX = piece.x;
     this.move.startY = piece.y;
-    this.move.discriminator = piece.discriminator;
+    this.move.pieceDiscriminator = piece.discriminator;
     this.move.pieceId = piece.id;
     this.move.userId = piece.ownedBy.id;
+  }
+
+  showMoves() {
+    console.log(this.game.moves);
   }
 
   putDownPiece(event) {
@@ -79,8 +82,8 @@ export class GameBoardComponent implements OnInit {
     // used in dev to add moves from one user.
     this.moveService.addMoveTwoPlayer(this.move).subscribe(() => {
     // this.moveService.addMove(this.move).subscribe(() => {
-      console.log(this.move);
-      this.game.moves.push(this.move);
+      // console.log(this.move);
+      // this.game.moves.push(this.move);
       // const savedPiece = this.getPieceForXY(this.move.endX, this.move.endY);
       piece.x = this.move.endX;
       piece.y = this.move.endY;
@@ -104,26 +107,8 @@ export class GameBoardComponent implements OnInit {
     return pieces[0];
   }
 
-  applyOpponentMove() {
-    console.log('newMove');
+  @HostListener('window:beforeunload')
+  leaveGame() {
+    this.moveService.leaveGame(this.game.id);
   }
-
-  private initIoConnection(): void {
-    this.moveSocketService.initSocket();
-
-    this.ioConnection = this.moveSocketService.onMove(this.applyOpponentMove());
-    // .subscribe((move: Move) => {
-    //     console.log(move);
-    //     // this.game.moves.push(move);
-    //   });
-      console.log(this.ioConnection);
-  }
-
-  // public sendMove(move: Move): void {
-  //   if (!move) {
-  //     return;
-  //   }
-  //   this.moveSocketService.send(move);
-  // }
-
 }
