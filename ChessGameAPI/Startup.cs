@@ -118,7 +118,6 @@ namespace ChessGameAPI
             app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
-                // routes.MapHub<ChatHub>("/chat");
                 routes.MapHub<MoveHub>("/api/move/ws");
             });
             
