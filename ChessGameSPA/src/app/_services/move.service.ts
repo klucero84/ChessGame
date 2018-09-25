@@ -25,25 +25,25 @@ addMoveTwoPlayer(move: Move) {
 }
 
 joinGame(game: Game) {
-  console.log(this.baseUrl + '/ws');
+  // console.log(this.baseUrl + '/ws');
   this.hubConnection = new HubConnectionBuilder().withUrl(this.baseUrl + '/ws').build();
   this.hubConnection
   .start()
   .then(
     () => {
-      console.log('Connection started.');
+      // console.log('Connection started.');
       this.hubConnection.invoke('joinGame', game.id);
       this.hubConnection.on('addMoveToGame', (move: Move) => {
         game.moves.push(move);
         const piece = game.pieces.filter(p => p.x === move.startX && p.y === move.startY)[0];
         piece.x = move.endX;
         piece.y = move.endY;
-        console.log(move);
+        // console.log(move);
       });
     }
     )
   .catch(
-    err => console.log('Error while establishing connection:' + err)
+    // err => console.log('Error while establishing connection:' + err)
     );
 }
 
@@ -51,10 +51,10 @@ leaveGame(gameId: number) {
   this.hubConnection.invoke('leaveGame', gameId);
   this.hubConnection.stop().
   then(
-    () => console.log('Connection ended.')
+    // () => console.log('Connection ended.')
     )
   .catch(
-    err => console.log('Error while closing connection:' + err)
+    // err => console.log('Error while closing connection:' + err)
     );
 
 }

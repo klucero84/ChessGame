@@ -29,7 +29,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.game.id);
+    // console.log(this.game.id);
     this.moveService.joinGame(this.game);
   }
 
@@ -46,7 +46,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   showMoves() {
-    console.log(this.game.moves);
+    // console.log(this.game.moves);
   }
 
   putDownPiece(event) {
