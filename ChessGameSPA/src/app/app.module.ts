@@ -46,6 +46,7 @@ import { UserEditResolver } from './_resolvers/user-edit.resolver';
 import { GameBoardSquareComponent } from './game/game-board-square/game-board-square.component';
 import { GameControlPanelComponent } from './game/game-control-panel/game-control-panel.component';
 import { GameHistoryComponent } from './game/game-history/game-history.component';
+import { UserMatchHistoryComponent } from './user/user-match-history/user-match-history.component';
 
 
 export function tokenGetter() {
@@ -71,7 +72,8 @@ export function tokenGetter() {
       GameBoardComponent,
       GameBoardSquareComponent,
       GameControlPanelComponent,
-      GameHistoryComponent
+      GameHistoryComponent,
+      UserMatchHistoryComponent
    ],
    imports: [
       FormsModule,

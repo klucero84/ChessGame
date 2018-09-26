@@ -23,7 +23,6 @@ namespace ChessGameAPI.Controllers
         private readonly IGameRepository _gameRepo;
         private readonly IUserRepository _userRepo;
         private readonly IMapper _mapper;
-        private readonly IAuthRepository _authRepo;
 
         /// <summary>
         /// Controller responsible for Games.
@@ -31,12 +30,11 @@ namespace ChessGameAPI.Controllers
         /// <param name="gameRepo">Data repository for games</param>
         /// <param name="mapper">automapper utility</param>
         /// <param name="userRepo">Data repository for users</param>
-        public GameController(IGameRepository gameRepo, IMapper mapper, IUserRepository userRepo, IAuthRepository authRepo)
+        public GameController(IGameRepository gameRepo, IMapper mapper, IUserRepository userRepo)
         {
             _gameRepo = gameRepo;
             _mapper = mapper;
             _userRepo = userRepo;
-            _authRepo = authRepo;
         }
 
         /// <summary>

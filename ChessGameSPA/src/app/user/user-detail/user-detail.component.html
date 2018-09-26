@@ -1,3 +1,66 @@
-<p>
-  user-detail works!
-</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-sm-4">
+            <h1>Your Profile</h1>
+        </div>
+        <div class="col-sm-8">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+              <div class="img-wrapper">
+                  <img class="card-img-top img-thumbnail m-3" src="{{photoUrl || '../../../../../assets/user.png" alt="{{user.name}}">
+              </div>
+                <div class="card-body">
+                    Name: {{user.name}}
+                    
+                    Email: {{user.email}}
+                    <div>
+                        <strong>Last Active:</strong>
+                        <p>{{user.lastActive | date: 'shortDate'}}</p>
+                    </div>
+                    <div>
+                        <strong>Member since:</strong>
+                        <p>{{user.dateJoined | date: 'mediumDate'}}</p>
+                    </div>
+                </div>
+                <!-- <div class="card-footer">
+                    <div class="btn-group d-flex">
+                        <button [disabled]="!editForm.dirty" form="editForm" class="btn btn-success btn-block">Save Changes</button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="tab-panel w-auto">
+                <tabset class="user-tabset" #userTabs>
+                  <tab heading="Match History">
+                      <app-user-match-history></app-user-match-history>
+                  </tab>
+                  <tab heading="Statistics">
+                    Win Rate:
+  
+                  </tab>
+                  <tab heading="Photos">
+                      <!-- <app-photo-editor [photos]="user.photos"></app-photo-editor> -->
+                  </tab>
+                </tabset>
+            </div>
+            <!-- <div class="tab-panel w-auto">
+              <tabset class="user-card-tabset" #userCardTabs>
+                <tab heading="Recent Matches">
+                  <i class="fa fa-calendar-alt"></i> User Since: {{user.dateJoined | date:'shortDate'}}<br>
+                  <i class="fa fa-calendar-alt"></i> Last Active: {{user.lastActive | date:'shortDate'}}
+                </tab>
+                <tab heading="Career Stats">
+                  
+                </tab>
+                <tab heading="Request Match">
+                    <input type="text" placeholder="input goes here"> <a href="#" class="btn btn-primary">Go somewhere</a>
+                </tab>
+              </tabset>
+            </div> -->
+        </div>
+    </div>
+  </div>
