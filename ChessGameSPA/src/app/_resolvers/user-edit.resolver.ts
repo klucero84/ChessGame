@@ -10,12 +10,12 @@ import { AuthService } from '../_services/auth.service';
 @Injectable()
 export class UserEditResolver implements Resolve<User> {
     constructor(private userService: UserService,
-                private authServere: AuthService,
+                private authService: AuthService,
                 private router: Router,
                 private alertify: AlertifyService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<User> {
-        return this.userService.getUser(this.authServere.decodedToken.nameid).pipe(
+        return this.userService.getUser(this.authService.decodedToken.nameid).pipe(
             catchError(error => {
                 this.alertify.error('Problem retreiving you data');
                 this.router.navigate(['/users']);

@@ -55,7 +55,7 @@ namespace ChessGameAPI.Controllers
         /// Creates new game for current user.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> NewGame()
         {
             // todo: match making queue/service
@@ -72,9 +72,12 @@ namespace ChessGameAPI.Controllers
                 _gameRepo.Add(piece);
             }
             var result = await _gameRepo.SaveAll();
-
+        
             GameDto gameDto = _mapper.Map<GameDto>(newGame);
-            return Ok(gameDto);
+            return Created("/game/" +gameDto.Id + "/play", gameDto);
+            //  return CreatedAtAction("GetGame", gameDto);
+            // return CreatedAtRoute( );
+            //  Ok(gameDto);
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace ChessGameAPI.Controllers
         /// </summary>
         /// <param name="id">Id of the game to get from data repo</param>
         /// <returns>Piece and Move list that represents a game in progress</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name="GetGame")]
         public async Task<IActionResult> GetGame(int id)
         {
             

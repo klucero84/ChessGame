@@ -43,7 +43,7 @@ namespace ChessGameAPI
         {
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connString"))
                     .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
-            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddTransient<IAuthRepository, AuthRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
@@ -70,18 +70,27 @@ namespace ChessGameAPI
                 {
                     OnTokenValidated = context => 
                     {
+                        // Task.Run(async () => {
+                            
+                        //     int userId = 0;
+                        //     IAuthRepository authRepo = context.HttpContext.RequestServices.GetRequiredService<IAuthRepository>();
+                        //     var userIdClaim = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+                        //     var userIdValue = userIdClaim?.Value;
+                        //     int.TryParse(userIdValue, out userId);
+                        //     await authRepo.LogUserActivity(userId);
+                        // });
                         /// <summary>
                         /// log all user activity
                         /// todo: make async and faster since this will be getting called on every token validation
                         /// </summary>
-                        int userId = 0;
-                        var dbContext = context.HttpContext.RequestServices.GetRequiredService<DataContext>();
-                        var userIdClaim = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-                        var userIdValue = userIdClaim?.Value;
-                        int.TryParse(userIdValue, out userId);
-                        var user = dbContext.Users.FirstOrDefault(u => u.Id == userId);
-                        user.LastActive = DateTime.Now;
-                        dbContext.SaveChanges();
+                        // int userId = 0;
+                        // var dbContext = context.HttpContext.RequestServices.GetRequiredService<DataContext>();
+                        // var userIdClaim = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+                        // var userIdValue = userIdClaim?.Value;
+                        // int.TryParse(userIdValue, out userId);
+                        // var user = dbContext.Users.FirstOrDefault(u => u.Id == userId);
+                        // user.LastActive = DateTime.Now;
+                        // dbContext.SaveChanges();
                         return Task.CompletedTask;
 
                         

@@ -348,3 +348,4 @@ wwwroot/
 
 # Publish settings
 *.pubxml
+ChessGameAPI/wwwroot/

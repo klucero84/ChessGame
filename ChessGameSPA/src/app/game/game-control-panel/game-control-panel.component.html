@@ -3,8 +3,8 @@
     <h5>Game Controls</h5>
   </div>
   <div class="card-body">
-      <button type="button" class="btn btn-success btn-sm mr-2" [routerLink]="['/messages']">New Game</button>
-      <button type="button" [ngClass]="{invisible: !game}" class="btn btn-danger btn-sm mr-2" [routerLink]="['/messages']">Concede</button>
+      <button type="button" class="btn btn-success btn-sm mr-2" (click)="getNewGame()">New Game</button>
+      <!-- <button type="button" [ngClass]="{invisible: !game}" class="btn btn-danger btn-sm mr-2" [routerLink]="['/game']">Concede</button> -->
       <button type="button" [ngClass]="{invisible: !game}" class="btn btn-info btn-sm" [routerLink]="['/game']">Save & Quit</button>
       <p class="card-text" *ngIf="game">
         <span class="text-sucess">Turn:</span> {{usersTurn()}}

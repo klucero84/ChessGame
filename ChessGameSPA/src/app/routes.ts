@@ -23,8 +23,9 @@ export const AppRoutes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: 'users', component : UserListComponent , resolve: {users: UserListResolver} },
-            { path: 'user/:id', component : UserDetailComponent , resolve : {user: UserDetailResolver} },
             { path: 'user/edit', component: UserEditComponent, resolve : {user: UserEditResolver}, canDeactivate: [PreventUnsavedChanges] },
+            { path: 'user/:id', component : UserDetailComponent , resolve : {user: UserDetailResolver} },
+
             { path: 'messages', component : MessagesComponent },
             { path: 'game',
                 children: [

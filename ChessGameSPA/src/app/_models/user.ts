@@ -4,7 +4,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    created: Date;
+    dateJoined: Date;
     lastActive: Date;
     photoUrl: string;
     photos?: Photo[];

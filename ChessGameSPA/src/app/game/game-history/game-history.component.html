@@ -2,17 +2,19 @@
   <div class="card-header text-white bg-primary">
     <h5>Move History</h5>
   </div>
-  <div class="card-body container-fluid" style ="max-height: 60vh; overflow-y: scroll;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-    <div *ngFor="let move of game.moves" class="row border border-secondary mb-2 pl-2 pt-2 move-history" >
-      <div class='w-100'>
-        {{getUserForMove(move)}}'s <i [ngClass]="'fa fa-chess-' + move.pieceDiscriminator.toLowerCase()" alt=""></i> ( {{move.pieceDiscriminator}} )
-      </div>
-      <div class='w-100'>
-        {{getXLocName(move.startX)}}{{getYLocName(move.startY)}} => {{getXLocName(move.endX)}}{{getYLocName(move.endY)}}
-      </div>
-    </div>
-    <div *ngIf="game.moves?.length === 0" class="row">
-      No Moves yet
-    </div>
+  <div class="card-body" style ="max-height: 60vh; overflow-y: scroll;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+    <ul class="list-group">
+      <li *ngFor="let move of game.moves" class="list-group-item" >
+        <div class='w-100'>
+          {{getUserForMove(move)}}'s <i [ngClass]="'fa fa-chess-' + move.pieceDiscriminator.toLowerCase()" alt=""></i> ( {{move.pieceDiscriminator}} )
+        </div>
+        <div class='w-100'>
+          {{getXLocName(move.startX)}}{{getYLocName(move.startY)}} => {{getXLocName(move.endX)}}{{getYLocName(move.endY)}}
+        </div>
+      </li>
+      <li *ngIf="game.moves?.length === 0" class="list-group-item">
+        No Moves yet
+      </li>
+    </ul>
   </div>
 </div>

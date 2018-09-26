@@ -57,12 +57,21 @@ export class GameBoardSquareComponent implements OnInit {
   }
 
   userHasTurn() {
-    if (this.game.moves[this.game.moves.length - 1]) {
-      return !(this.game.moves[this.game.moves.length - 1].userId === this.piece.ownedBy.id);
+    // get the last move made
+    const move = this.game.moves[this.game.moves.length - 1];
+    if (!move) {
+      if (this.piece && this.piece.ownedBy) {
+        // if no moves it's the white user's turn
+        return this.piece.ownedBy.id === this.game.whiteUser.id;
+      } else {
+        return false;
+      }
     }
-    if (this.piece && this.piece.ownedBy) {
-      return this.piece.ownedBy.id === this.game.whiteUser.id;
+    // move.user is the last user to make a move
+    if (move.user) {
+      return move.user.id !== this.piece.ownedBy.id;
+    } else {
+      return move.userId !== this.piece.ownedBy.id;
     }
-    return false;
   }
 }

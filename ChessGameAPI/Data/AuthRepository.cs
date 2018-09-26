@@ -104,12 +104,11 @@ namespace ChessGameAPI.Data
             return false;
         }
 
-        public async void LogUserActivity(int userId)
+        public async Task<bool> LogUserActivity(int userId)
         {
-
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             user.LastActive = DateTime.Now;
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

@@ -4,8 +4,9 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule, PaginationModule, ButtonsModule, BsDropdownModule } from 'ngx-bootstrap';
 import { JwtModule } from '@auth0/angular-jwt';
+import { NgxGalleryModule } from 'ngx-gallery';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 
 import { AppRoutes } from './routes';
@@ -73,11 +74,15 @@ export function tokenGetter() {
       GameHistoryComponent
    ],
    imports: [
+      FormsModule,
       BrowserModule,
       HttpClientModule,
-      FormsModule,
+      NgxGalleryModule,
       DragAndDropModule,
+      TabsModule.forRoot(),
+      ButtonsModule.forRoot(),
       BsDropdownModule.forRoot(),
+      PaginationModule.forRoot(),
       RouterModule.forRoot(AppRoutes),
       JwtModule.forRoot({
         config: {
@@ -86,7 +91,7 @@ export function tokenGetter() {
             blacklistedRoutes: ['localhost:5000/api/auth']
         }
       })
-   ],
+    ],
    providers: [
        AuthGuard,
        AuthService,

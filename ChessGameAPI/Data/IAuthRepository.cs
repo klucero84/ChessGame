@@ -31,6 +31,6 @@ namespace ChessGameAPI.Data
         /// <returns>an async operation returning a bool, true = user exisit</returns>
          Task<bool> UserExists(string email);
 
-         void LogUserActivity(int userId);
+         Task<bool> LogUserActivity(int userId);
     }
 }

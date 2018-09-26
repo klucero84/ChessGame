@@ -13,8 +13,8 @@ export class GameService {
 
 constructor(private http: HttpClient) { }
 
-newGame(): Observable<Game> {
-  return this.http.get<Game>(this.baseUrl);
+newGame() {
+  return this.http.post<Game>(this.baseUrl, null);
 }
 
 getGames(): Observable<Game[]> {

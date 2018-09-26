@@ -1,8 +1,8 @@
 <div class="card m-2">
     <div class="card-body">
       <h3 class="card-title">{{game.whiteUser.name}} V.S. {{game.blackUser.name}}</h3>
-      <i class="fa fa-calendar-alt"></i>Game Started: {{game.dateCreated}},<br>
-      <i class="fa fa-calendar-alt"></i>Game Completed: {{game.dateCompleted ? game.dateCompleted : 'In Progress'}}
+      <i class="fa fa-calendar-alt"></i> Started: {{game.dateCreated | date:'fullDate'}},<br>
+      <i class="fa fa-calendar-alt"></i> Completed: {{game.dateCompleted ? game.dateCompleted : 'In Progress'}}
       <div *ngIf="!isGameFinished()" routerLinkActive="active">
         <button class='btn btn-success' [routerLink]="['/game/' + game.id + '/play']" >Continue</button>
       </div>

@@ -16,6 +16,7 @@ export class GameBoardComponent implements OnInit {
   boardY: any[];
   move: Move = new Move();
   ioConnection: any;
+  isMoving = false;
 
 
 
@@ -30,10 +31,16 @@ export class GameBoardComponent implements OnInit {
 
   ngOnInit() {
     // console.log(this.game.id);
-    this.moveService.joinGame(this.game);
+    // this.moveService.joinGame(this.game);
   }
 
   pickUpPiece(piece) {
+    if (!this.isMoving) {
+      this.isMoving = true;
+    } else {
+      return false;
+    }
+
     if (!piece) {
       return;
     }
@@ -50,6 +57,10 @@ export class GameBoardComponent implements OnInit {
   }
 
   putDownPiece(event) {
+    if (!this.isMoving) {
+      return false;
+    }
+
     if (event.piece) {
       if (event.piece.ownedBy.id === this.move.userId) {
         this.alertifyService.warning('You cannot place a piece in a square that another of your pieces sits');
@@ -83,15 +94,17 @@ export class GameBoardComponent implements OnInit {
     this.moveService.addMoveTwoPlayer(this.move).subscribe(() => {
     // this.moveService.addMove(this.move).subscribe(() => {
       // console.log(this.move);
-      // this.game.moves.push(this.move);
-      // const savedPiece = this.getPieceForXY(this.move.endX, this.move.endY);
-      piece.x = this.move.endX;
-      piece.y = this.move.endY;
+      this.game.moves.push(this.move);
+      const savedPiece = this.getPieceForXY(this.move.endX, this.move.endY);
+      savedPiece.x = this.move.endX;
+      savedPiece.y = this.move.endY;
       // this.alertifyService.success('registration successful');
     }, error => {
       piece.x = this.move.startX;
       piece.y = this.move.startY;
       this.alertifyService.error(error);
+    }, () => {
+      this.isMoving = false;
     });
 
 
@@ -107,8 +120,8 @@ export class GameBoardComponent implements OnInit {
     return pieces[0];
   }
 
-  @HostListener('window:beforeunload')
-  leaveGame() {
-    this.moveService.leaveGame(this.game.id);
-  }
+  // @HostListener('window:beforeunload')
+  // leaveGame() {
+  //   // this.moveService.leaveGame(this.game.id);
+  // }
 }
