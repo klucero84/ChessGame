@@ -4,6 +4,7 @@ import { Move } from './move';
 
 export interface Game {
     id: number;
+    connId: string;
     whiteUser: User;
     blackUser: User;
     pieces?: Piece[];

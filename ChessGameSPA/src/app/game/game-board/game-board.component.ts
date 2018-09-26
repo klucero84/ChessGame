@@ -30,8 +30,8 @@ export class GameBoardComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.game.id);
-    // this.moveService.joinGame(this.game);
+    // console.log(this.game);
+    this.moveService.joinGame(this.game);
   }
 
   pickUpPiece(piece) {
@@ -52,52 +52,49 @@ export class GameBoardComponent implements OnInit {
     this.move.userId = piece.ownedBy.id;
   }
 
-  showMoves() {
-    // console.log(this.game.moves);
-  }
-
-  putDownPiece(event) {
+  putDownPiece(landingSquareInfo) {
     if (!this.isMoving) {
-      return false;
+      return;
     }
-
-    if (event.piece) {
-      if (event.piece.ownedBy.id === this.move.userId) {
-        this.alertifyService.warning('You cannot place a piece in a square that another of your pieces sits');
-        return;
-      } else {
-        this.alertifyService.success('Capturing');
-        return;
-      }
-    }
-
-      // if there is a piece
+    // get the piece from the starting location
     const piece = this.getPieceForXY(this.move.startX, this.move.startY);
     if (!piece) {
       return;
     }
-    // if (is not legalmove for this kind of piece)
-      // this.alertifyService.error('illegal move for piece type');
-      // return;
-
+    let isCapturing = false;
+    if (landingSquareInfo.piece) {
+      if (landingSquareInfo.piece.ownedBy.id === this.move.userId) {
+        this.alertifyService.warning('You cannot place a piece in a square that another of your pieces sits');
+        return;
+      } else {
+        // this.alertifyService.success('Capturing');
+        isCapturing = true;
+        return;
+      }
+    }
     // move the piece right now and move it back if it fails to persist
-    piece.x = event.x;
-    piece.y = event.y;
-    this.move.endX = event.x;
-    this.move.endY = event.y;
+    piece.x = landingSquareInfo.x;
+    piece.y = landingSquareInfo.y;
+
+    this.move.endX = landingSquareInfo.x;
+    this.move.endY = landingSquareInfo.y;
     this.move.gameId = this.game.id;
+    this.move.connId = this.game.connId;
     this.move.isWhite = this.game.whiteUser.id === this.move.userId;
-    if (!this.moveService.isLegalMove(this.move, this.move.isWhite, false)) {
+    const isLegal = this.moveService.isLegalMove(this.move, this.move.isWhite, isCapturing);
+    if (!isLegal) {
+      this.alertifyService.warning(isLegal.toString());
       return false;
     }
+
     // used in dev to add moves from one user.
     this.moveService.addMoveTwoPlayer(this.move).subscribe(() => {
     // this.moveService.addMove(this.move).subscribe(() => {
       // console.log(this.move);
-      this.game.moves.push(this.move);
-      const savedPiece = this.getPieceForXY(this.move.endX, this.move.endY);
-      savedPiece.x = this.move.endX;
-      savedPiece.y = this.move.endY;
+      // this.game.moves.push(this.move);
+      // const savedPiece = this.getPieceForXY(this.move.endX, this.move.endY);
+      // savedPiece.x = this.move.endX;
+      // savedPiece.y = this.move.endY;
       // this.alertifyService.success('registration successful');
     }, error => {
       piece.x = this.move.startX;
@@ -120,8 +117,8 @@ export class GameBoardComponent implements OnInit {
     return pieces[0];
   }
 
-  // @HostListener('window:beforeunload')
-  // leaveGame() {
-  //   // this.moveService.leaveGame(this.game.id);
-  // }
+  @HostListener('window:beforeunload')
+  leaveGame() {
+    this.moveService.leaveGame(this.game);
+  }
 }

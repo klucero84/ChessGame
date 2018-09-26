@@ -25,6 +25,8 @@ namespace ChessGameAPI.Dtos
 
         public bool isWhite { get; set; }
 
+        public string connId { get; set; }
+
     
     }
 }

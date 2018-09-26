@@ -9,8 +9,9 @@ namespace ChessGameAPI.Hubs
 {
     public class MoveHub : Hub
     {
-        public Task JoinGame(int gameId) {
-            return Groups.AddToGroupAsync(Context.ConnectionId, gameId.ToString());
+        public async Task<string> JoinGame(int gameId) {
+            await Groups.AddToGroupAsync(Context.ConnectionId, gameId.ToString());
+            return Context.ConnectionId;
         }
 
         public Task LeaveGame(int gameId) {

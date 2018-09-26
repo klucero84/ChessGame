@@ -32,12 +32,24 @@ joinGame(game: Game) {
   .then(
     () => {
       // console.log('Connection started.');
-      this.hubConnection.invoke('joinGame', game.id);
+      this.hubConnection.invoke('joinGame', game.id).then(function (connectionId) {
+        console.log(connectionId);
+        game.connId = connectionId;
+      });
       this.hubConnection.on('addMoveToGame', (move: Move) => {
         game.moves.push(move);
         const piece = game.pieces.filter(p => p.x === move.startX && p.y === move.startY)[0];
-        piece.x = move.endX;
-        piece.y = move.endY;
+        // if opponent mvoed are listening the piece will still be here
+        // if our piece it's at it's new location
+        console.log(piece);
+        if (piece) {
+          piece.x = move.endX;
+          piece.y = move.endY;
+        } else if (piece.ownedBy.id !== move.userId) {
+          // remove the captured piece
+          console.log('capturing');
+          // game.pieces.splice(game.pieces.indexOf(piece));
+        }
         // console.log(move);
       });
     }
@@ -47,8 +59,8 @@ joinGame(game: Game) {
     );
 }
 
-leaveGame(gameId: number) {
-  this.hubConnection.invoke('leaveGame', gameId);
+leaveGame(game: Game) {
+  this.hubConnection.invoke('leaveGame', game.id);
   this.hubConnection.stop().
   then(
     // () => console.log('Connection ended.')

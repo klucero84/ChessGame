@@ -78,7 +78,8 @@ namespace ChessGameAPI.Controllers
                 movedPiece.X = newMove.EndX;
                 movedPiece.Y = newMove.EndY;
                 int code = await _repo.SaveAll();
-                string connId =  Request.Cookies["conn-id"];
+                // this isn't 
+                string connId =  dto.connId;
                 await _hub.Clients.GroupExcept(dto.GameId.ToString(), connId).SendAsync("addMoveToGame", dto);
                 return Ok(code); 
             } else {

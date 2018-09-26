@@ -16,13 +16,5 @@ export class Move {
     endY: number;
     pieceDiscriminator: string;
     isWhite: boolean;
-
-    /**
-     *
-     */
-    constructor() { }
-
-    addMove(move: any) {
-        this.id = move.id;
-    }
+    connId: string;
 }
