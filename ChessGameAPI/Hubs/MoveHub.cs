@@ -34,11 +34,11 @@ namespace ChessGameAPI.Hubs
         //     return base.OnDisconnectedAsync();
         // }
 
-        // public void AddMoveToGame(MoveForAddMoveDto newMoveDto) {
+        public void AddMoveToGame(MoveForAddMoveDto newMoveDto) {
 
-        //     Clients.OthersInGroup(newMoveDto.GameId.ToString()).SendAsync("addMoveToGame", newMoveDto);
-        //     // Clients.All.SendAsync("sendToAll", move);
-        // }
+            Clients.OthersInGroup(newMoveDto.GameId.ToString()).SendAsync("addMoveToGame", newMoveDto);
+            // Clients.All.SendAsync("sendToAll", move);
+        }
 
         // public void SendToAll(){
         // }

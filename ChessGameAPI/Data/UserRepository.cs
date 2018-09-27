@@ -23,6 +23,33 @@ namespace ChessGameAPI.Data
         }
 
         /// <summary>
+        /// Creates/Adds an entity of type T to the injected data context.
+        /// </summary>
+        /// <typeparam name="T">a reference type</typeparam>
+        public void Add<T>(T entity) where T : class
+        {
+            _context.Add(entity);
+        }
+        
+        /// <summary>
+        /// Deletes an entity of type T from the injected data context.
+        /// </summary>
+        /// <typeparam name="T">a reference type</typeparam>
+        public void Delete<T>(T entity) where T : class
+        {
+            _context.Remove(entity);
+        }
+
+        /// <summary>
+        /// Saves all changes asynchronously
+        /// </summary>
+        /// <returns>an asynchronous operation returning a int, the number of objects written to the underlying data context.</returns>
+        public async Task<int> SaveAll()
+        {
+            return await _context.SaveChangesAsync();
+        }
+        
+        /// <summary>
         /// Gets a photo asynchronously
         /// </summary>
         /// <param name="id">Unique identifer of the photo to get</param>

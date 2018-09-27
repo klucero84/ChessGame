@@ -41,12 +41,22 @@ namespace ChessGameAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // db 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connString"))
                     .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
-            services.AddTransient<IAuthRepository, AuthRepository>();
+            // repos
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
+
+            // dto mapper
+            services.AddAutoMapper();
+
+            // db init
+            // services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
+            // services.AddTransient<Seeder>();
+
+            services.AddSignalR();
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
             {
                 builder
@@ -55,8 +65,6 @@ namespace ChessGameAPI
                 .AllowCredentials()
                 .WithOrigins("http://localhost:4200");
             }));
-            services.AddSignalR();
-            services.AddAutoMapper();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => {
                 options.TokenValidationParameters =new TokenValidationParameters
@@ -70,6 +78,10 @@ namespace ChessGameAPI
                 {
                     OnTokenValidated = context => 
                     {
+                        /// <summary>
+                        /// todo: log all user activity
+                        /// todo: make async and faster since this will be getting called on every token validation
+                        /// </summary>
                         // Task.Run(async () => {
                             
                         //     int userId = 0;
@@ -79,10 +91,6 @@ namespace ChessGameAPI
                         //     int.TryParse(userIdValue, out userId);
                         //     await authRepo.LogUserActivity(userId);
                         // });
-                        /// <summary>
-                        /// log all user activity
-                        /// todo: make async and faster since this will be getting called on every token validation
-                        /// </summary>
                         // int userId = 0;
                         // var dbContext = context.HttpContext.RequestServices.GetRequiredService<DataContext>();
                         // var userIdClaim = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
@@ -97,17 +105,19 @@ namespace ChessGameAPI
                     }
                 };
             });
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(opt => {
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider, Seeder seeder)
         {
             if (env.IsDevelopment())
             {
                 // app.UseDeveloperExceptionPage();
+                // seeder.SeedUsers();
             }
             else
             {
