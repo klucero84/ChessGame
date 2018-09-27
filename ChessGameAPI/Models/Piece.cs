@@ -31,7 +31,6 @@ namespace ChessGameAPI.Models
         /// Owner of this piece
         /// </summary>
         /// <returns></returns>
-        [Required]
         public User OwnedBy { get; set; }
 
         /// <summary>
@@ -46,6 +45,8 @@ namespace ChessGameAPI.Models
         /// </summary>
         /// <value></value>
         public string Discriminator { get; set; }
+
+        public IEnumerable<Move> Moves { get; set;}
 
         /// <summary>
         /// Blank Constructor 
@@ -75,14 +76,7 @@ namespace ChessGameAPI.Models
         public (bool, string) IsLegalMove(Move attemptedMove, bool isWhite)
         {
             //shared logic for determining legality of a move is here
-            if (!IsMe(attemptedMove?.Piece))
-            {
-                return (false, "Piece doesn't match.");
-            }
-            if (!IsMyUser(attemptedMove?.User))
-            {
-                return (false, "User doesn't match.");
-            }
+
             if (IsOutOfBounds(attemptedMove))
             {
                 return (false, "Attempted move is out of bounds.");
@@ -103,10 +97,6 @@ namespace ChessGameAPI.Models
 
         public (bool, string) IsLegalMoveTwoPlayer(Move attemptedMove, bool isWhite) {
             //shared logic for determining legality of a move is here
-            if (!IsMe(attemptedMove?.Piece))
-            {
-                return (false, "Piece doesn't match.");
-            }
             if (IsOutOfBounds(attemptedMove))
             {
                 return (false, "Attempted move is out of bounds.");
@@ -115,6 +105,7 @@ namespace ChessGameAPI.Models
             {
                 return (false, "Attempted move doesn't change board state.");
             }
+            // virtual method sub classes implement to have their exteneded functionality.
             return IsLegalMoveForPiece(attemptedMove, isWhite);
         }
         protected virtual (bool, string) IsLegalMoveForPiece(Move attemptedMove, bool isWhite)
@@ -125,26 +116,6 @@ namespace ChessGameAPI.Models
         public virtual List<Move> GetAllLegalMoves()
         {
             throw new NotImplementedException("GetAllLegalMoves is not imeplemented.");
-        }
-        
-        protected bool IsMe (Piece piece)
-        {
-            if (piece?.Id == Id)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        protected bool IsMyUser(User user)
-        {
-            if (OwnedBy == null || user == null)
-                return false;
-            if (user.Id == OwnedBy.Id)
-            {
-                return true;
-            }
-            return false;
         }
 
         /// <summary>

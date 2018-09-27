@@ -34,7 +34,7 @@ namespace ChessGameAPI.Models.Pieces
                     {
                         return (true, null);
                     } //pawns may move one space to eother side when capturing
-                    else if (IsCapturing && diffX == 1)
+                    else if (diffX == 1)
                     {
                         return (true, null);
                     }
@@ -53,7 +53,7 @@ namespace ChessGameAPI.Models.Pieces
                     {
                         return (true, null);
                     } //pawns may move one pace to either side when capturing
-                    else if (IsCapturing && diffX == 1)
+                    else if (diffX == 1)
                     {
                         return (true, null);
                     }

@@ -51,20 +51,23 @@ namespace ChessGameAPI.Data
 
         public async Task<IEnumerable<Game>> GetGamesForUser(int userId)
         {
-            return await _context.Games.Include(g => g.BlackUser).Include(g => g.WhiteUser).Where(x => x.BlackUserId == userId || x.WhiteUserId == userId).ToListAsync();
+            return await _context.Games.Include(game => game.BlackUser).Include(game => game.WhiteUser)
+                                .Where(game => game.BlackUserId == userId || game.WhiteUserId == userId).ToListAsync();
         }
 
         public async Task<Game> GetGame(int gameId)
         {
-            return await _context.Games.Include(g =>g.Pieces).Include(g =>g.Moves).Include(g => g.WhiteUser).Include(g => g.BlackUser).FirstOrDefaultAsync(x => x.Id == gameId);
+            return await _context.Games.Include(g =>g.Pieces).Include(g =>g.Moves).Include(g => g.WhiteUser).Include(g => g.BlackUser).FirstOrDefaultAsync(g => g.Id == gameId);
         }
 
         public async Task<Piece> GetPiece(int pieceId)
         {
-            return await _context.Pieces.Include(p =>p.Game).FirstOrDefaultAsync(x => x.Id == pieceId);
+            return await _context.Pieces.Include(piece =>piece.OwnedBy).FirstOrDefaultAsync(piece => piece.Id == pieceId);
         }
 
-
+        public async Task<Piece> GetPieceByXY(int gameId, int x, int y) {
+            return await _context.Pieces.Include(piece =>piece.OwnedBy).FirstOrDefaultAsync(piece => piece.Game.Id == gameId && piece.X == x && piece.Y ==y);
+        }
         
     }
 }

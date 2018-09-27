@@ -349,3 +349,5 @@ wwwroot/
 # Publish settings
 *.pubxml
 ChessGameAPI/wwwroot/
+ChessGameAPI/appsettings.json
+ChessGameAPI/appsettings.json

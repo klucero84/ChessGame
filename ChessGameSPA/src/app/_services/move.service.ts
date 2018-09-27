@@ -36,19 +36,24 @@ joinGame(game: Game) {
         console.log(connectionId);
         game.connId = connectionId;
       });
-      this.hubConnection.on('addMoveToGame', (move: Move) => {
-        game.moves.push(move);
-        const piece = game.pieces.filter(p => p.x === move.startX && p.y === move.startY)[0];
-        // if opponent mvoed are listening the piece will still be here
-        // if our piece it's at it's new location
-        console.log(piece);
-        if (piece) {
-          piece.x = move.endX;
-          piece.y = move.endY;
-        } else if (piece.ownedBy.id !== move.userId) {
-          // remove the captured piece
-          console.log('capturing');
-          // game.pieces.splice(game.pieces.indexOf(piece));
+      this.hubConnection.on('addMoveToGame',  (move: Move) => {
+        console.log(move);
+        // get the piece being moved by other player
+        const pieceBeingMoved = game.pieces.filter(p => p.x === move.startX && p.y === move.startY)[0];
+        // if opponent moved, we are listening the piece will still be here
+        // if our piece it's already at it's new location
+        if (pieceBeingMoved) {
+          const pieceAtEndLocation = game.pieces.filter(p => p.x === move.endX && p.y === move.endY)[0];
+          if (pieceAtEndLocation) {
+            // determine if the piece already there is our piece
+            if (pieceAtEndLocation.ownedBy.id !== move.userId) {
+              // if it's not the same user's piece they are capturing
+              game.pieces.splice(game.pieces.indexOf(pieceAtEndLocation), 1);
+            }
+          }
+          game.moves.push(move);
+          pieceBeingMoved.x = move.endX;
+          pieceBeingMoved.y = move.endY;
         }
         // console.log(move);
       });
@@ -77,7 +82,7 @@ leaveGame(game: Game) {
 
 isLegalMove(move: Move, isWhite: boolean, isCapturing: boolean) {
   const diffX = Math.abs(move.startX - move.endX);
-  const diffY = Math.abs(move.startY - move.startY);
+  const diffY = Math.abs(move.startY - move.endY);
   switch (move.pieceDiscriminator) {
     case 'Pawn':
       if (diffX > 1) { return 'A Pawn cannot move more than one square to the side.'; }

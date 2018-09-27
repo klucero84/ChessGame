@@ -54,6 +54,10 @@ namespace ChessGameAPI.Models
             set; 
         }
 
-        public ICollection<Photo> Photos { get; set; }
+        public IEnumerable<Photo> Photos { get; set; }
+
+        public IEnumerable<Piece> Pieces { get; set; }
+
+        public IEnumerable<Move> Moves { get; set; }
     }
 }

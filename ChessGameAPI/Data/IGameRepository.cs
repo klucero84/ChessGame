@@ -47,5 +47,7 @@ namespace ChessGameAPI.Data
         /// <param name="pieceId">unique identifier of the peice to get</param>
         /// <returns>the peice matching the id, if any.</returns>
         Task<Piece> GetPiece(int pieceId);
+
+        Task<Piece> GetPieceByXY(int gameId, int x, int y);
     }
 }

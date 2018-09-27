@@ -25,13 +25,13 @@ namespace ChessGameAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BlackUserId");
+                    b.Property<int?>("BlackUserId");
 
                     b.Property<DateTime?>("DateCompleted");
 
                     b.Property<DateTime>("DateCreated");
 
-                    b.Property<int>("WhiteUserId");
+                    b.Property<int?>("WhiteUserId");
 
                     b.HasKey("Id");
 
@@ -56,7 +56,7 @@ namespace ChessGameAPI.Migrations
 
                     b.Property<string>("PieceDiscriminator");
 
-                    b.Property<int>("PieceId");
+                    b.Property<int?>("PieceId");
 
                     b.Property<int>("StartX");
 
@@ -69,13 +69,15 @@ namespace ChessGameAPI.Migrations
 
                     b.Property<int>("UserId");
 
+                    b.Property<int?>("UserId1");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
 
                     b.HasIndex("PieceId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Moves");
                 });
@@ -115,7 +117,7 @@ namespace ChessGameAPI.Migrations
 
                     b.Property<int>("GameId");
 
-                    b.Property<int>("OwnedById");
+                    b.Property<int?>("OwnedById");
 
                     b.Property<int>("X");
 
@@ -224,13 +226,11 @@ namespace ChessGameAPI.Migrations
                 {
                     b.HasOne("ChessGameAPI.Models.User", "BlackUser")
                         .WithMany()
-                        .HasForeignKey("BlackUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BlackUserId");
 
                     b.HasOne("ChessGameAPI.Models.User", "WhiteUser")
                         .WithMany()
-                        .HasForeignKey("WhiteUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("WhiteUserId");
                 });
 
             modelBuilder.Entity("ChessGameAPI.Models.Move", b =>
@@ -241,14 +241,14 @@ namespace ChessGameAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ChessGameAPI.Models.Piece", "Piece")
-                        .WithMany()
+                        .WithMany("Moves")
                         .HasForeignKey("PieceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ChessGameAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("Moves")
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ChessGameAPI.Models.Photo", b =>
@@ -266,9 +266,9 @@ namespace ChessGameAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ChessGameAPI.Models.User", "OwnedBy")
-                        .WithMany()
+                        .WithMany("Pieces")
                         .HasForeignKey("OwnedById")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

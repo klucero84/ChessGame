@@ -17,13 +17,13 @@ namespace ChessGameAPI.Models
 
         private List<Piece> _pieces;
 
-        [ForeignKey("Users")]
-        public int WhiteUserId { get; set; }
+        [ForeignKey("WhiteUser")]
+        public int? WhiteUserId { get; set; }
 
         public User WhiteUser { get; set; }
 
-        [ForeignKey("Users")]
-        public int BlackUserId { get; set; }
+        [ForeignKey("BlackUser")]
+        public int? BlackUserId { get; set; }
 
         public User BlackUser { get; set; }
 

@@ -35,15 +35,17 @@ export class GameBoardComponent implements OnInit {
   }
 
   pickUpPiece(piece) {
-    if (!this.isMoving) {
-      this.isMoving = true;
-    } else {
-      return false;
-    }
-
+    // no piece to pick up
     if (!piece) {
       return;
     }
+    // if we are already moving a piece stop
+    if (this.isMoving) {
+      return;
+    }
+    this.isMoving = true;
+
+    // initialize move with pice info
     this.move = new Move();
     this.move.startX = piece.x;
     this.move.startY = piece.y;
@@ -53,28 +55,33 @@ export class GameBoardComponent implements OnInit {
   }
 
   putDownPiece(landingSquareInfo) {
+    // if we aren't moving a piece stop
     if (!this.isMoving) {
+      this.resetMove();
       return;
     }
     // get the piece from the starting location
     const piece = this.getPieceForXY(this.move.startX, this.move.startY);
     if (!piece) {
+      this.resetMove();
       return;
     }
     let isCapturing = false;
+    // determine if a piece is already there.
     if (landingSquareInfo.piece) {
+      // determine if the piece already there is our piece
       if (landingSquareInfo.piece.ownedBy.id === this.move.userId) {
         this.alertifyService.warning('You cannot place a piece in a square that another of your pieces sits');
+        this.resetMove();
         return;
       } else {
+        // if it's not the same user's piece they are capturing
         // this.alertifyService.success('Capturing');
         isCapturing = true;
-        return;
+        // this.resetMove();
+        // return;
       }
     }
-    // move the piece right now and move it back if it fails to persist
-    piece.x = landingSquareInfo.x;
-    piece.y = landingSquareInfo.y;
 
     this.move.endX = landingSquareInfo.x;
     this.move.endY = landingSquareInfo.y;
@@ -82,29 +89,49 @@ export class GameBoardComponent implements OnInit {
     this.move.connId = this.game.connId;
     this.move.isWhite = this.game.whiteUser.id === this.move.userId;
     const isLegal = this.moveService.isLegalMove(this.move, this.move.isWhite, isCapturing);
-    if (!isLegal) {
+    if (isLegal !== true) {
       this.alertifyService.warning(isLegal.toString());
+      this.resetMove();
       return false;
     }
 
+    // move the piece right now and move it back if it fails to persist
+    piece.x = landingSquareInfo.x;
+    piece.y = landingSquareInfo.y;
     // used in dev to add moves from one user.
     this.moveService.addMoveTwoPlayer(this.move).subscribe(() => {
     // this.moveService.addMove(this.move).subscribe(() => {
-      // console.log(this.move);
-      // this.game.moves.push(this.move);
-      // const savedPiece = this.getPieceForXY(this.move.endX, this.move.endY);
-      // savedPiece.x = this.move.endX;
-      // savedPiece.y = this.move.endY;
-      // this.alertifyService.success('registration successful');
+      // -------------------------
+      // Subscribe stuff only executes when we make a move in our screen
+      // our opponents moves are handled by the subscription to the move service
+      const pieces = this.game.pieces.filter(p => p.x === this.move.endX && p.y === this.move.endY);
+      console.log(pieces);
+      if (pieces.length === 2 && isCapturing) {
+        // if both players have a piece there
+        if ((pieces[0].ownedBy.id === this.game.whiteUser.id ||
+            pieces[1].ownedBy.id === this.game.whiteUser.id)
+            && (pieces[0].ownedBy.id === this.game.blackUser.id ||
+                pieces[1].ownedBy.id === this.game.blackUser.id)) {
+            // get the one that doesn't belong to us
+            const opponentPiece = pieces.filter(p => p.ownedBy.id !== this.move.userId)[0];
+            this.game.pieces.splice(this.game.pieces.indexOf(opponentPiece), 1);
+        }
+      }
+      this.game.moves.push(this.move);
     }, error => {
       piece.x = this.move.startX;
       piece.y = this.move.startY;
       this.alertifyService.error(error);
     }, () => {
-      this.isMoving = false;
+      this.resetMove();
     });
 
 
+  }
+
+  resetMove() {
+    this.isMoving = false;
+    this.move = null;
   }
 
   getPieceForXY(x: number, y: number) {

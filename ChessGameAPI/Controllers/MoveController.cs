@@ -34,7 +34,7 @@ namespace ChessGameAPI.Controllers
             _hub = hub;
         }
 
-        [Route("~/api/game/{gameId:int}/moves")]
+        [HttpGet("~/api/game/{gameId:int}/moves")]
         public async Task<IActionResult> GetMovesForGame(int gameId)
         {
             await _repo.SaveAll();
@@ -57,6 +57,7 @@ namespace ChessGameAPI.Controllers
             
             var moveAttempt =  movedPiece.IsLegalMove(newMove, dto.isWhite);
             if (moveAttempt.Item1) {
+
                 movedPiece.X = newMove.EndX;
                 movedPiece.Y = newMove.EndY;
                 int code = await _repo.SaveAll();
@@ -73,12 +74,22 @@ namespace ChessGameAPI.Controllers
             Move newMove = _mapper.Map<Move>(dto);
             _repo.Add(newMove);
             Piece movedPiece = await _repo.GetPiece(dto.PieceId);
+            if (movedPiece == null){
+                return BadRequest("Piece not found");
+            }
             var moveAttempt =  movedPiece.IsLegalMoveTwoPlayer(newMove, dto.isWhite);
             if (moveAttempt.Item1) {
+
+                Piece pieceAtNewLocation = await _repo.GetPieceByXY(dto.GameId, dto.EndX, dto.EndY);
+                if (pieceAtNewLocation != null && pieceAtNewLocation.OwnedBy.Id != dto.UserId){
+                    // ef needs to update the move record that the piece doens't exist anymore.
+                    // await _repo.GetMovesForPiece(pieceAtNewLocation.Id);
+                    _repo.Delete(pieceAtNewLocation);
+                }
+
                 movedPiece.X = newMove.EndX;
                 movedPiece.Y = newMove.EndY;
                 int code = await _repo.SaveAll();
-                // this isn't 
                 string connId =  dto.connId;
                 await _hub.Clients.GroupExcept(dto.GameId.ToString(), connId).SendAsync("addMoveToGame", dto);
                 return Ok(code); 
