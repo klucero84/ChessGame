@@ -59,9 +59,12 @@ namespace ChessGameAPI.Models
 
         [Required]
         public int EndY { get; set; }
+
+        public string AlgebraicNotation { get; set; }
         
         [Required]
         [Timestamp]
         public byte[] TimeStamp { get; set; }
+        
     }
 }

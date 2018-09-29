@@ -23,7 +23,15 @@ namespace ChessGameAPI.Dtos
 
         public int UserId { get; set; }
 
-        public bool isWhite { get; set; }
+        public bool IsWhite { get; set; }
+        
+        public bool IsCastle { get; set; }
+
+        public bool IsCapture { get; set; }
+
+        // public bool Concede { get; set; }
+
+        // public bool OfferDraw { get; set; }
 
         public string connId { get; set; }
 

@@ -26,7 +26,7 @@ namespace ChessGameAPI.Models.Pieces
             {
                 return (true, null);
             }
-            return (false, "A Queen must move in a in straight lines along the x or y axis, or in a diagonal line.");
+            return (false, MoveErrors.Queen);
         }
     }
 }

@@ -3,6 +3,7 @@ import { Game } from '../../_models/game';
 import { MoveService } from '../../_services/move.service';
 import { AlertifyService } from '../../_services/alertify.service';
 import { Move } from '../../_models/move';
+import { Piece } from '../../_models/piece';
 
 @Component({
   selector: 'app-game-board',
@@ -71,7 +72,7 @@ export class GameBoardComponent implements OnInit {
     if (landingSquareInfo.piece) {
       // determine if the piece already there is our piece
       if (landingSquareInfo.piece.ownedBy.id === this.move.userId) {
-        this.alertifyService.warning('You cannot place a piece in a square that another of your pieces sits');
+        this.alertifyService.warning('Pieces must move to either an unoccupied square or one occupied by an opponent\'s piece.');
         this.resetMove();
         return;
       } else {
@@ -86,9 +87,10 @@ export class GameBoardComponent implements OnInit {
     this.move.endX = landingSquareInfo.x;
     this.move.endY = landingSquareInfo.y;
     this.move.gameId = this.game.id;
+    this.move.game = this.game;
     this.move.connId = this.game.connId;
     this.move.isWhite = this.game.whiteUser.id === this.move.userId;
-    const isLegal = this.moveService.isLegalMove(this.move, this.move.isWhite, isCapturing);
+    const isLegal = this.move.isLegalMove(isCapturing);
     if (isLegal !== true) {
       this.alertifyService.warning(isLegal.toString());
       this.resetMove();
@@ -98,6 +100,8 @@ export class GameBoardComponent implements OnInit {
     // move the piece right now and move it back if it fails to persist
     piece.x = landingSquareInfo.x;
     piece.y = landingSquareInfo.y;
+    this.move.game = null;
+    // console.log(this.move);
     // used in dev to add moves from one user.
     this.moveService.addMoveTwoPlayer(this.move).subscribe(() => {
     // this.moveService.addMove(this.move).subscribe(() => {
@@ -105,7 +109,7 @@ export class GameBoardComponent implements OnInit {
       // Subscribe stuff only executes when we make a move in our screen
       // our opponents moves are handled by the subscription to the move service
       const pieces = this.game.pieces.filter(p => p.x === this.move.endX && p.y === this.move.endY);
-      console.log(pieces);
+      // console.log(pieces);
       if (pieces.length === 2 && isCapturing) {
         // if both players have a piece there
         if ((pieces[0].ownedBy.id === this.game.whiteUser.id ||
@@ -117,7 +121,8 @@ export class GameBoardComponent implements OnInit {
             this.game.pieces.splice(this.game.pieces.indexOf(opponentPiece), 1);
         }
       }
-      this.game.moves.push(this.move);
+      this.moveService.addMoveToGame(this.move, this.game);
+      // this.game.addMoveToGame(this.move);
     }, error => {
       piece.x = this.move.startX;
       piece.y = this.move.startY;
@@ -125,8 +130,6 @@ export class GameBoardComponent implements OnInit {
     }, () => {
       this.resetMove();
     });
-
-
   }
 
   resetMove() {
@@ -143,6 +146,27 @@ export class GameBoardComponent implements OnInit {
     }
     return pieces[0];
   }
+
+  private applyCastle(move: Move) {
+    let piece: Piece;
+    if (move.startX === 4 && move.startY === 0) {
+        if (move.endX === 6 && move.endY === 0) {
+            piece = this.game.pieces.filter(p => p.x === 7 && p.y === 0)[0];
+            piece.x = 5;
+        } else if (move.endX === 2 && move.endY === 0) {
+            piece = this.game.pieces.filter(p => p.x === 0 && p.y === 0)[0];
+            piece.x = 3;
+        }
+    } else if (move.startX === 4 && move.startY === 7) {
+        if (move.endX === 6 && move.endY === 7) {
+            piece = this. game.pieces.filter(p => p.x === 7 && p.y === 0)[0];
+            piece.x = 5;
+        } else if (move.endX === 2 && move.endY === 7) {
+            piece = this. game.pieces.filter(p => p.x === 0 && p.y === 7)[0];
+            piece.x = 3;
+        }
+    }
+}
 
   @HostListener('window:beforeunload')
   leaveGame() {

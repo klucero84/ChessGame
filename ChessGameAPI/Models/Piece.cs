@@ -79,11 +79,11 @@ namespace ChessGameAPI.Models
 
             if (IsOutOfBounds(attemptedMove))
             {
-                return (false, "Attempted move is out of bounds.");
+                return (false, MoveErrors.OutOfBounds);
             }
             if (!IsActuallyMoving(attemptedMove))
             {
-                return (false, "Attempted move doesn't change board state.");
+                return (false, MoveErrors.NoChange);
             }
             //determine if move will put user in check
 
@@ -95,15 +95,15 @@ namespace ChessGameAPI.Models
         }
 
 
-        public (bool, string) IsLegalMoveTwoPlayer(Move attemptedMove, bool isWhite) {
+        public (bool isLegal, string message) IsLegalMoveTwoPlayer(Move attemptedMove, bool isWhite) {
             //shared logic for determining legality of a move is here
             if (IsOutOfBounds(attemptedMove))
             {
-                return (false, "Attempted move is out of bounds.");
+                return (false, MoveErrors.OutOfBounds);
             }
             if (!IsActuallyMoving(attemptedMove))
             {
-                return (false, "Attempted move doesn't change board state.");
+                return (false, MoveErrors.NoChange);
             }
             // virtual method sub classes implement to have their exteneded functionality.
             return IsLegalMoveForPiece(attemptedMove, isWhite);
@@ -143,5 +143,22 @@ namespace ChessGameAPI.Models
         {
             return !(X == move.EndX && Y == move.EndY);
         }
+    }
+
+    public static class MoveErrors {
+        public const string OutOfBounds = "Attempted move is out of bounds.";
+        public const string NoChange = "Attempted move doesn't change board state.";
+        public const string SelfOccupiedSquare = "Pieces must move to either an unoccupied square or one occupied by an opponent's piece.";
+        public const string Bishop = "A Bishop must move in a diagonal line";
+        public const string King = "The King can only move one space in any direction, unless castling.";
+        public const string KingCastling = "Castling";
+        public const string Knight =  "A Knight must move two spaces on one axis and one space on the other axis.";
+        public const string Pawn = "A Pawn may only move forward one space at a time, " +
+                "capture diagonally, and may move two spaces forward if it is the first move of the pawn.";
+        public const string Queen ="A Queen must move in a in straight lines along the x or y axis, or in a diagonal line.";
+        public const string Rook ="A Rook must move in straight lines along the x or y axis";
+
+
+
     }
 }

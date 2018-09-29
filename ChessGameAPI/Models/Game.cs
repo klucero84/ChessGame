@@ -30,13 +30,31 @@ namespace ChessGameAPI.Models
         public DateTime DateCreated { get; set; }
         
         public DateTime? DateCompleted { get; set;}
+
+        /// Decision to use flags on game instead of 
+        /// query move table for performance
+        public bool CanWhiteKingSideCastle { get; set; }
+        public bool CanWhiteQueenSideCastle { get; set; }
+        public bool CanBlackKingSideCastle { get; set; }
+        public bool CanBlackQueenSideCastle { get; set; }
+
+        public GameStatus statusCode { get; set; }
         
-        public Game() { }
+        public Game() {
+            CanWhiteKingSideCastle = true;
+            CanWhiteQueenSideCastle = true;
+            CanBlackKingSideCastle = true;
+            CanBlackQueenSideCastle = true;
+        }
 
         public Game(User user1, User user2)
         {
             WhiteUser = user1;
             BlackUser = user2;
+            CanWhiteKingSideCastle = true;
+            CanWhiteQueenSideCastle = true;
+            CanBlackKingSideCastle = true;
+            CanBlackQueenSideCastle = true;
         }
 
         /// <summary>

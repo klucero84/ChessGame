@@ -23,7 +23,7 @@ namespace ChessGameAPI.Models.Pieces
             int diffX = Math.Abs(X - attemptedMove.EndX);
             if (diffX > 1)
             {
-                return (false, "A Pawn cannot move more than one square to the side.");
+                return (false, MoveErrors.Pawn);
             }
             if (isWhite)
             {
@@ -63,8 +63,7 @@ namespace ChessGameAPI.Models.Pieces
                     return (true, null);
                 }
             }
-            return (false, "A Pawn may only move forward one space at a time, " +
-                "capture diagonally, and may move two spaces forward if it is the first move of the pawn.");
+            return (false, MoveErrors.Pawn);
         }
     }
 }

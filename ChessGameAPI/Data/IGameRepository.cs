@@ -41,6 +41,8 @@ namespace ChessGameAPI.Data
         /// <returns>the game matching the id, if any.</returns>
         Task<Game> GetGame(int gameId);
 
+        Task<Game> GetGameMin(int gameId);
+
         /// <summary>
         /// Gets a peice by its unique id
         /// </summary>
@@ -49,5 +51,7 @@ namespace ChessGameAPI.Data
         Task<Piece> GetPiece(int pieceId);
 
         Task<Piece> GetPieceByXY(int gameId, int x, int y);
+
+        Task<IList<Move>> GetMovesForGameForUser(int gameId, int userId);
     }
 }

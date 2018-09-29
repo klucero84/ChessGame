@@ -25,7 +25,7 @@ namespace ChessGameAPI.Models.Pieces
                 return (true, null);
             }
 
-            return (false, "A Bishop must move in a diagonal line");
+            return (false, MoveErrors.Bishop);
             
         }
     }

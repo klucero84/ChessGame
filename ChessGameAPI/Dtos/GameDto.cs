@@ -50,5 +50,13 @@ namespace ChessGameAPI.Dtos
         /// </summary>
         /// <value>UserForDetailDto object</value>
         public UserForDetailDto BlackUser { get; set; }
+
+        public bool CanWhiteKingSideCastle { get; set; }
+
+        public bool CanWhiteQueenSideCastle { get; set; }
+
+        public bool CanBlackKingSideCastle { get; set; }
+
+        public bool CanBlackQueenSideCastle { get; set; }
     }
 }

@@ -350,4 +350,5 @@ wwwroot/
 *.pubxml
 ChessGameAPI/wwwroot/
 ChessGameAPI/appsettings.json
-ChessGameAPI/appsettings.json
+ChessGameAPI/appsettings.Development.json
+ChessGameAPI/Data/generated.json

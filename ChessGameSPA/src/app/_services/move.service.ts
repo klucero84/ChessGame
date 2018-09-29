@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Move } from '../_models/move';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { Game } from '../_models/game';
+import { Piece } from '../_models/piece';
 
 @Injectable({
   providedIn: 'root'
@@ -33,11 +34,11 @@ joinGame(game: Game) {
     () => {
       // console.log('Connection started.');
       this.hubConnection.invoke('joinGame', game.id).then(function (connectionId) {
-        console.log(connectionId);
+        // console.log(connectionId);
         game.connId = connectionId;
       });
       this.hubConnection.on('addMoveToGame',  (move: Move) => {
-        console.log(move);
+        // console.log(move);
         // get the piece being moved by other player
         const pieceBeingMoved = game.pieces.filter(p => p.x === move.startX && p.y === move.startY)[0];
         // if opponent moved, we are listening the piece will still be here
@@ -51,7 +52,7 @@ joinGame(game: Game) {
               game.pieces.splice(game.pieces.indexOf(pieceAtEndLocation), 1);
             }
           }
-          game.moves.push(move);
+          this.addMoveToGame(move, game);
           pieceBeingMoved.x = move.endX;
           pieceBeingMoved.y = move.endY;
         }
@@ -76,81 +77,60 @@ leaveGame(game: Game) {
 
 }
 
+addMoveToGame(move: Move, game: Game) {
+  console.log(move);
+  if (game.canWhiteQueenSideCastle && move.startY === 0 && move.startX === 0) {
+    game.canWhiteQueenSideCastle = false;
+  } else if (game.canWhiteKingSideCastle && move.startY === 0 && move.startX === 7) {
+    game.canWhiteKingSideCastle = false;
+  } else if ((game.canWhiteKingSideCastle || game.canWhiteQueenSideCastle) &&
+      move.startY === 0 && move.startX === 4) {
+    game.canWhiteKingSideCastle = false;
+    game.canWhiteQueenSideCastle = false;
+  } else if (game.canBlackQueenSideCastle && move.startY === 0 && move.startX === 0) {
+    game.canBlackQueenSideCastle = false;
+  } else if (game.canBlackKingSideCastle && move.startY === 0 && move.startX === 7) {
+    game.canBlackKingSideCastle = false;
+  } else if ((game.canBlackKingSideCastle || game.canBlackQueenSideCastle) &&
+      move.startY === 0 && move.startX === 4) {
+    game.canBlackKingSideCastle = false;
+    game.canBlackQueenSideCastle = false;
+  }
+
+  if (move.isCastle) {
+      this.applyCastle(move, game);
+  }
+  return game.moves.push(move);
+}
+
+private applyCastle(move: Move, game: Game) {
+  // console.log(move);
+  let piece: Piece;
+  if (move.startX === 4 && move.startY === 0) {
+      if (move.endX === 6 && move.endY === 0) {
+          piece = game.pieces.filter(p => p.x === 7 && p.y === 0)[0];
+          piece.x = 5;
+      } else if (move.endX === 2 && move.endY === 0) {
+          piece = game.pieces.filter(p => p.x === 0 && p.y === 0)[0];
+          piece.x = 3;
+      }
+  } else if (move.startX === 4 && move.startY === 7) {
+      if (move.endX === 6 && move.endY === 7) {
+          piece = game.pieces.filter(p => p.x === 7 && p.y === 7)[0];
+          piece.x = 5;
+      } else if (move.endX === 2 && move.endY === 7) {
+          piece = game.pieces.filter(p => p.x === 0 && p.y === 7)[0];
+          piece.x = 3;
+      }
+  }
+  // console.log(piece);
+}
+
 // listenForNewMove(moves: Move[]) {
 // }
 
 
-isLegalMove(move: Move, isWhite: boolean, isCapturing: boolean) {
-  const diffX = Math.abs(move.startX - move.endX);
-  const diffY = Math.abs(move.startY - move.endY);
-  switch (move.pieceDiscriminator) {
-    case 'Pawn':
-      if (diffX > 1) { return 'A Pawn cannot move more than one square to the side.'; }
-      if (isWhite) {
-          // white pawns start at row index 1 and move up one at a time
-          if (move.startY + 1 === move.endY) {
-              if (diffX === 0) {
-                  return true;
-              }  else if (isCapturing && diffX === 1) {
-                // pawns may move one space to eother side when capturing
-                  return true;
-              }
-          } else if (move.startY + 2 === move.endY && move.startY === 1 && diffX === 0) {
-            // if they are at their starting position they may move two spaces
-              return true;
-          }
-      } else {
-          // black pawns start at row index 6 and only move down
-          if (move.startY - 1 === move.endY ) {
-              if (diffX === 0) {
-                  return true;
-              } else if (isCapturing && diffX === 1) {
-                // pawns may move one pace to either side when capturing
-                  return true;
-              }
-          } else if (move.startY - 2 === move.endY && move.startY === 6 && diffX === 0) {
-            // if they are at their starting position they may move two spaces
-              return true;
-          }
-      }
-      return 'A Pawn may only move forward one space at a time, ' +
-      'capture diagonally, and may move two spaces forward if it is the first move of the pawn.';
 
-    case 'Rook':
-      if (diffX === 0 || diffY === 0) {
-          return true;
-      }
-      return 'A Rook must move in straight lines along the x or y axis';
-
-    case 'Knight':
-      if (diffX === 1 && diffY === 2) {
-          return true;
-      } else if (diffX === 2 && diffY === 1) {
-          return true;
-      }
-      return 'A Knight must move two spaces on one axis and one space on the other axis.';
-
-    case 'Bishop':
-      if (diffX === diffY) {
-          return true;
-      }
-      return 'A Bishop must move in a diagonal line';
-
-    case 'Queen':
-      if (diffX === 0 || diffY === 0) {
-          return true;
-      } else if (diffX === diffY) {
-          return true;
-      }
-      return 'A Queen must move in a in straight lines along the x or y axis, or in a diagonal line.';
-
-    case 'King':
-      if (diffX > 1 || diffY > 1) {
-          return 'The King can only move one space in any direction.';
-      }
-      return true;
-  }
-}
 
 
 }

@@ -60,6 +60,11 @@ namespace ChessGameAPI.Data
             return await _context.Games.Include(g =>g.Pieces).Include(g =>g.Moves).Include(g => g.WhiteUser).Include(g => g.BlackUser).FirstOrDefaultAsync(g => g.Id == gameId);
         }
 
+        public async Task<Game> GetGameMin(int gameId)
+        {
+            return await _context.Games.FirstOrDefaultAsync(game => game.Id == gameId);
+        }
+
         public async Task<Piece> GetPiece(int pieceId)
         {
             return await _context.Pieces.Include(piece =>piece.OwnedBy).FirstOrDefaultAsync(piece => piece.Id == pieceId);
@@ -68,6 +73,9 @@ namespace ChessGameAPI.Data
         public async Task<Piece> GetPieceByXY(int gameId, int x, int y) {
             return await _context.Pieces.Include(piece =>piece.OwnedBy).FirstOrDefaultAsync(piece => piece.Game.Id == gameId && piece.X == x && piece.Y ==y);
         }
-        
+
+        public async Task<IList<Move>> GetMovesForGameForUser(int gameId, int userId) {
+            return await _context.Moves.Where(move => move.GameId == gameId && move.UserId == userId).ToListAsync();
+        }
     }
 }

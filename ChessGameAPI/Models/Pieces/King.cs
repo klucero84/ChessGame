@@ -19,8 +19,11 @@ namespace ChessGameAPI.Models.Pieces
         {
             int diffX = Math.Abs(X - attemptedMove.EndX);
             int diffY = Math.Abs(Y - attemptedMove.EndY);
+            if (diffX == 2 && diffY == 0){
+                return (true, MoveErrors.KingCastling);
+            }
             if (diffX > 1 || diffY > 1) {
-                return (false, "The King can only move one space in any direction.");
+                return (false, MoveErrors.King);
             }
             return (true, null);
         }

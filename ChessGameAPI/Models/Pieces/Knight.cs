@@ -27,7 +27,7 @@ namespace ChessGameAPI.Models.Pieces
             {
                 return (true, null);
             }
-            return (false, "A Knight must move two spaces on one axis and one space on the other axis.");
+            return (false, MoveErrors.Knight);
         }
     }
 }

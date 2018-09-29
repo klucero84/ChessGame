@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 export class GameHomeComponent implements OnInit {
 
   @Input() games: Game[];
-  @Input() game: Game[];
+  @Input() game: Game;
 
   playMode = false;
   listMode = true;
@@ -21,9 +21,12 @@ export class GameHomeComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.games = data['games'];
       this.game = data['game'];
-      // console.log(this.game);
     });
     this.listMode = !this.game;
     this.playMode = !this.games;
+  }
+
+  showGame() {
+    // console.log(this.game);
   }
 }

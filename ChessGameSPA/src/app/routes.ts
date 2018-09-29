@@ -25,7 +25,7 @@ export const AppRoutes: Routes = [
             { path: 'users', component : UserListComponent , resolve: {users: UserListResolver} },
             { path: 'user/edit', component: UserEditComponent, resolve : {user: UserEditResolver}, canDeactivate: [PreventUnsavedChanges] },
             { path: 'user/:id', component : UserDetailComponent , resolve : {user: UserDetailResolver} },
-
+            // { path: 'lazy', loadChildren: './lazy/lazy.module#LazyModule'},
             { path: 'messages', component : MessagesComponent },
             { path: 'game',
                 children: [

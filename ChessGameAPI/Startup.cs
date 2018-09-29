@@ -53,8 +53,8 @@ namespace ChessGameAPI
             services.AddAutoMapper();
 
             // db init
-            // services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
-            // services.AddTransient<Seeder>();
+            services.BuildServiceProvider().GetService<DataContext>().Database.Migrate();
+            services.AddTransient<Seeder>();
 
             services.AddSignalR();
             services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
@@ -117,7 +117,7 @@ namespace ChessGameAPI
             if (env.IsDevelopment())
             {
                 // app.UseDeveloperExceptionPage();
-                // seeder.SeedUsers();
+                
             }
             else
             {
@@ -134,6 +134,7 @@ namespace ChessGameAPI
                 });
                 // app.UseHsts();
             }
+            // seeder.SeedUsers();
             app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {

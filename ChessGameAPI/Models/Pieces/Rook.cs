@@ -24,7 +24,7 @@ namespace ChessGameAPI.Models.Pieces
             {
                 return (true, null);
             }
-            return (false, "A Rook must move in straight lines along the x or y axis");
+            return (false, MoveErrors.Rook);
         }
     }
 }

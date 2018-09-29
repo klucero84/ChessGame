@@ -20,5 +20,7 @@ namespace ChessGameAPI.Dtos
         public int EndX { get; set; }
 
         public int EndY { get; set; }
+
+        public bool IsCastle { get; set; }
     }
 }

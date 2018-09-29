@@ -50,6 +50,13 @@ namespace ChessGameAPI.Controllers
             var result = await _repo.GetUser(id);
             return Ok(result);
         }
+
+        [HttpGet("/match-history/{id}")]
+        public async Task<IActionResult> GetUserMatchHistory(int id) 
+        {
+            await _repo.SaveAll();
+            return Ok();
+        }
         
     }
 }
