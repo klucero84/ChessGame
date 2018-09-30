@@ -17,7 +17,7 @@ export class GameDetailResolver implements Resolve<Game> {
         return this.gameService.getGame(route.params['id']).pipe(
             catchError( error => {
                 this.alertify.error('Problem retrieving game.');
-                this.router.navigate(['/games/home']);
+                this.router.navigate(['/home']);
                 return of(null);
             })
         );

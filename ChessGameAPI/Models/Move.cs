@@ -43,7 +43,7 @@ namespace ChessGameAPI.Models
         }
 
         [ForeignKey("Users")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         [Required]
         public User User { get; set; }

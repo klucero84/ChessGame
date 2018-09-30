@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { TabsModule, PaginationModule, ButtonsModule, BsDropdownModule } from 'ngx-bootstrap';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from 'ngx-gallery';
+import {DataTableModule} from 'angular-6-datatable';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 
 import { AppRoutes } from './routes';
@@ -81,6 +82,7 @@ export function tokenGetter() {
       HttpClientModule,
       NgxGalleryModule,
       DragAndDropModule,
+      DataTableModule,
       TabsModule.forRoot(),
       ButtonsModule.forRoot(),
       BsDropdownModule.forRoot(),

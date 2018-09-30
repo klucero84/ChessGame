@@ -26,19 +26,15 @@ addMoveTwoPlayer(move: Move) {
 }
 
 joinGame(game: Game) {
-  // console.log(this.baseUrl + '/ws');
   this.hubConnection = new HubConnectionBuilder().withUrl(this.baseUrl + '/ws').build();
   this.hubConnection
   .start()
   .then(
     () => {
-      // console.log('Connection started.');
       this.hubConnection.invoke('joinGame', game.id).then(function (connectionId) {
-        // console.log(connectionId);
         game.connId = connectionId;
       });
       this.hubConnection.on('addMoveToGame',  (move: Move) => {
-        // console.log(move);
         // get the piece being moved by other player
         const pieceBeingMoved = game.pieces.filter(p => p.x === move.startX && p.y === move.startY)[0];
         // if opponent moved, we are listening the piece will still be here
@@ -56,12 +52,11 @@ joinGame(game: Game) {
           pieceBeingMoved.x = move.endX;
           pieceBeingMoved.y = move.endY;
         }
-        // console.log(move);
       });
     }
     )
   .catch(
-    // err => console.log('Error while establishing connection:' + err)
+    err => console.log('Error while establishing connection:' + err)
     );
 }
 
@@ -69,16 +64,14 @@ leaveGame(game: Game) {
   this.hubConnection.invoke('leaveGame', game.id);
   this.hubConnection.stop().
   then(
-    // () => console.log('Connection ended.')
     )
   .catch(
-    // err => console.log('Error while closing connection:' + err)
+    err => console.log('Error while establishing connection:' + err)
     );
 
 }
 
 addMoveToGame(move: Move, game: Game) {
-  console.log(move);
   if (game.canWhiteQueenSideCastle && move.startY === 0 && move.startX === 0) {
     game.canWhiteQueenSideCastle = false;
   } else if (game.canWhiteKingSideCastle && move.startY === 0 && move.startX === 7) {
@@ -104,7 +97,6 @@ addMoveToGame(move: Move, game: Game) {
 }
 
 private applyCastle(move: Move, game: Game) {
-  // console.log(move);
   let piece: Piece;
   if (move.startX === 4 && move.startY === 0) {
       if (move.endX === 6 && move.endY === 0) {
@@ -123,14 +115,5 @@ private applyCastle(move: Move, game: Game) {
           piece.x = 3;
       }
   }
-  // console.log(piece);
 }
-
-// listenForNewMove(moves: Move[]) {
-// }
-
-
-
-
-
 }

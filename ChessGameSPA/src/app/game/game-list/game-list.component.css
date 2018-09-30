@@ -1,0 +1,26 @@
+.red {
+color: 	#8B0000;
+}
+.white {
+color: #ffffff;
+}
+.table-primary {
+    background-color:#e2d37f;
+    color:black;
+}
+.table-primary:hover {
+    background-color:#e7db97;
+}
+.table-primary>td {
+    background-color: inherit;
+}
+.table-secondary {
+    background-color:#54320a;
+    color: white;
+}
+.table-secondary:hover {
+    background-color:#72430d;
+}
+.table-secondary>td {
+    background-color: inherit;
+}

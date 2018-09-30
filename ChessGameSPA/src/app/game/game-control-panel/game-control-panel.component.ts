@@ -22,8 +22,7 @@ export class GameControlPanelComponent implements OnInit {
   getNewGame() {
 
     this.gameService.newGame().subscribe(event => {
-      // console.log(event);
-      this.router.navigate(['/game/' + event.id + '/play']);
+      this.router.navigate(['/game/play/' + event.id ]);
     }, error => {
       this.alertify.error(error);
     });
@@ -35,7 +34,6 @@ export class GameControlPanelComponent implements OnInit {
     if (!move) {
       return name;
     }
-    // console.log(move);
     if (move.userId === this.game.whiteUser.id) {
       name = this.game.blackUser.name;
     } else if ( move.userId === this.game.blackUser.id) {
@@ -46,6 +44,22 @@ export class GameControlPanelComponent implements OnInit {
       name = this.game.whiteUser.name;
     }
     return name;
+  }
+
+  requestDraw() {
+    this.gameService.newGame().subscribe(event => {
+      this.router.navigate(['/game/' + event.id + '/play']);
+    }, error => {
+      this.alertify.error(error);
+    });
+  }
+
+  concede() {
+    this.gameService.newGame().subscribe(event => {
+      this.router.navigate(['/game/' + event.id + '/play']);
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 
 }

@@ -9,15 +9,15 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GameDetailComponent implements OnInit {
 
-  game: Game;
+  @Input() game: Game;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      this.game = data['game'];
-      // console.log(this.game);
-    });
+  }
+
+  isGameFinished() {
+    return this.game.dateCompleted != null;
   }
 
 }

@@ -29,7 +29,6 @@ export class UserEditComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.user = data['user'];
-      // console.log(this.users);
     });
     this.route.queryParams.subscribe(params => {
       const selectedTab = params['tab'];

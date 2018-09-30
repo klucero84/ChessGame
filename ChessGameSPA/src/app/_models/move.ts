@@ -89,8 +89,6 @@ export class Move {
             return 'A Queen must move in a in straight lines along the x or y axis, or in a diagonal line.';
 
             case 'King':
-            // const canCastle = ;
-            // console.log(canCastle);
             if (this.isCastleLegal() && diffY === 0 && diffX === 2) {
                 return true;
             }
@@ -134,7 +132,6 @@ export class Move {
         //                                                 move.startX === 7 && move.startY === 7 );
         //     }
         // }
-        // console.log(moves);
         // return moves.length === 0;
     }
 }

@@ -91,5 +91,31 @@ namespace ChessGameAPI.Controllers
             var gameDto = _mapper.Map<GameDto>(game);
             return Ok(gameDto);
         }
+
+        [HttpPost("~/api/game/{gameId:int}/draw")]
+        public async Task<IActionResult> RequestDraw(int gameId)
+        {
+            Game game = await _gameRepo.GetGameMin(gameId);
+            if (this.GetCurrentUserId() == game.WhiteUserId) {
+                game.statusCode = GameStatus.WinBlack;
+            } else if (this.GetCurrentUserId() == game.BlackUserId) {
+                game.statusCode = GameStatus.WinWhite;
+            }
+            await _gameRepo.SaveAll();
+            return Ok();
+        }
+
+        [HttpPost("~/api/game/{gameId:int}/concede")]
+        public async Task<IActionResult> Concede(int gameId)
+        {
+            Game game = await _gameRepo.GetGameMin(gameId);
+            if (this.GetCurrentUserId() == game.WhiteUserId) {
+                game.statusCode = GameStatus.WinBlack;
+            } else if (this.GetCurrentUserId() == game.BlackUserId) {
+                game.statusCode = GameStatus.WinWhite;
+            }
+            await _gameRepo.SaveAll();
+            return Ok();
+        }
     }
 }

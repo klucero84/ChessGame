@@ -5,10 +5,13 @@ div
 }
 
 .active-piece {
-  opacity: 1;
+  /* opacity: 1; */
 }
 .non-active-piece {
-  opacity: .8;
+  /* filter: brightness(50%); */
+  filter: contrast(25%);
+  /* filter: blur(2px); */
+  /* opacity: .8; */
 }
 
 .black-Pawn

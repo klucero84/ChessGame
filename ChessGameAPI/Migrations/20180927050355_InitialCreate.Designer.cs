@@ -71,7 +71,7 @@ namespace ChessGameAPI.Migrations
 
                     b.Property<int>("UserId");
 
-                    b.Property<int?>("UserId1");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
 
@@ -79,7 +79,7 @@ namespace ChessGameAPI.Migrations
 
                     b.HasIndex("PieceId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Moves");
                 });
@@ -249,7 +249,7 @@ namespace ChessGameAPI.Migrations
 
                     b.HasOne("ChessGameAPI.Models.User", "User")
                         .WithMany("Moves")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 

@@ -6,6 +6,8 @@ namespace ChessGameAPI.Models
         Inprogress = 1,
         WinWhite = 2,
         WinBlack = 3,
-        Draw = 4
+        Draw = 4,
+        DrawRequestWhite = 5,
+        DrawRequestBlack = 6
     }
 }

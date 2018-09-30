@@ -116,8 +116,7 @@ namespace ChessGameAPI.Migrations
                     GameId = table.Column<int>(nullable: false),
                     PieceId = table.Column<int>(nullable: true),
                     PieceDiscriminator = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<int>(nullable: true),
+                    UserId = table.Column<int>(nullable: true),
                     StartX = table.Column<int>(nullable: false),
                     StartY = table.Column<int>(nullable: false),
                     EndX = table.Column<int>(nullable: false),
@@ -140,8 +139,8 @@ namespace ChessGameAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Moves_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Moves_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -168,9 +167,9 @@ namespace ChessGameAPI.Migrations
                 column: "PieceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Moves_UserId1",
+                name: "IX_Moves_UserId",
                 table: "Moves",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_UserId",

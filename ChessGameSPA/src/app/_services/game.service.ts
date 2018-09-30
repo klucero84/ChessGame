@@ -28,5 +28,13 @@ getGame(id): Observable<Game> {
 getMovesForGame(id): Observable<Move[]> {
   return this.http.get<Move[]>(this.baseUrl + '/' + id + '/moves');
 }
+
+requestDraw(id) {
+  return this.http.post<Game>(this.baseUrl + '/' + id + '/draw', null);
+}
+
+concede(id) {
+  return this.http.post<Game>(this.baseUrl + '/' + id + '/concede', null);
+}
 }
 

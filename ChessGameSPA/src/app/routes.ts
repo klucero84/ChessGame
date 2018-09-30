@@ -30,8 +30,8 @@ export const AppRoutes: Routes = [
             { path: 'game',
                 children: [
                 //    { path: 'list', component : GameHomeComponent, resolve: {games: GameListResolver} },
-                   { path: ':id/play', component: GameHomeComponent, resolve : {game: GamePlayResolver} },
-                   { path: ':id/detail', component: GameDetailComponent, resolve : {game: GameDetailResolver} },
+                   { path: 'play/:id', component: GameHomeComponent, resolve : {game: GamePlayResolver} },
+                   { path: 'detail/:id', component: GameHomeComponent, resolve : {games: GameListResolver} },
                    { path: '**', redirectTo: '', component: GameHomeComponent, resolve: {games: GameListResolver} }
                 ]
             }

@@ -18,10 +18,6 @@ export class GameBoardComponent implements OnInit {
   move: Move = new Move();
   ioConnection: any;
   isMoving = false;
-
-
-
-
   @Input() game: Game;
 
   constructor(private moveService: MoveService,
@@ -31,7 +27,6 @@ export class GameBoardComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.game);
     this.moveService.joinGame(this.game);
   }
 
@@ -101,7 +96,6 @@ export class GameBoardComponent implements OnInit {
     piece.x = landingSquareInfo.x;
     piece.y = landingSquareInfo.y;
     this.move.game = null;
-    // console.log(this.move);
     // used in dev to add moves from one user.
     this.moveService.addMoveTwoPlayer(this.move).subscribe(() => {
     // this.moveService.addMove(this.move).subscribe(() => {
@@ -109,7 +103,6 @@ export class GameBoardComponent implements OnInit {
       // Subscribe stuff only executes when we make a move in our screen
       // our opponents moves are handled by the subscription to the move service
       const pieces = this.game.pieces.filter(p => p.x === this.move.endX && p.y === this.move.endY);
-      // console.log(pieces);
       if (pieces.length === 2 && isCapturing) {
         // if both players have a piece there
         if ((pieces[0].ownedBy.id === this.game.whiteUser.id ||
@@ -122,7 +115,6 @@ export class GameBoardComponent implements OnInit {
         }
       }
       this.moveService.addMoveToGame(this.move, this.game);
-      // this.game.addMoveToGame(this.move);
     }, error => {
       piece.x = this.move.startX;
       piece.y = this.move.startY;
