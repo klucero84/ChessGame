@@ -27,14 +27,7 @@ export const AppRoutes: Routes = [
             { path: 'user/:id', component : UserDetailComponent , resolve : {user: UserDetailResolver} },
             // { path: 'lazy', loadChildren: './lazy/lazy.module#LazyModule'},
             { path: 'messages', component : MessagesComponent },
-            { path: 'game',
-                children: [
-                //    { path: 'list', component : GameHomeComponent, resolve: {games: GameListResolver} },
-                   { path: 'play/:id', component: GameHomeComponent, resolve : {game: GamePlayResolver} },
-                   { path: 'detail/:id', component: GameHomeComponent, resolve : {games: GameListResolver} },
-                   { path: '**', redirectTo: '', component: GameHomeComponent, resolve: {games: GameListResolver} }
-                ]
-            }
+            { path: 'game', loadChildren: './game/game.module#GameModule'}
         ]
     },
     { path: '**', redirectTo: '', pathMatch: 'full' }

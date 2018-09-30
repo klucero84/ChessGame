@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Game } from '../../_models/game';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../_services/auth.service';

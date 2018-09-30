@@ -7,8 +7,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { TabsModule, PaginationModule, ButtonsModule, BsDropdownModule } from 'ngx-bootstrap';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from 'ngx-gallery';
-import {DataTableModule} from 'angular-6-datatable';
-import { DragAndDropModule } from 'angular-draggable-droppable';
 
 import { AppRoutes } from './routes';
 
@@ -32,21 +30,9 @@ import { UserListComponent } from './user/user-list/user-list.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserCardComponent } from './user/user-card/user-card.component';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
-import { GameHomeComponent } from './game/game-home/game-home.component';
-import { GameListComponent } from './game/game-list/game-list.component';
-import { GameCardComponent } from './game/game-card/game-card.component';
-import { GameDetailComponent } from './game/game-detail/game-detail.component';
-import { GameBoardComponent } from './game/game-board/game-board.component';
-
-import { GameDetailResolver } from './_resolvers/game-detail.resolver';
-import { GameListResolver } from './_resolvers/game-list.resolver';
-import { GamePlayResolver } from './_resolvers/game-play.resolver';
 import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { UserEditResolver } from './_resolvers/user-edit.resolver';
-import { GameBoardSquareComponent } from './game/game-board-square/game-board-square.component';
-import { GameControlPanelComponent } from './game/game-control-panel/game-control-panel.component';
-import { GameHistoryComponent } from './game/game-history/game-history.component';
 import { UserMatchHistoryComponent } from './user/user-match-history/user-match-history.component';
 
 
@@ -65,15 +51,7 @@ export function tokenGetter() {
       UserDetailComponent,
       UserEditComponent,
       UserListComponent,
-      GameListComponent,
-      GameDetailComponent,
-      GameHomeComponent,
       UserCardComponent,
-      GameCardComponent,
-      GameBoardComponent,
-      GameBoardSquareComponent,
-      GameControlPanelComponent,
-      GameHistoryComponent,
       UserMatchHistoryComponent
    ],
    imports: [
@@ -81,8 +59,6 @@ export function tokenGetter() {
       BrowserModule,
       HttpClientModule,
       NgxGalleryModule,
-      DragAndDropModule,
-      DataTableModule,
       TabsModule.forRoot(),
       ButtonsModule.forRoot(),
       BsDropdownModule.forRoot(),
@@ -108,12 +84,12 @@ export function tokenGetter() {
        UserListResolver,
        UserDetailResolver,
        UserEditResolver,
-       GameDetailResolver,
-       GameListResolver,
-       GamePlayResolver
    ],
    bootstrap: [
       AppComponent
+   ],
+   exports: [
+
    ]
 })
 export class AppModule { }
