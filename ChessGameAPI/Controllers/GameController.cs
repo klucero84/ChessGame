@@ -15,6 +15,7 @@ namespace ChessGameAPI.Controllers
     /// <summary>
     /// Controller responsible for Games.
     /// </summary>
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]

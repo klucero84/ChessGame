@@ -35,6 +35,8 @@ namespace ChessGameAPI.Data
         /// <value></value>
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Message> Messages { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -93,6 +95,14 @@ namespace ChessGameAPI.Data
             modelBuilder.Entity<Game>()
                 .Property(game => game.WhiteUserId)
                 .IsRequired(false);
+            modelBuilder.Entity<Message>()
+                .HasOne(u => u.Sender)
+                .WithMany(m => m.MessagesSent)
+                .OnDelete(DeleteBehavior.Restrict);
+             modelBuilder.Entity<Message>()
+                .HasOne(u => u.Recipient)
+                .WithMany(m => m.MessagesReceived)
+                .OnDelete(DeleteBehavior.Restrict);
             // modelBuilder.Entity<User>().HasData( 
             //     for(int i = 0; i < 100; i++) {
             //         new {}

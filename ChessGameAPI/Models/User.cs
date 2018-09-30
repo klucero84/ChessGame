@@ -59,5 +59,9 @@ namespace ChessGameAPI.Models
         public IEnumerable<Piece> Pieces { get; set; }
 
         public IEnumerable<Move> Moves { get; set; }
+
+        public ICollection<Message> MessagesSent { get; set; }
+        
+        public ICollection<Message> MessagesReceived { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ChessGameAPI.Data;
 using ChessGameAPI.Dtos;
+using ChessGameAPI.Helpers;
 using ChessGameAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +63,7 @@ namespace ChessGameAPI.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
+        [ServiceFilter(typeof(LogUserActivity))]
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto dto)
         {

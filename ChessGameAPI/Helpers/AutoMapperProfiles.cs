@@ -27,7 +27,12 @@ namespace ChessGameAPI.Helpers
             CreateMap<Move, MoveDto>();
             CreateMap<Piece, PieceDto>();
             CreateMap<Game, GameDto>();
-
+            CreateMap<MessageForCreationDto, Message>().ReverseMap();
+            CreateMap<Message, MessageForReturnDto>()
+                .ForMember(m => m.SenderPhotoUrl, opt => opt
+                    .MapFrom(u => u.Sender.Photos.FirstOrDefault(p => p.IsMain).URL))
+                .ForMember(m => m.RecipientPhotoUrl, opt => opt
+                    .MapFrom(u => u.Recipient.Photos.FirstOrDefault(p => p.IsMain).URL));
 
             //dto to model
             CreateMap<UserForUpdateDto, User>();

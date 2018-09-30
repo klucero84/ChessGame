@@ -48,7 +48,7 @@ namespace ChessGameAPI
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddScoped<LogUserActivity>();
             // dto mapper
             services.AddAutoMapper();
 

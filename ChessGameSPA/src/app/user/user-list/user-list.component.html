@@ -1,7 +1,17 @@
 <div class="container mt-3">
   <div class="row">
-    <div *ngFor="let user of users" class="col-9">
-      <app-user-card [user]="user"></app-user-card>
+    <div  class="col-9">
+      <app-user-card *ngFor="let user of users" [user]="user"></app-user-card>
+      <div class="d-flex justify-content-center mb-3">
+        <pagination
+            [boundaryLinks]="true"
+            [totalItems]="pagination.totalItems"
+            [(ngModel)]="pagination.currentPage"
+            [itemsPerPage]="pagination.itemsPerPage"
+            (pageChanged)="pageChanged($event)"
+          previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+         </pagination>
+      </div>
     </div>
     <div class="col-3">
       <div class="card">

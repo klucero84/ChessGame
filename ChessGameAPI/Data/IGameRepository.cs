@@ -9,7 +9,7 @@ namespace ChessGameAPI.Data
     /// </summary>
     public interface IGameRepository
     {
-          /// <summary>
+        /// <summary>
         /// Adds an entity of type T
         /// </summary>
         /// <typeparam name="T">a reference type</typeparam>

@@ -1,6 +1,6 @@
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
- namespace DatingApp.API.Controllers
+namespace ChessGameAPI.API.Controllers
 {
     public class FallBack : Controller
     {

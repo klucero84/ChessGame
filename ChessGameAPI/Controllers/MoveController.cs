@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ChessGameAPI.Data;
 using ChessGameAPI.Dtos;
+using ChessGameAPI.Helpers;
 using ChessGameAPI.Hubs;
 using ChessGameAPI.Models;
 using ChessGameAPI.Models.Pieces;
@@ -16,6 +17,7 @@ namespace ChessGameAPI.Controllers
     /// <summary>
     /// Controller responsible for moves.
     /// </summary>
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]

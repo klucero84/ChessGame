@@ -1,4 +1,5 @@
 using ChessGameAPI.Data;
+using ChessGameAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ namespace ChessGameAPI.Controllers
     /// <summary>
     /// Controller reponsible for photos.
     /// </summary>
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
