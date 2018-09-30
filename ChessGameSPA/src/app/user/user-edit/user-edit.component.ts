@@ -25,7 +25,7 @@ export class UserEditComponent implements OnInit {
 
 
  constructor(private route: ActivatedRoute) { }
- 
+
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.user = data['user'];
