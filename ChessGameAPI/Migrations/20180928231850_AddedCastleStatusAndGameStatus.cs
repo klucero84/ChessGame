@@ -36,7 +36,7 @@ namespace ChessGameAPI.Migrations
                 defaultValue: false);
 
             migrationBuilder.AddColumn<int>(
-                name: "statusCode",
+                name: "StatusCode",
                 table: "Games",
                 nullable: false,
                 defaultValue: 0);
@@ -67,7 +67,7 @@ namespace ChessGameAPI.Migrations
                 table: "Games");
 
             migrationBuilder.DropColumn(
-                name: "statusCode",
+                name: "StatusCode",
                 table: "Games");
         }
     }

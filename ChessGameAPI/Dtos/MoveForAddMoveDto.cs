@@ -29,11 +29,15 @@ namespace ChessGameAPI.Dtos
 
         public bool IsCapture { get; set; }
 
-        // public bool Concede { get; set; }
+        public string PromoteTo { get; set; }
 
-        // public bool OfferDraw { get; set; }
+        public bool Concede { get; set; }
 
-        public string connId { get; set; }
+        public bool OfferDraw { get; set; }
+
+        public string ConnId { get; set; }
+
+        public string Notation { get; set; }
 
     
     }

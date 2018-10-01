@@ -21,6 +21,7 @@ export class Move {
     concede: boolean;
     offerDraw: boolean;
     connId: string;
+    notation: string;
 
 
     isLegalMove(isCapturing: boolean) {

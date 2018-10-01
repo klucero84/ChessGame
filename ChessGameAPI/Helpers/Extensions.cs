@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text;
 using ChessGameAPI.Controllers;
 using ChessGameAPI.Data;
+using ChessGameAPI.Dtos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +53,40 @@ namespace ChessGameAPI.Helpers
             camelCaseFormatter.ContractResolver = new CamelCasePropertyNamesContractResolver();
             response.Headers.Add("Pagination", JsonConvert.SerializeObject(paginationHeader, camelCaseFormatter));
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
+        }
+
+        public static string GetNotation(this MoveController controller, MoveForAddMoveDto dto) {
+            string[] letters = {"a", "b", "c", "d", "e", "f", "g", "h"};
+            StringBuilder sb = new StringBuilder();
+
+            if (dto.IsCastle) {
+                if (dto.EndX == 2) {
+                    sb.Append("0-0-0");
+                } else {
+                    sb.Append("0-0");
+                }
+                return sb.ToString();
+            }
+            if (dto.PieceDiscriminator == "Knight") {
+                sb.Append("N");
+            } else if (!String.IsNullOrEmpty(dto.PieceDiscriminator) && dto.PieceDiscriminator != "Pawn") {
+                sb.Append(dto.PieceDiscriminator[0].ToString());
+            }
+            sb.Append(letters[dto.StartX] + (dto.StartY + 1).ToString());
+            if (dto.IsCapture) {
+                sb.Append("x");
+            } else {
+                sb.Append("-");
+            }
+            sb.Append(letters[dto.EndX] + (dto.EndY + 1).ToString());
+            if (!String.IsNullOrEmpty(dto.PromoteTo)) {
+                if (dto.PromoteTo == "Knight") {
+                sb.Append("=N");
+                } else {
+                    sb.Append("=" + dto.PromoteTo[0].ToString());
+                }
+            }
+            return sb.ToString();
         }
     }
 }

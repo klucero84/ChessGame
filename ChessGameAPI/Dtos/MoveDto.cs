@@ -22,5 +22,7 @@ namespace ChessGameAPI.Dtos
         public int EndY { get; set; }
 
         public bool IsCastle { get; set; }
+
+        public string Notation { get; set; }
     }
 }

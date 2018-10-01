@@ -62,7 +62,6 @@ export class GameBoardComponent implements OnInit {
       this.resetMove();
       return;
     }
-    let isCapturing = false;
     // determine if a piece is already there.
     if (landingSquareInfo.piece) {
       // determine if the piece already there is our piece
@@ -73,7 +72,7 @@ export class GameBoardComponent implements OnInit {
       } else {
         // if it's not the same user's piece they are capturing
         // this.alertifyService.success('Capturing');
-        isCapturing = true;
+        this.move.isCapture = true;
         // this.resetMove();
         // return;
       }
@@ -85,7 +84,7 @@ export class GameBoardComponent implements OnInit {
     this.move.game = this.game;
     this.move.connId = this.game.connId;
     this.move.isWhite = this.game.whiteUser.id === this.move.userId;
-    const isLegal = this.move.isLegalMove(isCapturing);
+    const isLegal = this.move.isLegalMove(this.move.isCapture);
     if (isLegal !== true) {
       this.alertifyService.warning(isLegal.toString());
       this.resetMove();
@@ -97,13 +96,14 @@ export class GameBoardComponent implements OnInit {
     piece.y = landingSquareInfo.y;
     this.move.game = null;
     // used in dev to add moves from one user.
-    this.moveService.addMoveTwoPlayer(this.move).subscribe(() => {
+    this.moveService.addMoveTwoPlayer(this.move).subscribe((newMove: Move) => {
     // this.moveService.addMove(this.move).subscribe(() => {
       // -------------------------
       // Subscribe stuff only executes when we make a move in our screen
       // our opponents moves are handled by the subscription to the move service
+      this.move.notation = newMove.notation;
       const pieces = this.game.pieces.filter(p => p.x === this.move.endX && p.y === this.move.endY);
-      if (pieces.length === 2 && isCapturing) {
+      if (pieces.length === 2 && this.move.isCapture) {
         // if both players have a piece there
         if ((pieces[0].ownedBy.id === this.game.whiteUser.id ||
             pieces[1].ownedBy.id === this.game.whiteUser.id)

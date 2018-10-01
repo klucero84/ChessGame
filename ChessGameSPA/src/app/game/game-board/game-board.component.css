@@ -8,7 +8,7 @@
     float:left;
 }
 .board-tile:hover {
-    border: tomato ridge 2px;
+    border: #c4c4c4 inset 1px;
 }
 
 /*black squares */
@@ -18,6 +18,12 @@
 .checkerboard > div:nth-child(2n) > div:nth-child(2n-1){
     background-color: #54320a;
 }
+.checkerboard > div:nth-child(2n-1) > div:nth-child(2n):hover{
+    background-color: #72430d;
+}
+.checkerboard > div:nth-child(2n) > div:nth-child(2n-1):hover{
+    background-color: #72430d;
+}
 
 /*white squares */
 .checkerboard > div:nth-child(2n) > div:nth-child(2n){
@@ -26,6 +32,13 @@
 .checkerboard > div:nth-child(2n-1) > div:nth-child(2n-1){
     background-color: #e2d37f;
 }
+.checkerboard > div:nth-child(2n) > div:nth-child(2n):hover{
+    background-color: #e7db97;
+}
+.checkerboard > div:nth-child(2n-1) > div:nth-child(2n-1):hover{
+    background-color: #e7db97;
+}
+
 /*columns*/
 .x-0{
     clear: left;

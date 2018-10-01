@@ -40,14 +40,13 @@ namespace ChessGameAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)
         {
-           var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-             var userFromRepo = await _repo.GetUser(currentUserId);
-             userParams.UserId = currentUserId;
+        //    var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            //  var userFromRepo = await _repo.GetUser(GetCurrentUserId());
+             userParams.UserId = this.GetCurrentUserId();
              var users = await _repo.GetUsers(userParams);
              var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
              Response.AddPagination(users.CurrentPage, users.PageSize,
                 users.TotalCount, users.TotalPages);
-            string s = "'";
             return Ok(usersToReturn);
         }
 

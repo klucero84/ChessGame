@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Game } from '../../_models/game';
 import { ActivatedRoute } from '@angular/router';
-import { GameDetailComponent } from '../game-detail/game-detail.component';
 
 @Component({
   selector: 'app-game-home',

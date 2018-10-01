@@ -43,7 +43,7 @@ namespace ChessGameAPI.Migrations
 
                     b.Property<int?>("WhiteUserId");
 
-                    b.Property<int>("statusCode");
+                    b.Property<int>("StatusCode");
 
                     b.HasKey("Id");
 

@@ -182,9 +182,12 @@ namespace ChessGameAPI.Controllers
                     currentGame.CanBlackKingSideCastle = false;
                     currentGame.CanBlackQueenSideCastle = false;
                 }
+
+                dto.Notation = this.GetNotation(dto);
+                newMove.AlgebraicNotation = dto.Notation;
                 // this.UpdateCastleStatus(dto);
                 int code = await _repo.SaveAll();
-                await _hub.Clients.GroupExcept(dto.GameId.ToString(), dto.connId).SendAsync("addMoveToGame", dto);
+                await _hub.Clients.GroupExcept(dto.GameId.ToString(), dto.ConnId).SendAsync("addMoveToGame", dto);
                 return Ok(dto); 
             } else {
                 return BadRequest(moveAttempt.Item2);

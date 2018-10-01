@@ -24,7 +24,8 @@ namespace ChessGameAPI.Helpers
             });
             CreateMap<Photo, PhotosForDetailDto>();
             CreateMap<Photo, PhotoForReturnDto>();
-            CreateMap<Move, MoveDto>();
+            CreateMap<Move, MoveDto>().ForMember(dest => dest.Notation, 
+                opt => opt.MapFrom(srs => srs.AlgebraicNotation));
             CreateMap<Piece, PieceDto>();
             CreateMap<Game, GameDto>();
             CreateMap<MessageForCreationDto, Message>().ReverseMap();
