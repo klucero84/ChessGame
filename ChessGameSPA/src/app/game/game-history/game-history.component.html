@@ -2,7 +2,7 @@
   <div class="card-header text-white bg-primary">
     <h5>Move History</h5>
   </div>
-  <div class="card-body" style ="max-height: 60vh; overflow-y: scroll;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+  <div class="card-body" style ="max-height: 60vh; overflow-y: scroll;">
     <div class="">
       <div class="w-50 mb-2 float-left"><u>{{game.whiteUser.name}}</u></div><div class="w-50 mb-2 float-left"><u>{{game.blackUser.name}}</u></div>
       <div *ngFor="let move of game.moves; let i = index;" class="w-50 float-left" [ngClass]="{'clear-left': i % 2  === 0}" >
