@@ -38,8 +38,8 @@ namespace ChessGameAPI.Data
             if(!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt)){
                 return null;
             }
-            // user.LastActive = DateTime.Now;
-            // _context.SaveChangesAsync();
+            user.LastActive = DateTime.Now;
+            _context.SaveChangesAsync();
             return user;
         }
 

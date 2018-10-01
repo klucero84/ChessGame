@@ -63,7 +63,6 @@ namespace ChessGameAPI.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [ServiceFilter(typeof(LogUserActivity))]
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto dto)
         {
