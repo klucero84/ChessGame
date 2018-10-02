@@ -39,7 +39,7 @@ namespace ChessGameAPI.Data
                 return null;
             }
             user.LastActive = DateTime.Now;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return user;
         }
 

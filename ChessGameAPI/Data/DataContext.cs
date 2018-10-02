@@ -103,6 +103,9 @@ namespace ChessGameAPI.Data
                 .HasOne(u => u.Recipient)
                 .WithMany(m => m.MessagesReceived)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>()
+                .HasAlternateKey(u => u.Email)
+                .HasName("Unique_Email");
             // modelBuilder.Entity<User>().HasData( 
             //     for(int i = 0; i < 100; i++) {
             //         new {}
