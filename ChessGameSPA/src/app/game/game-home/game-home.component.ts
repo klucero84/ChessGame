@@ -17,14 +17,16 @@ export class GameHomeComponent implements OnInit {
   listMode = true;
   detailMode = false;
 
-  // @ViewChild('detailPanel') detailPanel: GameDetailComponent;
-
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.games = data['games'];
       this.game = data['game'];
+      if (this.game) {
+        Game.getPossibleMovesforAllPieces(this.game);
+
+      }
     });
     this.route.url.subscribe(data => {
       if (data[0]) {
@@ -48,10 +50,4 @@ export class GameHomeComponent implements OnInit {
       }
     });
   }
-
-  // showGameDetails(game) {
-  //   this.detailMode = true;
-  //   this.gameDetail = game;
-  //   // console.log(this.game);
-  // }
 }

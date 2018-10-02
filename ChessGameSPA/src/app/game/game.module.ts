@@ -17,7 +17,6 @@ import { DataTableModule } from 'angular-6-datatable';
 import { DragAndDropModule } from 'angular-draggable-droppable';
 
 const routes: Routes = [
-  //    { path: 'list', component : GameHomeComponent, resolve: {games: GameListResolver} },
       { path: 'play/:id', component: GameHomeComponent, resolve : {game: GamePlayResolver} },
       { path: 'detail/:id', component: GameHomeComponent, resolve : {games: GameListResolver} },
       { path: '**', redirectTo: '', component: GameHomeComponent, resolve: {games: GameListResolver} }

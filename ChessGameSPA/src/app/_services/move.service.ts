@@ -25,7 +25,7 @@ addMoveTwoPlayer(move: Move) {
   return this.http.post(this.baseUrl + '/two-player', move);
 }
 
-joinGame(game: Game) {
+joinGame(game: Game, AddMoveToGameCallback: (move: Move) => void) {
   this.hubConnection = new HubConnectionBuilder().withUrl(this.baseUrl + '/ws').build();
   this.hubConnection
   .start()
@@ -34,25 +34,7 @@ joinGame(game: Game) {
       this.hubConnection.invoke('joinGame', game.id).then(function (connectionId) {
         game.connId = connectionId;
       });
-      this.hubConnection.on('addMoveToGame',  (move: Move) => {
-        // get the piece being moved by other player
-        const pieceBeingMoved = game.pieces.filter(p => p.x === move.startX && p.y === move.startY)[0];
-        // if opponent moved, we are listening the piece will still be here
-        // if our piece it's already at it's new location
-        if (pieceBeingMoved) {
-          const pieceAtEndLocation = game.pieces.filter(p => p.x === move.endX && p.y === move.endY)[0];
-          if (pieceAtEndLocation) {
-            // determine if the piece already there is our piece
-            if (pieceAtEndLocation.ownedBy.id !== move.userId) {
-              // if it's not the same user's piece they are capturing
-              game.pieces.splice(game.pieces.indexOf(pieceAtEndLocation), 1);
-            }
-          }
-          this.addMoveToGame(move, game);
-          pieceBeingMoved.x = move.endX;
-          pieceBeingMoved.y = move.endY;
-        }
-      });
+      this.hubConnection.on('addMoveToGame',  (move: Move) => AddMoveToGameCallback(move));
     }
     )
   .catch(
@@ -69,51 +51,5 @@ leaveGame(game: Game) {
     err => console.log('Error while establishing connection:' + err)
     );
 
-}
-
-addMoveToGame(move: Move, game: Game) {
-  if (game.canWhiteQueenSideCastle && move.startY === 0 && move.startX === 0) {
-    game.canWhiteQueenSideCastle = false;
-  } else if (game.canWhiteKingSideCastle && move.startY === 0 && move.startX === 7) {
-    game.canWhiteKingSideCastle = false;
-  } else if ((game.canWhiteKingSideCastle || game.canWhiteQueenSideCastle) &&
-      move.startY === 0 && move.startX === 4) {
-    game.canWhiteKingSideCastle = false;
-    game.canWhiteQueenSideCastle = false;
-  } else if (game.canBlackQueenSideCastle && move.startY === 0 && move.startX === 0) {
-    game.canBlackQueenSideCastle = false;
-  } else if (game.canBlackKingSideCastle && move.startY === 0 && move.startX === 7) {
-    game.canBlackKingSideCastle = false;
-  } else if ((game.canBlackKingSideCastle || game.canBlackQueenSideCastle) &&
-      move.startY === 0 && move.startX === 4) {
-    game.canBlackKingSideCastle = false;
-    game.canBlackQueenSideCastle = false;
-  }
-
-  if (move.isCastle) {
-      this.applyCastle(move, game);
-  }
-  return game.moves.push(move);
-}
-
-private applyCastle(move: Move, game: Game) {
-  let piece: Piece;
-  if (move.startX === 4 && move.startY === 0) {
-      if (move.endX === 6 && move.endY === 0) {
-          piece = game.pieces.filter(p => p.x === 7 && p.y === 0)[0];
-          piece.x = 5;
-      } else if (move.endX === 2 && move.endY === 0) {
-          piece = game.pieces.filter(p => p.x === 0 && p.y === 0)[0];
-          piece.x = 3;
-      }
-  } else if (move.startX === 4 && move.startY === 7) {
-      if (move.endX === 6 && move.endY === 7) {
-          piece = game.pieces.filter(p => p.x === 7 && p.y === 7)[0];
-          piece.x = 5;
-      } else if (move.endX === 2 && move.endY === 7) {
-          piece = game.pieces.filter(p => p.x === 0 && p.y === 7)[0];
-          piece.x = 3;
-      }
-  }
 }
 }

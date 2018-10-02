@@ -32,6 +32,16 @@ export class GameBoardSquareComponent implements OnInit {
     this.putDownPiece.emit({piece: this.piece, x: this.x, y: this.y});
   }
 
+  dragOver() {
+    // console.log('here');
+  }
+
+  // mouseOver(event) {
+  //   console.log(event);
+  //   // event.path.x
+  //   // Game.getPieceForXY()
+  // }
+
   dragStart() {
     if (this.piece && this.userHasTurn()) {
       this.pickUpPiece.emit(this.piece);
@@ -39,7 +49,7 @@ export class GameBoardSquareComponent implements OnInit {
   }
 
   getCssClass() {
-    if (this.piece == null) {
+    if (!this.piece || !this.piece.ownedBy) {
       return '';
     }
     let cssString = '';

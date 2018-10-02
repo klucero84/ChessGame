@@ -27,33 +27,32 @@ export class Move {
     isLegalMove(isCapturing: boolean) {
         const diffX = Math.abs(this.startX - this.endX);
         const diffY = Math.abs(this.startY - this.endY);
-
         switch (this.pieceDiscriminator) {
             case 'Pawn':
             if (diffX > 1) { return 'A Pawn cannot move more than one square to the side.'; }
             if (this.isWhite) {
                 // white pawns start at row index 1 and move up one at a time
                 if (this.startY + 1 === this.endY) {
-                    if (diffX === 0) {
+                    if (diffX === 0 && !isCapturing) {
                         return true;
                     }  else if (isCapturing && diffX === 1) {
                         // pawns may move one space to the side when capturing
                         return true;
                     }
-                } else if (this.startY + 2 === this.endY && this.startY === 1 && diffX === 0) {
+                } else if (this.startY + 2 === this.endY && this.startY === 1 && diffX === 0 && !isCapturing) {
                     // if they are at their starting position they may move two spaces
                     return true;
                 }
             } else {
                 // black pawns start at row index 6 and only move down
-                if (this.startY - 1 === this.endY ) {
-                    if (diffX === 0) {
+                if (this.startY - 1 === this.endY) {
+                    if (diffX === 0 && !isCapturing) {
                         return true;
                     } else if (isCapturing && diffX === 1) {
                         // pawns may move one pace to either side when capturing
                         return true;
                     }
-                } else if (this.startY - 2 === this.endY && this.startY === 6 && diffX === 0) {
+                } else if (this.startY - 2 === this.endY && this.startY === 6 && diffX === 0 && !isCapturing) {
                     // if they are at their starting position they may move two spaces
                     return true;
                 }
@@ -115,24 +114,5 @@ export class Move {
             }
         }
         return this.isCastle;
-        // let moves;
-        // if (this.isWhite) {
-        //     if (this.startX - this.endX === 2) {
-        //         moves = this.game.moves.filter(move => (move.startX === 4 && move.startY === 0) ||
-        //                                                 move.startX === 7 && move.startY === 0 );
-        //     } else if (this.startX - this.endX === -2) {
-        //         moves = this.game.moves.filter(move => (move.startX === 4 && move.startY === 0) ||
-        //                                                 move.startX === 7 && move.startY === 0 );
-        //     }
-        // } else {
-        //     if (this.startX - this.endX === 2) {
-        //         moves = this.game.moves.filter(move => (move.startX === 4 && move.startY === 7) ||
-        //                                                 move.startX === 7 && move.startY === 7 );
-        //     } else if (this.startX - this.endX === -2) {
-        //         moves = this.game.moves.filter(move => (move.startX === 4 && move.startY === 7) ||
-        //                                                 move.startX === 7 && move.startY === 7 );
-        //     }
-        // }
-        // return moves.length === 0;
     }
 }

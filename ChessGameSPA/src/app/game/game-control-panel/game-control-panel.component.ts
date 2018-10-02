@@ -47,19 +47,20 @@ export class GameControlPanelComponent implements OnInit {
   }
 
   requestDraw() {
-    this.gameService.newGame().subscribe(event => {
-      this.router.navigate(['/game/' + event.id + '/play']);
-    }, error => {
-      this.alertify.error(error);
-    });
+    console.log(this.game);
+    // this.gameService.newGame().subscribe(event => {
+    //   this.router.navigate(['/game/' + event.id + '/play']);
+    // }, error => {
+    //   this.alertify.error(error);
+    // });
   }
 
   concede() {
-    this.gameService.newGame().subscribe(event => {
-      this.router.navigate(['/game/' + event.id + '/play']);
-    }, error => {
-      this.alertify.error(error);
-    });
+    // this.gameService.newGame().subscribe(event => {
+    //   this.router.navigate(['/game/' + event.id + '/play']);
+    // }, error => {
+    //   this.alertify.error(error);
+    // });
   }
 
 }

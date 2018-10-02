@@ -5,13 +5,15 @@ div
 }
 
 .active-piece {
-  /* opacity: 1; */
 }
 .non-active-piece {
-  /* filter: brightness(50%); */
   filter: contrast(25%);
-  /* filter: blur(2px); */
-  /* opacity: .8; */
+}
+.allowed-move:hover {
+  border: green solid 4px;
+}
+.illegal-move:hover {
+  border: red solid 4px;
 }
 
 .black-Pawn

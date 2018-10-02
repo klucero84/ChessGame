@@ -2,22 +2,15 @@
   <div class="card-header text-white bg-primary">
     <h5>Move History</h5>
   </div>
-  <div class="card-body" style ="max-height: 60vh; overflow-y: scroll;">
+  <div class="card-body" style ="max-height: 60vh; overflow-y: auto;">
     <div class="">
       <div class="w-50 mb-2 float-left"><u>{{game.whiteUser.name}}</u></div><div class="w-50 mb-2 float-left"><u>{{game.blackUser.name}}</u></div>
       <div *ngFor="let move of game.moves; let i = index;" class="w-50 float-left" [ngClass]="{'clear-left': i % 2  === 0}" >
-        <!-- <div class='w-100'>
-          {{getUserForMove(move)}}'s  ( {{move.pieceDiscriminator}} )
-        </div>
-        <div class='w-100'>
-          {{getXLocName(move.startX)}}{{getYLocName(move.startY)}} => {{getXLocName(move.endX)}}{{getYLocName(move.endY)}}
-        </div> -->
-        
         <div class=''>
           <span *ngIf="i%2==0">{{(i+2)/2}}.</span>&nbsp;<i [ngClass]="'fa fa-chess-' + move.pieceDiscriminator.toLowerCase()" alt=""></i> {{move.notation}}
         </div>
       </div>
-      <div *ngIf="game.moves?.length === 0" class="list-group-item">
+      <div *ngIf="game.moves?.length === 0">
         No Moves yet
       </div>
     </div>
