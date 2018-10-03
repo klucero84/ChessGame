@@ -64,6 +64,7 @@ namespace ChessGameAPI.Controllers
             User blackUser = await _userRepo.GetUser(oppenentId);
 
             Game newGame = new Game(whiteUser, blackUser);
+            newGame.statusCode = GameStatus.Inprogress;
             newGame.Reset();
             _gameRepo.Add(newGame);
             foreach(Piece piece in newGame.Pieces)

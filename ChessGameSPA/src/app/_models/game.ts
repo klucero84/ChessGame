@@ -1,6 +1,7 @@
 import { User } from './user';
 import { Piece } from './piece';
 import { Move } from './move';
+import { GameStatus } from './game-status';
 
 export class Game {
     id: number;
@@ -9,9 +10,13 @@ export class Game {
     blackUser: User;
     private pieces?: Piece[];
     moves?: Move[];
+    // <x-y, piece>
     private piecesMap?: Map<string, Piece>;
+    // <user in check's possible moves, user threatening's possible moves, enemy piece discriminator>>
+    private checkMateMap?: Map<string, Map<string, string>>;
     dateCreated: Date;
     dateCompleted?: Date;
+    statusCode: GameStatus;
     canWhiteKingSideCastle: boolean;
     canWhiteQueenSideCastle: boolean;
     canBlackKingSideCastle: boolean;
@@ -73,8 +78,93 @@ export class Game {
         map.delete(Piece.getMapKey(startX, startY));
         map.set(Piece.getMapKey(endX, endY), piece);
         if (!isCastle) {
+            this.resetGameStatus(game);
             this.getPossibleMovesforAllPieces(game);
         }
+        if (game.statusCode === GameStatus.CheckWhite || game.statusCode === GameStatus.CheckBlack) {
+            this.isCheckMate(game);
+        }
+    }
+
+    private static isCheckMate(game: Game) {
+        if (!game.checkMateMap) {
+            game.checkMateMap = new Map<string, Map<string, string>>();
+        } else {
+            game.checkMateMap.clear();
+        }
+
+        if (game.statusCode === GameStatus.CheckWhite || game.statusCode === GameStatus.CheckBlack) {
+            const allPieces = this.getPiecesMap(game);
+            let isCheckMate = true;
+            const pieceArray = Array.from(allPieces.entries());
+            let keyCounter = pieceArray.length;
+            // look at each piece's possible moves see if moving there would stop check
+            while (isCheckMate &&  keyCounter > 0) {
+                keyCounter--;
+                // <string (xy), Piece> = <string (xy), Piece>[i]
+                const pieceEntry = pieceArray[keyCounter];
+                const piece = pieceEntry[1];
+                if ((piece.ownedBy.id === game.whiteUser.id && game.statusCode === GameStatus.CheckWhite ) ||
+                    (piece.ownedBy.id !== game.whiteUser.id && game.statusCode === GameStatus.CheckBlack )) {
+
+                    const moveArray = Array.from(piece.possibleMoves);
+                    let possibleMoveCounter =  moveArray.length;
+                    while (isCheckMate && possibleMoveCounter > 0) {
+
+                        possibleMoveCounter--;
+                        const possibleMoveXY = moveArray[possibleMoveCounter];
+                        // xy of possible move
+                        const xyTuple = Piece.getXYFromKey(possibleMoveXY[0]);
+                        // store starting location
+                        const originX = piece.x;
+                        const originY = piece.y;
+
+                        // spoof piece movement to see possibilities
+                        piece.x = xyTuple.x;
+                        piece.y = xyTuple.y;
+                        // this is a potential capture so remove from map
+                        const pieceAtLoction = this.getPieceForXY(game, xyTuple.x, xyTuple.y);
+
+                        allPieces.delete(Piece.getMapKey(originX, originY));
+                        allPieces.set(Piece.getMapKey(xyTuple.x, xyTuple.y), piece);
+
+                        this.resetGameStatus(game);
+                        this.getPossibleMovesforAllPieces(game);
+
+                        // if all possible moves generate one that doesn't create a check white status
+                        // see if we are still in check if we are not then this possible move takes us out of check aka no checkmate.
+                        if ((piece.ownedBy.id === game.whiteUser.id && game.statusCode !== GameStatus.CheckWhite ) ||
+                        (piece.ownedBy.id !== game.whiteUser.id && game.statusCode !== GameStatus.CheckBlack )) {
+                            isCheckMate = false;
+                        }
+                        // reset for next test
+                        // put piece back
+                        piece.x = originX;
+                        piece.y = originY;
+                        allPieces.delete(Piece.getMapKey(xyTuple.x, xyTuple.y));
+                        allPieces.set(Piece.getMapKey(originX, originY), piece);
+                        // if there was a piece here put it back
+                        if (pieceAtLoction) {
+                            allPieces.set(Piece.getMapKey(pieceAtLoction.x, pieceAtLoction.y), pieceAtLoction);
+                        }
+                        // set status code back to check for user
+                        game.statusCode = piece.ownedBy.id === game.whiteUser.id ? GameStatus.CheckWhite : GameStatus.CheckBlack;
+                    }
+                }
+            }
+            if (isCheckMate) {
+                game.statusCode =
+                game.statusCode === GameStatus.CheckWhite ? GameStatus.WinBlack : GameStatus.WinWhite;
+            } else {
+                // if we are not in checkmate game keeps going
+                // we scrambled all the possible moves with testing checkmate
+                // so rebuild for all pieces
+                this.getPossibleMovesforAllPieces(game);
+            }
+        }
+    }
+    private static resetGameStatus(game: Game) {
+        game.statusCode = GameStatus.Inprogress;
     }
 
     private static updateCastleAbility(game: Game, move: Move) {
@@ -181,6 +271,7 @@ export class Game {
                 }
             }
         }
+        return piece.possibleMoves;
     }
 
     private static getPossibleMovesForRook(game: Game, piece: Piece) {
@@ -216,6 +307,7 @@ export class Game {
             y--;
             keepGoing = this.tryMove(game, piece, x, y);
         }
+        return piece.possibleMoves;
     }
 
     private static getPossibleMovesForKnight(game: Game, piece: Piece) {
@@ -231,6 +323,7 @@ export class Game {
                 this.tryMove(game, piece, piece.x + xOptions[i], piece.y + yOptions[i]);
             }
         }
+        return piece.possibleMoves;
     }
 
     private static getPossibleMovesForBishop(game: Game, piece: Piece) {
@@ -273,6 +366,7 @@ export class Game {
             x--;
             keepGoing = this.tryMove(game, piece, x, y);
         }
+        return piece.possibleMoves;
     }
 
     private static getPossibleMovesForQueen(game: Game, piece: Piece) {
@@ -280,6 +374,7 @@ export class Game {
         this.getPossibleMovesForBishop(game, piece);
         // lines
         this.getPossibleMovesForRook(game, piece);
+        return piece.possibleMoves;
     }
 
     private static getPossibleMovesForKing(game: Game, piece: Piece) {
@@ -294,6 +389,7 @@ export class Game {
         // up and down
         this.tryMove(game, piece, piece.x, piece.y + 1);
         this.tryMove(game, piece, piece.x, piece.y - 1);
+        return piece.possibleMoves;
     }
 
     private static tryMove(game: Game, piece: Piece, x: number, y: number, isPawnCapture = false) {
@@ -302,6 +398,14 @@ export class Game {
             // if piece is not ours we can move there but no further
             if (pieceAtNewLocation.ownedBy.id !== piece.ownedBy.id) {
                 // piece threatened by new move, not really needed for check but might be nice ui feature
+                if (pieceAtNewLocation.discriminator === 'King') {
+                    // the owner of pieceAtNewLocation is in check
+                    if (pieceAtNewLocation.ownedBy.id === game.whiteUser.id) {
+                        game.statusCode = GameStatus.CheckWhite;
+                    } else {
+                        game.statusCode = GameStatus.CheckBlack;
+                    }
+                }
                 // if attempt to automate this would be where one could store the next tree level possible moves
                 piece.possibleMoves.set(Piece.getMapKey(x, y), pieceAtNewLocation.discriminator);
             }

@@ -3,6 +3,7 @@ import { Game } from '../../_models/game';
 import { GameService } from '../../_services/game.service';
 import { Router } from '@angular/router';
 import { AlertifyService } from '../../_services/alertify.service';
+import { GameStatus } from '../../_models/game-status';
 
 @Component({
   selector: 'app-game-control-panel',
@@ -44,6 +45,27 @@ export class GameControlPanelComponent implements OnInit {
       name = this.game.whiteUser.name;
     }
     return name;
+  }
+
+  getStatusCodeText(code: number) {
+    switch (code) {
+      case GameStatus.Inprogress:
+        return 'In Progress.';
+      case GameStatus.CheckWhite:
+        return this.game.whiteUser.name + ' is in Check.';
+      case GameStatus.CheckBlack:
+        return this.game.blackUser.name + ' is in Check.';
+      case GameStatus.WinWhite:
+        return this.game.whiteUser.name + ' has won.';
+      case GameStatus.WinBlack:
+        return this.game.blackUser.name + ' has won.';
+      case GameStatus.Draw:
+        return 'Draw';
+      case GameStatus.DrawRequestWhite:
+        return this.game.whiteUser.name + ' has requested a draw.';
+      case GameStatus.DrawRequestBlack:
+        return this.game.blackUser.name + ' has requested a draw.';
+    }
   }
 
   requestDraw() {

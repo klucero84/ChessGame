@@ -4,10 +4,12 @@ namespace ChessGameAPI.Models
     {
         NotYetBegun = 0,
         Inprogress = 1,
-        WinWhite = 2,
-        WinBlack = 3,
-        Draw = 4,
-        DrawRequestWhite = 5,
-        DrawRequestBlack = 6
+        CheckWhite = 2, 
+        CheckBlack = 3,
+        WinWhite = 4,
+        WinBlack = 5,
+        Draw = 6,
+        DrawRequestWhite = 7,
+        DrawRequestBlack = 8
     }
 }
