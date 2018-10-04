@@ -115,40 +115,7 @@ export class Game {
                         const possibleMoveXY = moveArray[possibleMoveCounter];
                         // xy of possible move
                         const xyTuple = Piece.getXYFromKey(possibleMoveXY[0]);
-                        // store starting location
-                        const originX = piece.x;
-                        const originY = piece.y;
-
-                        // spoof piece movement to see possibilities
-                        piece.x = xyTuple.x;
-                        piece.y = xyTuple.y;
-                        // this is a potential capture so remove from map
-                        const pieceAtLoction = this.getPieceForXY(game, xyTuple.x, xyTuple.y);
-
-                        allPieces.delete(Piece.getMapKey(originX, originY));
-                        allPieces.set(Piece.getMapKey(xyTuple.x, xyTuple.y), piece);
-
-                        this.resetGameStatus(game);
-                        this.getPossibleMovesforAllPieces(game);
-
-                        // if all possible moves generate one that doesn't create a check white status
-                        // see if we are still in check if we are not then this possible move takes us out of check aka no checkmate.
-                        if ((piece.ownedBy.id === game.whiteUser.id && game.statusCode !== GameStatus.CheckWhite ) ||
-                        (piece.ownedBy.id !== game.whiteUser.id && game.statusCode !== GameStatus.CheckBlack )) {
-                            isCheckMate = false;
-                        }
-                        // reset for next test
-                        // put piece back
-                        piece.x = originX;
-                        piece.y = originY;
-                        allPieces.delete(Piece.getMapKey(xyTuple.x, xyTuple.y));
-                        allPieces.set(Piece.getMapKey(originX, originY), piece);
-                        // if there was a piece here put it back
-                        if (pieceAtLoction) {
-                            allPieces.set(Piece.getMapKey(pieceAtLoction.x, pieceAtLoction.y), pieceAtLoction);
-                        }
-                        // set status code back to check for user
-                        game.statusCode = piece.ownedBy.id === game.whiteUser.id ? GameStatus.CheckWhite : GameStatus.CheckBlack;
+                        isCheckMate = this.doesMoveCauseCheck(game, piece.x, piece.y, xyTuple.x, xyTuple.y);
                     }
                 }
             }
@@ -162,6 +129,46 @@ export class Game {
                 this.getPossibleMovesforAllPieces(game);
             }
         }
+    }
+
+    ///
+    private static doesMoveCauseCheck(game: Game, startX: number, startY: number, endX: number, endY: number) {
+        let causesCheck = true;
+        const originStatusCode = game.statusCode;
+        const piece =  this.getPieceForXY(game, startX, startY);
+        if (!piece) {
+            return null;
+        }
+        // spoof piece movement to see possibilities
+        piece.x = endX;
+        piece.y = endY;
+        // if this is a capture, remove from map
+        const pieceAtLoction = this.getPieceForXY(game, endX, endY);
+        const allPieces = Game.getPiecesMap(game);
+        allPieces.delete(Piece.getMapKey(startX, startY));
+        allPieces.set(Piece.getMapKey(endX, endY), piece);
+
+        this.resetGameStatus(game);
+        this.getPossibleMovesforAllPieces(game);
+        // if all possible moves generate one that doesn't create a check white status
+        // see if we are still in check if we are not then this possible move takes us out of check aka no checkmate.
+        if ((piece.ownedBy.id === game.whiteUser.id && game.statusCode !== GameStatus.CheckWhite ) ||
+        (piece.ownedBy.id !== game.whiteUser.id && game.statusCode !== GameStatus.CheckBlack )) {
+            causesCheck = false;
+        }
+        // reset
+        // put piece back
+        piece.x = startX;
+        piece.y = startY;
+        allPieces.delete(Piece.getMapKey(endX, endY));
+        allPieces.set(Piece.getMapKey(startX, startY), piece);
+        // if there was a piece here put it back
+        if (pieceAtLoction) {
+            allPieces.set(Piece.getMapKey(pieceAtLoction.x, pieceAtLoction.y), pieceAtLoction);
+        }
+
+        game.statusCode = originStatusCode;
+        return causesCheck;
     }
     private static resetGameStatus(game: Game) {
         game.statusCode = GameStatus.Inprogress;
@@ -318,8 +325,8 @@ export class Game {
         // Check if each possible move is valid or not
         for (let i = 0; i < 8; i++) {
             // if we don't go off the board
-            if (piece.x + xOptions[i] > 0 && piece.x + xOptions[i] < 7
-                && piece.y + yOptions[i] > 0 && piece.y + yOptions[i] < 7) {
+            if (piece.x + xOptions[i] >= 0 && piece.x + xOptions[i] <= 7
+                && piece.y + yOptions[i] >= 0 && piece.y + yOptions[i] <= 7) {
                 this.tryMove(game, piece, piece.x + xOptions[i], piece.y + yOptions[i]);
             }
         }
@@ -378,17 +385,50 @@ export class Game {
     }
 
     private static getPossibleMovesForKing(game: Game, piece: Piece) {
-        // right
-        this.tryMove(game, piece, piece.x + 1, piece.y - 1);
-        this.tryMove(game, piece, piece.x + 1, piece.y);
-        this.tryMove(game, piece, piece.x + 1, piece.y + 1);
-        // left
-        this.tryMove(game, piece, piece.x - 1, piece.y - 1);
-        this.tryMove(game, piece, piece.x - 1, piece.y);
-        this.tryMove(game, piece, piece.x - 1, piece.y + 1);
-        // up and down
-        this.tryMove(game, piece, piece.x, piece.y + 1);
-        this.tryMove(game, piece, piece.x, piece.y - 1);
+        const canMoveRight = piece.x > 0;
+        const canMoveLeft = piece.x < 7;
+        const canMoveUp = piece.y < 7;
+        const canMoveDown = piece.y > 0;
+
+        if (canMoveRight) {
+            this.tryMove(game, piece, piece.x + 1, piece.y);
+            if (canMoveUp) {
+                this.tryMove(game, piece, piece.x + 1, piece.y + 1);
+            }
+            if (canMoveDown) {
+                this.tryMove(game, piece, piece.x + 1, piece.y - 1);
+            }
+        }
+        if (canMoveLeft) {
+            this.tryMove(game, piece, piece.x - 1, piece.y);
+            if (canMoveUp) {
+                this.tryMove(game, piece, piece.x - 1, piece.y + 1);
+            }
+            if (canMoveDown) {
+                this.tryMove(game, piece, piece.x - 1, piece.y - 1);
+            }
+        }
+        if (canMoveUp) {
+            this.tryMove(game, piece, piece.x, piece.y + 1);
+        }
+        if (canMoveDown) {
+            this.tryMove(game, piece, piece.x, piece.y - 1);
+        }
+        if (piece.ownedBy.id === game.whiteUser.id) {
+            if (game.canWhiteKingSideCastle) {
+                this.tryMove(game, piece, 6, 0);
+            }
+            if (game.canWhiteQueenSideCastle) {
+                this.tryMove(game, piece, 2, 0);
+            }
+        } else {
+            if (game.canBlackKingSideCastle) {
+                this.tryMove(game, piece, 6, 7);
+            }
+            if (game.canBlackQueenSideCastle) {
+                this.tryMove(game, piece, 2, 7);
+            }
+        }
         return piece.possibleMoves;
     }
 
@@ -418,4 +458,82 @@ export class Game {
         piece.possibleMoves.set(Piece.getMapKey(x, y), null);
         return true ;
     }
+
+
+    static isLegalMove(game: Game, move: Move) {
+        console.log(move);
+        if (move) {
+            const canMove = this.getPieceForXY(game, move.startX, move.startY).possibleMoves.has(Piece.getMapKey(move.endX, move.endY));
+            if (canMove) {
+                const causesCheck = this.doesMoveCauseCheck(game, move.startX, move.startY, move.endX, move.endY);
+                if (causesCheck) {
+                    // the user may not make a move that places their king in check
+                    return 'A player may not make any move that places or leaves their king in check.3';
+                }
+
+                if (move.pieceDiscriminator === 'King') {
+                    return this.isCastleLegal(game, move);
+                // gonna need clause here for en passant
+                }
+                return canMove;
+            }
+            switch (move.pieceDiscriminator) {
+                case 'Pawn':
+                    return 'A Pawn may only move forward one space at a time, ' +
+                    'capture diagonally, and may move two spaces forward if it is the first move of the pawn.';
+
+                case 'Rook':
+                    return 'A Rook must move in straight lines along the x or y axis, and cannot jump over other pieces.';
+
+                case 'Knight':
+                    return 'A Knight must move two spaces on one axis and one space on the other axis.';
+
+                case 'Bishop':
+                    return 'A Bishop must move in a diagonal line, and cannot jump over other pieces.';
+
+                case 'Queen':
+                    return 'A Queen must move in a in straight lines along the x or y axis, or in a diagonal line,' +
+                            ' and cannot jump over other pieces.';
+
+                case 'King':
+                    return 'The King can only move one space in any direction.';
+            }
+        }
+    }
+
+    private static isCastleLegal(game: Game, move: Move) {
+        move.isCastle = false;
+        if ((game.statusCode === GameStatus.CheckBlack && move.userId === game.blackUser.id) ||
+            (game.statusCode === GameStatus.CheckWhite && move.userId === game.whiteUser.id) ) {
+            return 'Cannot Castle while in check';
+        }
+        if (move.isWhite && move.startX === 4 && move.startY === 0) {
+            if (move.endX === 6 && move.endY === 0) {
+                const canKingMove = this.getPieceForXY(game, 4, 0).possibleMoves.has(Piece.getMapKey(6, 0));
+                const canRookMove = this.getPieceForXY(game, 7, 0).possibleMoves.has(Piece.getMapKey(5, 0));
+                const isKingMovingThroughCheck = this.doesMoveCauseCheck(game, 4, 0, 5, 0);
+                move.isCastle = game.canWhiteKingSideCastle && canKingMove && canRookMove && isKingMovingThroughCheck;
+            } else if (move.endX === 2 && move.endY === 0) {
+                const canKingMove = this.getPieceForXY(game, 4, 0).possibleMoves.has(Piece.getMapKey(2, 0));
+                const canRookMove = this.getPieceForXY(game, 0, 0).possibleMoves.has(Piece.getMapKey(3, 0));
+                const isKingMovingThroughCheck = this.doesMoveCauseCheck(game, 4, 0, 3, 0);
+                move.isCastle = game.canWhiteQueenSideCastle && canKingMove && canRookMove && isKingMovingThroughCheck;
+            }
+        } else if (!move.isWhite && move.startX === 4 && move.startY === 7) {
+            if (move.endX === 6 && move.endY === 7) {
+                const canKingMove = this.getPieceForXY(game, 4, 7).possibleMoves.has(Piece.getMapKey(6, 7));
+                const canRookMove = this.getPieceForXY(game, 7, 7).possibleMoves.has(Piece.getMapKey(5, 7));
+                const isKingMovingThroughCheck = this.doesMoveCauseCheck(game, 4, 7, 5, 7);
+                move.isCastle = game.canBlackKingSideCastle && canKingMove && canRookMove && isKingMovingThroughCheck;
+            } else if (move.endX === 2 && move.endY === 7) {
+                const canKingMove = this.getPieceForXY(game, 4, 7).possibleMoves.has(Piece.getMapKey(2, 7));
+                const canRookMove = this.getPieceForXY(game, 0, 7).possibleMoves.has(Piece.getMapKey(3, 7));
+                const isKingMovingThroughCheck = this.doesMoveCauseCheck(game, 4, 7, 3, 7);
+                move.isCastle = game.canBlackQueenSideCastle && canKingMove && canRookMove && isKingMovingThroughCheck;
+            }
+        }
+        return move.isCastle;
+    }
 }
+
+

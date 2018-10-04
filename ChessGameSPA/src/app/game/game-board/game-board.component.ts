@@ -80,7 +80,8 @@ export class GameBoardComponent implements OnInit {
     this.move.game = this.game;
     this.move.connId = this.game.connId;
     this.move.isWhite = this.game.whiteUser.id === this.move.userId;
-    const isLegal = this.move.isLegalMove(this.move.isCapture);
+    const isLegal = Game.isLegalMove(this.game, this.move);
+    // const isLegal = this.move.isLegalMove(this.move.isCapture);
     if (isLegal !== true) {
       this.alertifyService.warning(isLegal.toString());
       this.resetMove();
