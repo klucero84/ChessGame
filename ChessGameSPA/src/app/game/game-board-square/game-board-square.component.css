@@ -4,8 +4,6 @@ div
   width: 100%;
 }
 
-.active-piece {
-}
 .non-active-piece {
   filter: contrast(25%);
 }

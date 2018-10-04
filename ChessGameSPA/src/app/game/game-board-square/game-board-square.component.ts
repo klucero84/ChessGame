@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Piece } from '../../_models/piece';
 import { Game } from '../../_models/game';
-import { Move } from '../../_models/move';
 
 @Component({
   selector: 'app-game-board-square',
@@ -32,19 +31,10 @@ export class GameBoardSquareComponent implements OnInit {
     this.putDownPiece.emit({piece: this.piece, x: this.x, y: this.y});
   }
 
-  dragOver() {
-    // console.log('here');
-  }
-
-  // mouseOver(event) {
-  //   console.log(event);
-  //   // event.path.x
-  //   // Game.getPieceForXY()
-  // }
-
   dragStart() {
     if (this.piece && this.userHasTurn()) {
       this.pickUpPiece.emit(this.piece);
+
     }
   }
 

@@ -15,24 +15,6 @@ export class GameHistoryComponent implements OnInit {
   ngOnInit() {
   }
 
-  getUserForMove(move: Move) {
-    let name = this.game.whiteUser.name;
-    // const move = this.game.moves[this.game.moves.length - 1];
-    if (!move) {
-      return name;
-    }
-    if (move.userId === this.game.whiteUser.id) {
-      name = this.game.whiteUser.name;
-    } else if ( move.userId === this.game.blackUser.id) {
-      name = this.game.blackUser.name;
-    } else if ( move.user.id === this.game.whiteUser.id) {
-      name = this.game.whiteUser.name;
-    } else if ( move.user.id === this.game.blackUser.id) {
-      name = this.game.blackUser.name;
-    }
-    return name;
-  }
-
   getXLocName(x: number) {
     const letters: Array<string> = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     return letters[x];

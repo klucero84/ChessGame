@@ -12,8 +12,6 @@ export class Game {
     moves?: Move[];
     // <x-y, piece>
     private piecesMap?: Map<string, Piece>;
-    // <user in check's possible moves, user threatening's possible moves, enemy piece discriminator>>
-    private checkMateMap?: Map<string, Map<string, string>>;
     dateCreated: Date;
     dateCompleted?: Date;
     statusCode: GameStatus;
@@ -23,7 +21,7 @@ export class Game {
     canBlackQueenSideCastle: boolean;
 
 
-
+    // a Map<string, Piece> that has each piece's xy location as key
     static getPiecesMap(game: Game) {
         // cache the map and use that when modifying data
         if (game && !game.piecesMap && game.pieces) {
@@ -35,6 +33,7 @@ export class Game {
         return game.piecesMap;
     }
 
+    // returns a piece from the pieces map based on x, y
     static getPieceForXY(game: Game, x: number, y: number) {
         const map = this.getPiecesMap(game);
         if (map) {
@@ -42,6 +41,8 @@ export class Game {
         }
     }
 
+    // process for adding a move to a game
+    // entry point for all move logic
     static addMoveToGame(move: Move, game: Game) {
 
         const pieceBeingMoved = this.getPieceForXY(game, move.startX, move.startY);
@@ -63,6 +64,8 @@ export class Game {
           this.updateCastleAbility(game, move);
           game.moves.push(move);
           this.movePiece(game, pieceBeingMoved, move.startX, move.startY, move.endX, move.endY);
+        } else {
+            throw new Error('No piece being moved.');
         }
     }
 
@@ -87,12 +90,6 @@ export class Game {
     }
 
     private static isCheckMate(game: Game) {
-        if (!game.checkMateMap) {
-            game.checkMateMap = new Map<string, Map<string, string>>();
-        } else {
-            game.checkMateMap.clear();
-        }
-
         if (game.statusCode === GameStatus.CheckWhite || game.statusCode === GameStatus.CheckBlack) {
             const allPieces = this.getPiecesMap(game);
             let isCheckMate = true;
@@ -131,7 +128,8 @@ export class Game {
         }
     }
 
-    ///
+    /// always call getPossibleMovesforAllPieces after because scrambles all the possible moves
+    // not called inside so this can be called in loop
     private static doesMoveCauseCheck(game: Game, startX: number, startY: number, endX: number, endY: number) {
         let causesCheck = true;
         const originStatusCode = game.statusCode;
@@ -461,14 +459,23 @@ export class Game {
 
 
     static isLegalMove(game: Game, move: Move) {
-        console.log(move);
         if (move) {
-            const canMove = this.getPieceForXY(game, move.startX, move.startY).possibleMoves.has(Piece.getMapKey(move.endX, move.endY));
+            const piece = this.getPieceForXY(game, move.startX, move.startY);
+            if (!piece) {
+                return 'No piece at starting location';
+            }
+            const capturing = this.getPieceForXY(game, move.startX, move.startY)
+                                        .possibleMoves
+                                        .get(Piece.getMapKey(move.endX, move.endY));
+            move.isCapture = (!capturing);
+
+            const canMove = this.getPieceForXY(game, move.startX, move.startY)
+                                        .possibleMoves
+                                        .has(Piece.getMapKey(move.endX, move.endY));
             if (canMove) {
                 const causesCheck = this.doesMoveCauseCheck(game, move.startX, move.startY, move.endX, move.endY);
                 if (causesCheck) {
-                    // the user may not make a move that places their king in check
-                    return 'A player may not make any move that places or leaves their king in check.3';
+                    return 'A player may not make any move that places or leaves their king in check.';
                 }
 
                 if (move.pieceDiscriminator === 'King') {
@@ -503,8 +510,8 @@ export class Game {
 
     private static isCastleLegal(game: Game, move: Move) {
         move.isCastle = false;
-        if ((game.statusCode === GameStatus.CheckBlack && move.userId === game.blackUser.id) ||
-            (game.statusCode === GameStatus.CheckWhite && move.userId === game.whiteUser.id) ) {
+        if ((game.statusCode === GameStatus.CheckBlack && !move.isWhite) ||
+            (game.statusCode === GameStatus.CheckWhite && move.isWhite) ) {
             return 'Cannot Castle while in check';
         }
         if (move.isWhite && move.startX === 4 && move.startY === 0) {

@@ -1,5 +1,12 @@
 .checkerboard{
-    margin: 0 auto; 
+    margin: 0 auto;
+    cursor: move;
+    cursor: -webkit-grab;
+}
+.checkerboard:active{ 
+    cursor: grab;
+    cursor: grabbing; 
+    cursor: -webkit-grabbing;
 }
 .board-tile{
     height: 80px;
@@ -7,7 +14,7 @@
     border: black solid 1px;
     float:left;
 }
-.board-tile:hover {
+.board-tile:hover  {
     border: #c4c4c4 inset 1px;
 }
 

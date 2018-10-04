@@ -28,6 +28,9 @@ export class GameControlPanelComponent implements OnInit {
       this.alertify.error(error);
     });
   }
+  getInvisible() {
+    return !this.game || this.game.statusCode >= GameStatus.GAMEOVERMAN;
+  }
 
   usersTurn() {
     let name = this.game.whiteUser.name;
@@ -35,14 +38,10 @@ export class GameControlPanelComponent implements OnInit {
     if (!move) {
       return name;
     }
-    if (move.userId === this.game.whiteUser.id) {
-      name = this.game.blackUser.name;
-    } else if ( move.userId === this.game.blackUser.id) {
+    if (move.isWhite) {
       name = this.game.whiteUser.name;
-    } else if ( move.user.id === this.game.whiteUser.id) {
+    } else {
       name = this.game.blackUser.name;
-    } else if ( move.user.id === this.game.blackUser.id) {
-      name = this.game.whiteUser.name;
     }
     return name;
   }

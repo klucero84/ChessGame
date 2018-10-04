@@ -3,6 +3,7 @@ import { Game } from '../../_models/game';
 import { MoveService } from '../../_services/move.service';
 import { AlertifyService } from '../../_services/alertify.service';
 import { Move } from '../../_models/move';
+import { GameStatus } from '../../_models/game-status';
 
 @Component({
   selector: 'app-game-board',
@@ -31,16 +32,18 @@ export class GameBoardComponent implements OnInit {
 
   pickUpPiece(piece) {
     // no piece to pick up
-    if (!piece) {
+    if (!piece || this.game.statusCode >= GameStatus.GAMEOVERMAN) {
       return;
     }
     // if we are already moving a piece stop
     if (this.isMoving) {
       return;
     }
+    // this is here because multiple buttons e.g. left, right, middle, etc.
+    // cause multiple drag events and we only allow one move at a time.
     this.isMoving = true;
 
-    // initialize move with pice info
+    // initialize move with piece info
     this.move = new Move();
     this.move.startX = piece.x;
     this.move.startY = piece.y;
@@ -55,41 +58,19 @@ export class GameBoardComponent implements OnInit {
       this.resetMove();
       return;
     }
-    // get the piece from the starting location
-    const piece = this.getPieceForXY(this.move.startX, this.move.startY);
-    if (!piece) {
-      this.resetMove();
-      return;
-    }
-    // determine if a piece is already there.
-    if (landingSquareInfo.piece) {
-      // determine if the piece already there is our piece
-      if (landingSquareInfo.piece.ownedBy.id === this.move.userId) {
-        this.alertifyService.warning('Pieces must move to either an unoccupied square or one occupied by an opponent\'s piece.');
-        this.resetMove();
-        return;
-      } else {
-        // if it's not the same user's piece they are capturing
-        this.move.isCapture = true;
-      }
-    }
-
     this.move.endX = landingSquareInfo.x;
     this.move.endY = landingSquareInfo.y;
     this.move.gameId = this.game.id;
-    this.move.game = this.game;
     this.move.connId = this.game.connId;
     this.move.isWhite = this.game.whiteUser.id === this.move.userId;
     const isLegal = Game.isLegalMove(this.game, this.move);
-    // const isLegal = this.move.isLegalMove(this.move.isCapture);
     if (isLegal !== true) {
       this.alertifyService.warning(isLegal.toString());
       this.resetMove();
       return false;
     }
-    this.move.game = null;
-    // used in dev to add moves from one user.
     this.isWaitForServer = true;
+    // used in dev to add moves from one user.
     this.moveService.addMoveTwoPlayer(this.move).subscribe((newMove: Move) => this.addMove(newMove)
     , error => {
       this.alertifyService.error(error);
@@ -104,6 +85,9 @@ export class GameBoardComponent implements OnInit {
   }
 
   addMove(move: Move) {
+    if (this.game.statusCode >= GameStatus.GAMEOVERMAN) {
+      return;
+    }
     Game.addMoveToGame(move, this.game);
   }
 
