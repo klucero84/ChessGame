@@ -10,22 +10,62 @@ namespace ChessGameAPI.Models.Pieces
         {
         }
 
-        public override List<Move> GetAllLegalMoves()
+        public override void GetAllLegalMoves()
         {
-            throw new NotImplementedException();
-        }
+            if(Game == null)
+            {
+                throw new NullReferenceException($"Piece with id:{Id} is not part of a game.");
+            }
+            if (possibleMoves == null) {
+                possibleMoves = new Dictionary<(int, int), Piece>();
+            } else {
+                possibleMoves.Clear();
+            }
+            possibleMoves.Clear();
+            bool canMoveRight = X > 0;
+            bool canMoveLeft = X < 7;
+            bool canMoveUp = Y < 7;
+            bool canMoveDown = Y > 0;
 
-        protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove, bool isWhite)
-        {
-            int diffX = Math.Abs(X - attemptedMove.EndX);
-            int diffY = Math.Abs(Y - attemptedMove.EndY);
-            if (diffX == 2 && diffY == 0){
-                return (true, MoveErrors.KingCastling);
+            if (canMoveRight) {
+                Game.tryMove(X, Y, X + 1, Y);
+                if (canMoveUp) {
+                    Game.tryMove(X, Y, X + 1, Y + 1);
+                }
+                if (canMoveDown) {
+                    Game.tryMove(X, Y, X + 1, Y - 1);
+                }
             }
-            if (diffX > 1 || diffY > 1) {
-                return (false, MoveErrors.King);
+            if (canMoveLeft) {
+                Game.tryMove(X, Y, X - 1, Y);
+                if (canMoveUp) {
+                    Game.tryMove(X, Y, X - 1, Y + 1);
+                }
+                if (canMoveDown) {
+                    Game.tryMove(X, Y, X - 1, Y - 1);
+                }
             }
-            return (true, null);
+            if (canMoveUp) {
+                Game.tryMove(X, Y, X, Y + 1);
+            }
+            if (canMoveDown) {
+                Game.tryMove(X, Y, X, Y - 1);
+            }
+            if (OwnedBy.Id == Game.WhiteUserId) {
+                if (Game.CanWhiteKingSideCastle) {
+                    Game.tryMove(X, Y, 6, 0);
+                }
+                if (Game.CanWhiteQueenSideCastle) {
+                    Game.tryMove(X, Y, 2, 0);
+                }
+            } else {
+                if (Game.CanBlackKingSideCastle) {
+                    Game.tryMove(X, Y, 6, 7);
+                }
+                if (Game.CanBlackQueenSideCastle) {
+                    Game.tryMove(X, Y, 2, 7);
+                }
+            }
         }
     }
 }

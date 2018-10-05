@@ -11,20 +11,52 @@ namespace ChessGameAPI.Models.Pieces
         {
         }
 
-        public override List<Move> GetAllLegalMoves()
+        public override void GetAllLegalMoves()
         {
-            throw new NotImplementedException();
-        }
-
-        protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove, bool isWhite)
-        {
-            int diffX = Math.Abs(X - attemptedMove.EndX);
-            int diffY = Math.Abs(Y - attemptedMove.EndY);
-            if (diffX == 0 || diffY == 0)
-            {
-                return (true, null);
+            if(Game == null) {
+                throw new NullReferenceException($"Piece with id:{Id} is not part of a game.");
             }
-            return (false, MoveErrors.Rook);
+            if (possibleMoves == null) {
+                possibleMoves = new Dictionary<(int, int), Piece>();
+            } else {
+                possibleMoves.Clear();
+            }
+            
+            int tempX = X;
+            int tempY = Y;
+            bool keepGoing = true;
+            // right
+            while (tempX < 7 && keepGoing) {
+                tempX++;
+                keepGoing = Game.tryMove(X, Y, tempX, tempY);
+            }
+
+            // left
+            tempX = X;
+            tempY = Y;
+            keepGoing = true;
+            while (tempX > 0 && keepGoing) {
+                tempX--;
+                keepGoing = Game.tryMove(X, Y, tempX, tempY);
+            }
+
+            // up
+            tempX = X;
+            tempY = Y;
+            keepGoing = true;
+            while (tempY < 7 && keepGoing) {
+                tempY++;
+                keepGoing = Game.tryMove(X, Y, tempX, tempY);
+            }
+
+            // down
+            tempX = X;
+            tempY = Y;
+            keepGoing = true;
+            while (tempY > 0 && keepGoing) {
+                tempY--;
+                keepGoing = Game.tryMove(X, Y, tempX, tempY);
+            }
         }
     }
 }

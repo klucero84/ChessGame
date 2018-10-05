@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ChessGameAPI.Data;
 using ChessGameAPI.Dtos;
+using ChessGameAPI.Models;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 
@@ -9,6 +10,11 @@ namespace ChessGameAPI.Hubs
 {
     public class MoveHub : Hub
     {
+        private readonly IGameRepository _gameRepo;
+        public MoveHub (IGameRepository gameRepo)
+        {
+            _gameRepo = gameRepo;
+        }
         public async Task<string> JoinGame(int gameId) {
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId.ToString());
             return Context.ConnectionId;
@@ -34,9 +40,13 @@ namespace ChessGameAPI.Hubs
         //     return base.OnDisconnectedAsync();
         // }
 
-        public void AddMoveToGame(MoveForAddMoveDto newMoveDto) {
+        public async void AddMoveToGame(MoveForAddMoveDto newMoveDto) {
 
-            Clients.OthersInGroup(newMoveDto.GameId.ToString()).SendAsync("addMoveToGame", newMoveDto);
+            Game game = await _gameRepo.GetGameForAddMove(newMoveDto.GameId);
+
+            
+
+            await Clients.OthersInGroup(newMoveDto.GameId.ToString()).SendAsync("addMoveToGame", newMoveDto);
             // Clients.All.SendAsync("sendToAll", move);
         }
 

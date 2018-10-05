@@ -61,6 +61,9 @@ namespace ChessGameAPI.Models
         public int EndY { get; set; }
 
         public string AlgebraicNotation { get; set; }
+
+        [NotMapped]
+        public bool isCastle { get; set; }
         
         [Required]
         [Timestamp]

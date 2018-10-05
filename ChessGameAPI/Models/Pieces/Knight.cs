@@ -10,24 +10,29 @@ namespace ChessGameAPI.Models.Pieces
         {
         }
 
-        public override List<Move> GetAllLegalMoves()
+        public override void GetAllLegalMoves()
         {
-            throw new NotImplementedException();
-        }
-
-        protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove, bool isWhite)
-        {
-            //move must be abs two in one axis and abs one in another axis
-            int diffX = Math.Abs(X - attemptedMove.EndX);
-            int diffY = Math.Abs(Y - attemptedMove.EndY);
-            if (diffX == 1 && diffY == 2)
+            if(Game == null)
             {
-                return (true, null);
-            } else if (diffX == 2 && diffY == 1)
-            {
-                return (true, null);
+                throw new NullReferenceException($"Piece with id:{Id} is not part of a game.");
             }
-            return (false, MoveErrors.Knight);
+            if (possibleMoves == null) {
+                possibleMoves = new Dictionary<(int, int), Piece>();
+            } else {
+                possibleMoves.Clear();
+            }
+            // All possible offset combinations of a knight move
+            int[] xOptions = new int[] {2, 1, -1, -2, -2, -1, 1, 2};
+            int[] yOptions = new int[] {1, 2, 2, 1, -1, -2, -2, -1};
+
+            // Check if each possible move is valid or not
+            for (int i = 0; i < 8; i++) {
+                // if we don't go off the board
+                if (X + xOptions[i] >= 0 && X + xOptions[i] <= 7
+                    && Y + yOptions[i] >= 0 && Y + yOptions[i] <= 7) {
+                    Game.tryMove(X, Y, X + xOptions[i], Y + yOptions[i]);
+                }
+            }
         }
     }
 }

@@ -64,8 +64,8 @@ namespace ChessGameAPI.Controllers
             User blackUser = await _userRepo.GetUser(oppenentId);
 
             Game newGame = new Game(whiteUser, blackUser);
-            newGame.statusCode = GameStatus.Inprogress;
-            newGame.Reset();
+            newGame.StatusCode = GameStatus.Inprogress;
+            newGame.Initialize();
             _gameRepo.Add(newGame);
             foreach(Piece piece in newGame.Pieces)
             {
@@ -86,10 +86,10 @@ namespace ChessGameAPI.Controllers
         /// <param name="id">Id of the game to get from data repo</param>
         /// <returns>Piece and Move list that represents a game in progress</returns>
         [HttpGet("{id}", Name="GetGame")]
-        public async Task<IActionResult> GetGame(int id)
+        public async Task<IActionResult> GetGameForPlay(int id)
         {
             
-            var game =  await _gameRepo.GetGame(id);
+            var game =  await _gameRepo.GetGameForPlay(id);
             var gameDto = _mapper.Map<GameDto>(game);
             return Ok(gameDto);
         }
@@ -99,9 +99,9 @@ namespace ChessGameAPI.Controllers
         {
             Game game = await _gameRepo.GetGameMin(gameId);
             if (this.GetCurrentUserId() == game.WhiteUserId) {
-                game.statusCode = GameStatus.WinBlack;
+                game.StatusCode = GameStatus.WinBlack;
             } else if (this.GetCurrentUserId() == game.BlackUserId) {
-                game.statusCode = GameStatus.WinWhite;
+                game.StatusCode = GameStatus.WinWhite;
             }
             await _gameRepo.SaveAll();
             return Ok();
@@ -112,9 +112,9 @@ namespace ChessGameAPI.Controllers
         {
             Game game = await _gameRepo.GetGameMin(gameId);
             if (this.GetCurrentUserId() == game.WhiteUserId) {
-                game.statusCode = GameStatus.WinBlack;
+                game.StatusCode = GameStatus.WinBlack;
             } else if (this.GetCurrentUserId() == game.BlackUserId) {
-                game.statusCode = GameStatus.WinWhite;
+                game.StatusCode = GameStatus.WinWhite;
             }
             await _gameRepo.SaveAll();
             return Ok();

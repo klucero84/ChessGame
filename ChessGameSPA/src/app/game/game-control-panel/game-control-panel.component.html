@@ -5,8 +5,8 @@
   <div class="card-body fluid">
     <div class="btn-group">
       <button type="button" class="btn btn-success btn-sm mr-1" (click)="getNewGame()">New Game</button>
-      <button class="btn btn-warning btn-sm mr-1 text-primary" [ngClass]="{invisible: getInvisible()}" (click)="requestDraw()">Request Draw</button>
-      <button class="btn btn-danger btn-sm mr-1" [ngClass]="{invisible: getInvisible()}" (click)="concede()">Concede</button>
+      <button class="btn btn-warning btn-sm mr-1 text-primary" [ngClass]="{'d-none': getInvisible()}" (click)="requestDraw()">Request Draw</button>
+      <button class="btn btn-danger btn-sm mr-1" [ngClass]="{'d-none': getInvisible()}" (click)="concede()">Concede</button>
       <button type="button" [ngClass]="{invisible: !game}" class="btn btn-info btn-sm" [routerLink]="['/game']">Save & Quit</button>
     </div>
       

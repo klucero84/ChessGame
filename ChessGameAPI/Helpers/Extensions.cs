@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
@@ -6,6 +8,7 @@ using System.Text;
 using ChessGameAPI.Controllers;
 using ChessGameAPI.Data;
 using ChessGameAPI.Dtos;
+using ChessGameAPI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -87,6 +90,20 @@ namespace ChessGameAPI.Helpers
                 }
             }
             return sb.ToString();
+        }
+
+        public static T GetAttribute<T>(this Enum  value) where T : Attribute {
+            var type = value.GetType();
+            var memberInfo = type.GetMember(value.ToString());
+            var attributes = memberInfo[0].GetCustomAttributes(typeof(T), false);
+            return (T)attributes[0];
+        }
+
+        // This method creates a specific call to the above method, requesting the
+        // Description MetaData attribute.
+        public static string GetDescription(this Enum  value) {
+            var attribute = value.GetAttribute<DescriptionAttribute>();
+            return attribute == null ? value.ToString() : attribute.Description;
         }
     }
 }

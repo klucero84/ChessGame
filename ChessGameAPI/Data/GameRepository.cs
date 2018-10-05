@@ -55,9 +55,14 @@ namespace ChessGameAPI.Data
                                 .Where(game => game.BlackUserId == userId || game.WhiteUserId == userId).ToListAsync();
         }
 
-        public async Task<Game> GetGame(int gameId)
+        public async Task<Game> GetGameForPlay(int gameId)
         {
             return await _context.Games.Include(g =>g.Pieces).Include(g =>g.Moves).Include(g => g.WhiteUser).Include(g => g.BlackUser).FirstOrDefaultAsync(g => g.Id == gameId);
+        }
+
+        public async Task<Game> GetGameForAddMove(int gameId) 
+        {
+            return await _context.Games.Include(g => g.Pieces).FirstOrDefaultAsync(g => g.Id == gameId);
         }
 
         public async Task<Game> GetGameMin(int gameId)

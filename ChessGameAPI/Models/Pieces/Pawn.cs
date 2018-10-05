@@ -13,57 +13,45 @@ namespace ChessGameAPI.Models.Pieces
         {
         }
 
-        public override List<Move> GetAllLegalMoves()
+        public override void GetAllLegalMoves()
         {
-            throw new NotImplementedException();
-        }
-
-        protected override (bool, string) IsLegalMoveForPiece(Move attemptedMove, bool isWhite)
-        {
-            int diffX = Math.Abs(X - attemptedMove.EndX);
-            if (diffX > 1)
+            if(Game == null)
             {
-                return (false, MoveErrors.Pawn);
+                throw new NullReferenceException($"Piece with id:{Id} is not part of a game.");
             }
-            if (isWhite)
-            {
-                //white pawns start at row index 1 and move up one at a time
-                if (Y + 1 == attemptedMove.EndY)
-                {
-                    if (diffX == 0)
-                    {
-                        return (true, null);
-                    } //pawns may move one space to eother side when capturing
-                    else if (diffX == 1)
-                    {
-                        return (true, null);
+            if (possibleMoves == null) {
+                possibleMoves = new Dictionary<(int, int), Piece>();
+            } else {
+                possibleMoves.Clear();
+            }
+            // white side pawn
+            if (OwnedBy.Id == Game.WhiteUserId) {
+                if (Y == 1) {
+                    Game.tryMove(X, Y, X, Y + 2, false);
+                }
+                if (Y < 7) {
+                    Game.tryMove(X, Y, X, Y + 1, false);
+                    if (X < 7) {
+                        Game.tryMove(X, Y, X + 1, Y + 1, true);
+                    }
+                    if (X > 0) {
+                        Game.tryMove(X, Y, X - 1, Y + 1, true);
                     }
                 }
-                else if (Y + 2 == attemptedMove.EndY && Y == 1 && diffX == 0)
-                {//if they are at their starting position they may move two spaces
-                    return (true, null);
+            } else { // black side pawn
+                if (Y == 6) {
+                    Game.tryMove(X, Y, X, Y - 2, false);
                 }
-            }
-            else
-            {
-                //black pawns start at row index 6 and only move down
-                if (Y - 1 == attemptedMove.EndY)
-                {
-                    if (diffX == 0)
-                    {
-                        return (true, null);
-                    } //pawns may move one pace to either side when capturing
-                    else if (diffX == 1)
-                    {
-                        return (true, null);
+                if (Y > 0) {
+                    Game.tryMove(X, Y, X, Y - 1, false);
+                    if (X < 7) {
+                        Game.tryMove(X, Y, X + 1, Y - 1, true);
+                    }
+                    if (X > 0) {
+                        Game.tryMove(X, Y, X - 1, Y - 1, true);
                     }
                 }
-                else if (Y - 2 == attemptedMove.EndY && Y == 6 && diffX == 0)
-                {//if they are at their starting position they may move two spaces
-                    return (true, null);
-                }
             }
-            return (false, MoveErrors.Pawn);
         }
     }
 }

@@ -39,7 +39,9 @@ namespace ChessGameAPI.Data
         /// </summary>
         /// <param name="gameId">unique identifier of the game to get</param>
         /// <returns>the game matching the id, if any.</returns>
-        Task<Game> GetGame(int gameId);
+        Task<Game> GetGameForPlay(int gameId);
+
+        Task<Game> GetGameForAddMove(int gameId);
 
         Task<Game> GetGameMin(int gameId);
 
