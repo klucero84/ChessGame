@@ -76,6 +76,12 @@ namespace ChessGameAPI.Controllers
             return Ok(dto); 
         }
 
+        /// <summary>
+        /// Two Player mode. Mostly for development. Not sure if this will be a feature.
+        /// Maybe make it a practice or not ranked game.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost("~/api/move/two-player")]
         public async Task<IActionResult> AddMoveTwoPlayer(MoveForAddMoveDto dto)
         {

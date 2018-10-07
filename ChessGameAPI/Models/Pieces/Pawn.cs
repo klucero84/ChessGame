@@ -13,6 +13,9 @@ namespace ChessGameAPI.Models.Pieces
         {
         }
 
+        /// <summary>
+        /// Populates possible moves collection with all legal options for Pawn.
+        /// </summary>
         public override void GetAllLegalMoves()
         {
             if(Game == null)

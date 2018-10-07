@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChessGameAPI.Models
 {
+    /// <summary>
+    /// The player of the game, the mover of pieces.
+    /// </summary>
     public class User
     {
         public User()

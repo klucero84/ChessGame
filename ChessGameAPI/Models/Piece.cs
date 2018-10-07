@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChessGameAPI.Models
 {
-    public class Piece
+    public abstract class Piece
     {
         /// <summary>
         /// Unique db identifier
@@ -73,6 +73,9 @@ namespace ChessGameAPI.Models
             Y = y;
         }
 
+        /// <summary>
+        /// Populates possible moves collection with all legal options.
+        /// </summary>
         public virtual void GetAllLegalMoves()
         {
             throw new NotImplementedException("GetAllLegalMoves is not imeplemented.");
