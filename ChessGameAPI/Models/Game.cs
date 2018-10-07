@@ -114,7 +114,11 @@ namespace ChessGameAPI.Models
             IDictionary<(int, int), Piece> pieces = GetPieces();
             if (pieces != null)
             {
-                return pieces[(x, y)];
+                Piece outPiece;
+                if (pieces.TryGetValue((x, y), out outPiece))
+                {
+                    return outPiece;
+                };
             }
             return null;
         }
@@ -437,8 +441,11 @@ namespace ChessGameAPI.Models
                 if (causesCheck) {
                     return MoveResult.CannotMoveIntoCheck;
                 }
+                GetAllPossibleMovesForAllPieces();
+                
                 bool canMove = piece.possibleMoves.ContainsKey((move.EndX, move.EndY));
                 if (canMove) {
+                    
                     if (move.PieceDiscriminator == "King") {
                         return IsCastleLegal(move);
                     // gonna need clause here for en passant

@@ -58,7 +58,7 @@ namespace ChessGameAPI.Helpers
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
         }
 
-        public static string GetNotation(this MoveController controller, MoveForAddMoveDto dto) {
+        public static string GetNotation(this Game game, MoveForAddMoveDto dto) {
             string[] letters = {"a", "b", "c", "d", "e", "f", "g", "h"};
             StringBuilder sb = new StringBuilder();
 

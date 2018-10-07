@@ -55,34 +55,42 @@ namespace ChessGameAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddMove(MoveForAddMoveDto dto)
         {
-            
-            Move newMove = _mapper.Map<Move>(dto);
-            _repo.Add(newMove);
-            Piece movedPiece = await _repo.GetPiece(dto.PieceId);
-            
-            var moveAttempt =  movedPiece.IsLegalMove(newMove, dto.IsWhite);
-            if (moveAttempt.Item1) {
-
-                movedPiece.X = newMove.EndX;
-                movedPiece.Y = newMove.EndY;
-                int code = await _repo.SaveAll();
-                return Ok(code); 
-            } else {
-                return BadRequest(moveAttempt.Item2);
+            if (dto.UserId != this.GetCurrentUserId()) {
+                return Unauthorized();
             }
-           
+
+            Game game = await _repo.GetGameForAddMove(dto.GameId);
+            if (dto.UserId != game.WhiteUserId && dto.UserId != game.BlackUserId) {
+                return Unauthorized();
+            }
+
+            dto.Notation = game.GetNotation(dto);
+            Move newMove = _mapper.Map<Move>(dto);
+            MoveResult result = game.TryAddMoveToGame(newMove);
+            if (result != MoveResult.CanMove) {
+                return BadRequest(result.GetDescription());
+            }
+
+            int code = await _repo.SaveAll();
+            await _hub.Clients.GroupExcept(dto.GameId.ToString(), dto.ConnId).SendAsync("addMoveToGame", dto);
+            return Ok(dto); 
         }
 
         [HttpPost("~/api/move/two-player")]
         public async Task<IActionResult> AddMoveTwoPlayer(MoveForAddMoveDto dto)
         {
-            dto.Notation = this.GetNotation(dto);
-            Move newMove = _mapper.Map<Move>(dto);
             Game game = await _repo.GetGameForAddMove(dto.GameId);
+            if (dto.UserId != game.WhiteUserId && dto.UserId != game.BlackUserId) {
+                return Unauthorized();
+            }
+
+            dto.Notation = game.GetNotation(dto);
+            Move newMove = _mapper.Map<Move>(dto);
             MoveResult result = game.TryAddMoveToGame(newMove);
             if (result != MoveResult.CanMove) {
                 BadRequest(result.GetDescription());
             }
+
             int code = await _repo.SaveAll();
             await _hub.Clients.GroupExcept(dto.GameId.ToString(), dto.ConnId).SendAsync("addMoveToGame", dto);
             return Ok(dto); 

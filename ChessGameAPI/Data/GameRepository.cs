@@ -62,7 +62,7 @@ namespace ChessGameAPI.Data
 
         public async Task<Game> GetGameForAddMove(int gameId) 
         {
-            return await _context.Games.Include(g => g.Pieces).FirstOrDefaultAsync(g => g.Id == gameId);
+            return await _context.Games.Include(g => g.Pieces).Include(g => g.WhiteUser).Include(g => g.BlackUser).FirstOrDefaultAsync(g => g.Id == gameId);
         }
 
         public async Task<Game> GetGameMin(int gameId)

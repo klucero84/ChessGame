@@ -209,7 +209,7 @@ export class Game {
         }
     }
 
-    private static getPossibleMovesforAllPieces(game: Game) {
+    public static getPossibleMovesforAllPieces(game: Game) {
         const map = this.getPiecesMap(game);
         map.forEach( (piece) => {
             this.getPossibleMovesForPiece(game, piece);
