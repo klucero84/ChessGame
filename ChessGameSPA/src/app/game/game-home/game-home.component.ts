@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Game } from '../../_models/game';
 import { ActivatedRoute } from '@angular/router';
+import { GameStatus } from 'src/app/_models/game-status';
 
 @Component({
   selector: 'app-game-home',
@@ -23,7 +24,7 @@ export class GameHomeComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.games = data['games'];
       this.game = data['game'];
-      if (this.game) {
+      if (this.game && this.game.statusCode < GameStatus.GAMEOVERMAN) {
         Game.getPossibleMovesforAllPieces(this.game);
 
       }

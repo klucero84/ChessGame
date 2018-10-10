@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace ChessGameAPI.Models
 {
@@ -207,18 +208,19 @@ namespace ChessGameAPI.Models
             // must alreay be in check
             if (StatusCode == GameStatus.CheckWhite || StatusCode == GameStatus.CheckBlack) {
                 bool isCheckMate = true;
-                IDictionary<(int, int), Piece> allPieces = GetPieces();
+                Piece[] allPieces = GetPieces().Values.ToArray();
                 // look at each piece's possible moves see if moving there would stop check
-                foreach(KeyValuePair<(int, int), Piece> locationAndPiece in allPieces)
+                foreach(Piece piece in allPieces)
                 {
-                    (int, int) originalLocation = locationAndPiece.Key;
-                    Piece piece = locationAndPiece.Value;
+                    // (int, int) originalLocation = locationAndPiece.Key;
+                    // Piece piece = locationAndPiece.Value;
                     if ((piece.OwnedBy.Id == WhiteUserId && StatusCode == GameStatus.CheckWhite ) ||
                         (piece.OwnedBy.Id == BlackUserId && StatusCode == GameStatus.CheckBlack )) {
-                        foreach(KeyValuePair<(int, int), Piece> possibleMove in piece.possibleMoves)
+                        (int, int)[] Moves = piece.possibleMoves.Keys.ToArray();
+                        foreach((int, int) possibleMove in Moves)
                         {
                             isCheckMate = DoesMoveCauseCheck(piece.X, piece.Y, 
-                                            possibleMove.Key.Item1, possibleMove.Key.Item2);
+                                            possibleMove.Item1, possibleMove.Item2);
                             if (!isCheckMate) {
                                 break ;
                             }
@@ -231,9 +233,9 @@ namespace ChessGameAPI.Models
                 }
                 if (isCheckMate) {
                     if (StatusCode == GameStatus.CheckWhite ) {
-                        StatusCode = GameStatus.WinWhite;
-                    } else if(StatusCode == GameStatus.CheckBlack ) {
                         StatusCode = GameStatus.WinBlack;
+                    } else if(StatusCode == GameStatus.CheckBlack ) {
+                        StatusCode = GameStatus.WinWhite;
                     }
                 } else {
                     // if we are not in checkmate game keeps going
