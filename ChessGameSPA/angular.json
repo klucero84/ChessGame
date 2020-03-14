@@ -125,5 +125,8 @@
       }
     }
   },
-  "defaultProject": "ChessGameSPA"
+  "defaultProject": "ChessGameSPA",
+  "cli": {
+    "analytics": false
+  }
 }
